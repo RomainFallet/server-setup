@@ -86,7 +86,7 @@ then
   # Apache local config
   apacheconfig="<VirtualHost *:${localport}>
   # Set up server name
-  ServerName ${appdomain}
+  ServerName 127.0.0.1
 
   # Configure separate log files
   ErrorLog /var/log/apache2/${appname}.error.log
