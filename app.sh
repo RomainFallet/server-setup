@@ -248,8 +248,11 @@ then
     [Install]
     WantedBy=multi-user.target"
 
-    echo "${autosshconfig}" | sudo see "/etc/systemd/system/autossh-${appname}.service" > /dev/null
+    echo "${autosshconfig}" | sudo tee "/etc/systemd/system/autossh-${appname}.service" > /dev/null
 
+    sudo systemctl daemon-reload
+    sudo systemctl enable autossh-"${appname}"
+    sudo systemctl start autossh-"${appname}"
   fi
 
 fi
