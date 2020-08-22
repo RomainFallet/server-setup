@@ -15,8 +15,8 @@ fi
 if [[ -z "${monitoringemails}" ]]
 then
   read -r -p "Do you want to receive monitoring emails from this machine? [Y/n]: " monitoringemails
-  remotesmtp=${monitoringemails:-y}
-  remotesmtp=$(echo "${monitoringemails}" | awk '{print tolower($0)}')
+  monitoringemails=${monitoringemails:-y}
+  monitoringemails=$(echo "${monitoringemails}" | awk '{print tolower($0)}')
 fi
 
 if [[ "${monitoringemails}" == 'y' ]]
