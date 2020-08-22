@@ -81,13 +81,13 @@ usermod -d /home/<newUserName> -m <newUserName>
 passwd <newUserName>
 
 # Disable root password
-sudo passwd -l root
+passwd -l root
 
 # Disallow root login with password through SSH
-sudo sed -i'.backup' -e 's/PermitRootLogin yes/#PermitRootLogin prohibit-password/g' /etc/ssh/sshd_config
+sed -i'.backup' -e 's/PermitRootLogin yes/#PermitRootLogin prohibit-password/g' /etc/ssh/sshd_config
 
 # Restart SSH
-sudo service ssh restart
+service ssh restart
 
 # Disconnect from your machine
 exit
