@@ -124,7 +124,7 @@ then
   # Apache proxy config
   apacheconfig+="
   # Proxy all requests
-  ProxyPass / http://127.0.01:${proxyport}/
+  ProxyPass / http://127.0.0.1:${proxyport}/
 "
 fi
 
