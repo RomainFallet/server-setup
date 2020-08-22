@@ -269,44 +269,49 @@ then
 fi
 
 ### Create a new SSH user for the app
-if ! id -u "${appname}" > /dev/null
+if [[ "${apptype}" != '1' ]]
 then
-  # Generate a new password
-  sshpassword=$(openssl rand -hex 15)
 
-  # Encrypt the password
-  sshencryptedpassword=$(echo "${sshpassword}" | openssl passwd -crypt -stdin)
+  # Create a new user
+  if ! id -u "${appname}" > /dev/null
+  then
+    # Generate a new password
+    sshpassword=$(openssl rand -hex 15)
 
-  # Create the user and set the default shell
-  sudo useradd -m -p "${sshencryptedpassword}" -s /bin/bash "${appname}"
-fi
+    # Encrypt the password
+    sshencryptedpassword=$(echo "${sshpassword}" | openssl passwd -crypt -stdin)
 
-# Give Apache group to the user (so that Apache can still access his files)
-sudo usermod -g www-data "${appname}"
+    # Create the user and set the default shell
+    sudo useradd -m -p "${sshencryptedpassword}" -s /bin/bash "${appname}"
+  fi
 
-# Give ownership to the user
-sudo chown -R "${appname}:www-data" "/var/www/${appname}"
+  # Give Apache group to the user (so that Apache can still access his files)
+  sudo usermod -g www-data "${appname}"
 
-# Create SSH folder in the user home
-sudo mkdir -p "/home/${appname}/.ssh"
+  # Give ownership to the user
+  sudo chown -R "${appname}:www-data" "/var/www/${appname}"
 
-# Copy the authorized_keys file to enable passwordless SSH connections
-sudo cp ~/.ssh/authorized_keys "/home/${appname}/.ssh/authorized_keys"
+  # Create SSH folder in the user home
+  sudo mkdir -p "/home/${appname}/.ssh"
 
-# Give ownership to the user
-sudo chown -R "${appname}:${appname}" "/home/${appname}/.ssh"
+  # Copy the authorized_keys file to enable passwordless SSH connections
+  sudo cp ~/.ssh/authorized_keys "/home/${appname}/.ssh/authorized_keys"
 
-### Create a chroot jail for this user
+  # Give ownership to the user
+  sudo chown -R "${appname}:${appname}" "/home/${appname}/.ssh"
 
-# Create the jail
-sudo username="${appname}" use_basic_commands=n bash -c "$(wget --no-cache -O- https://raw.githubusercontent.com/RomainFallet/chroot-jail/master/create.sh)"
+  ### Create a chroot jail for this user
 
-# Mount the app folder into the jail
-sudo mount --bind "/var/www/${appname}" "/home/jails/${appname}/home/${appname}"
+  # Create the jail
+  sudo username="${appname}" use_basic_commands=n bash -c "$(wget --no-cache -O- https://raw.githubusercontent.com/RomainFallet/chroot-jail/master/create.sh)"
 
-# Make the mount permanent
-mountconfig="/var/www/${appname} /home/jails/${appname}/home/${appname} none rw,bind 0 0"
-if ! grep "${mountconfig}" /etc/fstab > /dev/null
-then
-  echo "${mountconfig}" | sudo tee -a /etc/fstab > /dev/null
+  # Mount the app folder into the jail
+  sudo mount --bind "/var/www/${appname}" "/home/jails/${appname}/home/${appname}"
+
+  # Make the mount permanent
+  mountconfig="/var/www/${appname} /home/jails/${appname}/home/${appname} none rw,bind 0 0"
+  if ! grep "${mountconfig}" /etc/fstab > /dev/null
+  then
+    echo "${mountconfig}" | sudo tee -a /etc/fstab > /dev/null
+  fi
 fi
