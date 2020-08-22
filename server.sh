@@ -155,7 +155,7 @@ sudo sed -i'.backup' -E 's/UMASK(\s+)([0-9]+)/UMASK\1002/g' /etc/login.defs
 
 ### Postfix (optional)
 
-if [[ "${monitoringemails}" == 'y' && "${remotesmtp}" == 'y' ]]
+if [[ "${monitoringemails}" == 'y' ]]
 then
   # Install
   sudo DEBIAN_FRONTEND=noninteractive apt install -y postfix mailutils
@@ -164,8 +164,10 @@ then
   sudo cp /etc/postfix/main.cf /etc/postfix/.main.cf.backup
   sudo cp /etc/aliases /etc/.aliases.backup
 
-  # Update main config file
-  echo "# See /usr/share/postfix/main.cf.dist for a commented, more complete version
+  if [[ "${remotesmtp}" == 'y' ]]
+  then
+    # Config Postfix for sending emails through a remote SMTP server
+    echo "# See /usr/share/postfix/main.cf.dist for a commented, more complete version
 # Debian specific:  Specifying a file name will cause the first
 # line of that file to be used as the name.  The Debian default
 # is /etc/mailname.
@@ -214,17 +216,18 @@ sender_canonical_classes = envelope_sender, header_sender
 sender_canonical_maps =  regexp:/etc/postfix/sender_canonical_maps
 smtp_header_checks = regexp:/etc/postfix/header_check" | sudo tee /etc/postfix/main.cf > /dev/null
 
-  # Save SMTP credentials
-  echo "[${smtphostname}]:${smtpport} ${smtpusername}:${smtppassword}" | sudo tee /etc/postfix/sasl_passwd > /dev/null
-  sudo postmap /etc/postfix/sasl_passwd
-  sudo chown root:root /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
-  sudo chmod 0600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
+    # Save SMTP credentials
+    echo "[${smtphostname}]:${smtpport} ${smtpusername}:${smtppassword}" | sudo tee /etc/postfix/sasl_passwd > /dev/null
+    sudo postmap /etc/postfix/sasl_passwd
+    sudo chown root:root /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
+    sudo chmod 0600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
 
-  # Remap sender address
-  echo "/.+/    ${smtpusername}" | sudo tee /etc/postfix/sender_canonical_maps > /dev/null
-  echo "/From:.*/ REPLACE From: ${smtpusername}" | sudo tee /etc/postfix/header_check > /dev/null
-  sudo postmap /etc/postfix/sender_canonical_maps
-  sudo postmap /etc/postfix/header_check
+    # Remap sender address
+    echo "/.+/    ${smtpusername}" | sudo tee /etc/postfix/sender_canonical_maps > /dev/null
+    echo "/From:.*/ REPLACE From: ${smtpusername}" | sudo tee /etc/postfix/header_check > /dev/null
+    sudo postmap /etc/postfix/sender_canonical_maps
+    sudo postmap /etc/postfix/header_check
+  fi
 
   # Forwarding System Mail to your email address
   echo "root:     ${email}" | sudo tee -a /etc/aliases > /dev/null
@@ -238,6 +241,7 @@ smtp_header_checks = regexp:/etc/postfix/header_check" | sudo tee /etc/postfix/m
   # Display Postfix version
   postconf mail_version
 
+  # Send email
   echo "Email monitoring is enabled for your machine: ${hostname}." | mail -s "Email monitoring is enabled." "${email}"
 fi
 
