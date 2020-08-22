@@ -220,7 +220,7 @@ sudo a2ensite "${appname}".conf
 # Restart Apache to make changes available
 sudo service apache2 restart
 
-###
+### Set up SSH reverse tunnel
 
 if [[ "${apphow}" == '2' && -n "${localport}" ]]
 then
