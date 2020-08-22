@@ -83,8 +83,13 @@ then
     read -r -p "Define your app running port (eg. 3000): " localport
   fi
 
+  # Allow firewall port
+  sudo ufw allow "${localport}"
+
   # Apache local config
-  apacheconfig="<VirtualHost *:${localport}>
+  apacheconfig="Listen ${localport}
+
+<VirtualHost *:${localport}>
   # Set up server name
   ServerName 127.0.0.1
 
