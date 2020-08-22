@@ -145,7 +145,8 @@ fi
 ### HTML/JS/React/Angular case
 if [[ "${apptype}" == '2' ]]
 then
-  apacheconfig+="
+  apacheconfig+="  DirectoryIndex /index.html
+
   # Set up HTML/JS/React/Angular specific configuration
   <Directory />
       Require all denied
@@ -159,7 +160,7 @@ then
 "
 fi
 
-### HTML/JS/React/Angular case
+### NodeJS/NestJS case
 if [[ "${apptype}" == '3' ]]
 then
   apacheconfig+="
@@ -173,10 +174,11 @@ then
 "
 fi
 
-### PHP/Nextcloud
+### PHP/Symfony case
 if [[ "${apptype}" == '4' ]]
 then
-  apacheconfig+="
+  apacheconfig+="  DirectoryIndex /index.php
+
   # Set up PHP/Symfony specific configuration
   <Directory />
       Require all denied
@@ -193,10 +195,11 @@ then
 "
 fi
 
-### PHP/Symfony case
+### PHP/Nextcloud case
 if [[ "${apptype}" == '5' ]]
 then
-  apacheconfig+="
+  apacheconfig+="  DirectoryIndex /index.php
+
   # Set up PHP/Nextcloud specific configuration
   <Directory />
       Require all denied
