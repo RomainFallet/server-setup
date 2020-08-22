@@ -74,6 +74,9 @@ ssh root@<ipAddress>
 # Rename user
 usermod -l <newUserName> ubuntu
 
+# Rename user group
+groupmod -n <newUserName> ubuntu
+
 # Rename home directory
 usermod -d /home/<newUserName> -m <newUserName>
 
