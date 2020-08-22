@@ -214,6 +214,9 @@ fi
 apacheconfig+="</VirtualHost>"
 echo "${apacheconfig}" | sudo tee "/etc/apache2/sites-available/${appname}.conf" > /dev/null
 
+# Enable Apache config
+sudo a2ensite "${appname}".conf
+
 # Restart Apache to make changes available
 sudo service apache2 restart
 
