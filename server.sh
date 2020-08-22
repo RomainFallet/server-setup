@@ -303,7 +303,10 @@ fi
 # Add rules and activate firewall
 sudo ufw allow 3022
 sudo ufw allow Postfix
-"${apache}" == 'y' && sudo ufw allow in "Apache Full"
+if [[ "${apache}" == 'y' ]]
+then
+  sudo ufw allow "Apache Full"
+fi
 echo 'y' | sudo ufw enable
 
 sudo ufw status
