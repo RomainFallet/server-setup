@@ -302,7 +302,10 @@ fi
 
 # Add rules and activate firewall
 sudo ufw allow 3022
+if [[ "${monitoringemails}" == 'y' ]]
+then
 sudo ufw allow Postfix
+fi
 if [[ "${apache}" == 'y' ]]
 then
   sudo ufw allow "Apache Full"
@@ -320,7 +323,8 @@ sudo apt install -y fail2ban
 fail2banconfig="[DEFAULT]
 findtime = 3600
 bantime = 86400"
-if [[ "${monitoringemails}" == 'y' ]]; then
+if [[ "${monitoringemails}" == 'y' ]]
+then
   fail2banconfig+="
 destemail = ${email}
 action = %(action_mwl)s"
