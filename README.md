@@ -152,7 +152,7 @@ Login to your machine's sudo user and run the following commands.
 ### Installation
 
 ```bash
-git clone https://github/com/RomainFallet/server-setup
+git clone https://github.com/RomainFallet/server-setup
 ```
 
 ### Server setup
