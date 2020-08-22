@@ -254,7 +254,7 @@ After=network-online.target
 
 [Service]
 Environment=\"AUTOSSH_GATETIME=0\"
-ExecStart=/usr/bin/autossh -NC -M 0 -o \"ServerAliveInterval 30\" -o \"ServerAliveCountMax 3\" -o \"PubkeyAuthentication=yes\" -o \"PasswordAuthentication=no\" -i ~/.ssh/id_rsa -p ${sshreverseport} -R ${localport}:127.0.0.1:${sshreverseremoteport} ${sshreverseuser}@${sshreversehost}
+ExecStart=/usr/bin/autossh -NC -M 0 -o \"ServerAliveInterval 30\" -o \"ServerAliveCountMax 3\" -o \"PubkeyAuthentication=yes\" -o \"PasswordAuthentication=no\" -i /home/$(whoami)/.ssh/id_rsa -p ${sshreverseport} -R ${sshreverseremoteport}:127.0.0.1:${localport} ${sshreverseuser}@${sshreversehost}
 
 [Install]
 WantedBy=multi-user.target"
