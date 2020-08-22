@@ -177,26 +177,6 @@ fi
 if [[ "${apptype}" == '4' ]]
 then
   apacheconfig+="
-  # Set up PHP/Nextcloud specific configuration
-  <Directory />
-      Require all denied
-  </Directory>
-  <Directory /var/www/${appname}>
-      Require all granted
-      AllowOverride All
-      Options FollowSymLinks MultiViews
-      php_admin_value open_basedir '/var/www/${appname}'
-  </Directory>
-  <IfModule mod_dav.c>
-    Dav off
-  </IfModule>
-"
-fi
-
-### PHP/Symfony case
-if [[ "${apptype}" == '5' ]]
-then
-  apacheconfig+="
   # Set up PHP/Symfony specific configuration
   <Directory />
       Require all denied
@@ -210,6 +190,26 @@ then
   <Directory /var/www/${appname}/public/bundles>
       FallbackResource disabled
   </Directory>
+"
+fi
+
+### PHP/Symfony case
+if [[ "${apptype}" == '5' ]]
+then
+  apacheconfig+="
+  # Set up PHP/Nextcloud specific configuration
+  <Directory />
+      Require all denied
+  </Directory>
+  <Directory /var/www/${appname}>
+      Require all granted
+      AllowOverride All
+      Options FollowSymLinks MultiViews
+      php_admin_value open_basedir '/var/www/${appname}'
+  </Directory>
+  <IfModule mod_dav.c>
+    Dav off
+  </IfModule>
 "
 fi
 
