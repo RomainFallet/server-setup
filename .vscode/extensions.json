@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "davidanson.vscode-markdownlint",
+    "timonwong.shellcheck",
+    "editorconfig.editorconfig",
+    "eg2.vscode-npm-script"
+  ]
+}

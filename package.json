@@ -1,0 +1,35 @@
+{
+  "name": "server-setup",
+  "version": "1.0.0",
+  "repository": "git@github.com:RomainFallet/server-setup.git",
+  "license": "MIT",
+  "devDependencies": {
+    "husky": "~4.2.5",
+    "lint-staged": "~10.2.9",
+    "markdownlint": "~0.20.4",
+    "markdownlint-cli": "~0.23.2",
+    "npm-run-all": "~4.1.5",
+    "shellcheck": "~0.4.4"
+  },
+  "scripts": {
+    "lint": "npm-run-all lint:*",
+    "format": "npm-run-all format:*",
+    "lint:sh": "shellcheck ./*.sh",
+    "lint:md": "markdownlint ./*.md --ignore ./node_modules",
+    "format:md": "markdownlint --fix ./*.md --ignore ./node_modules"
+  },
+  "lint-staged": {
+    "./*.sh": [
+      "shellcheck"
+    ],
+    "./*.md": [
+      "markdownlint --ignore ./node_modules"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "dependencies": {}
+}
