@@ -133,7 +133,7 @@ if [[ "${apptype}" == '2' || "${apptype}" == '4' || "${apptype}" == '5' ]]
   sudo chown www-data:www-data "/var/www/${appname}"
 
   # Set permission
-  sudo chmod -R 775 "/var/www/${appname}"
+  sudo chmod 775 "/var/www/${appname}"
 
   # Apache document root config
   apacheconfig+="
@@ -298,7 +298,7 @@ then
   sudo usermod -g www-data "${appname}"
 
   # Give ownership to the user
-  sudo chown -R "${appname}:www-data" "/var/www/${appname}"
+  sudo chown "${appname}:www-data" "/var/www/${appname}"
 
   # Create SSH folder in the user home
   sudo mkdir -p "/home/${appname}/.ssh"
