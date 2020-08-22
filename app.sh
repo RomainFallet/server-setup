@@ -132,6 +132,9 @@ if [[ "${apptype}" == '2' || "${apptype}" == '4' || "${apptype}" == '5' ]]
   # Set ownership to Apache
   sudo chown www-data:www-data "/var/www/${appname}"
 
+  # Set permission
+  sudo chmod -R 775 "/var/www/${appname}"
+
   # Apache document root config
   apacheconfig+="
   # Set up document root
