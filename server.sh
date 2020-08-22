@@ -76,39 +76,50 @@ sudo hostnamectl set-hostname "${hostname}"
 
 ### SSH
 
+# Backup config file
+sshconfigpath=/etc/ssh/sshd_config
+sshconfigbackuppath=/etc/ssh/.sshd_config.backup
+if ! test -f "${sshconfigbackuppath}"
+then
+  sudo cp "${sshconfigpath}" "${sshconfigbackuppath}"
+fi
+
 # Change default port
 sshportconfig='Port 3022'
-if ! sudo grep "^${sshportconfig}" /etc/ssh/sshd_config > /dev/null
+if ! sudo grep "^${sshportconfig}" "${sshconfigpath}" > /dev/null
 then
-  sudo sed -i'.backup' -E "s/#*Port\s+[0-9]+/${sshportconfig}/g" /etc/ssh/sshd_config
+  sudo sed -i'.tmp' -E "s/#*Port\s+[0-9]+/${sshportconfig}/g" "${sshconfigpath}"
 fi
-if ! sudo grep "^${sshportconfig}" /etc/ssh/sshd_config > /dev/null
+if ! sudo grep "^${sshportconfig}" "${sshconfigpath}" > /dev/null
 then
-  echo "${sshportconfig}" | sudo tee -a /etc/ssh/sshd_config > /dev/null
+  echo "${sshportconfig}" | sudo tee -a "${sshconfigpath}" > /dev/null
 fi
 
 # Disable password authentication
 sshpassconfig='PasswordAuthentication no'
-sudo sed -i'.backup' -E "s/#*PasswordAuthentication\s+(\w+)/PasswordAuthentication no/g" /etc/ssh/sshd_config
-if ! sudo grep "^${sshpassconfig}" /etc/ssh/sshd_config > /dev/null
+sudo sed -i'.tmp' -E "s/#*PasswordAuthentication\s+(\w+)/PasswordAuthentication no/g" "${sshconfigpath}"
+if ! sudo grep "^${sshpassconfig}" "${sshconfigpath}" > /dev/null
 then
-  echo "${sshpassconfig}" | sudo tee -a /etc/ssh/sshd_config > /dev/null
+  echo "${sshpassconfig}" | sudo tee -a "${sshconfigpath}" > /dev/null
 fi
 
 # Keep alive client connections
 sshclientintervalconfig='ClientAliveInterval 120'
-sudo sed -i'.backup' -E "s/#*ClientAliveInterval\s+([0-9]+)/ClientAliveInterval 120/g" /etc/ssh/sshd_config
-if ! sudo grep "^${sshclientintervalconfig}" /etc/ssh/sshd_config > /dev/null
+sudo sed -i'.tmp' -E "s/#*ClientAliveInterval\s+([0-9]+)/ClientAliveInterval 120/g" "${sshconfigpath}"
+if ! sudo grep "^${sshclientintervalconfig}" "${sshconfigpath}" > /dev/null
 then
-  echo "${sshclientintervalconfig}" | sudo tee -a /etc/ssh/sshd_config > /dev/null
+  echo "${sshclientintervalconfig}" | sudo tee -a "${sshconfigpath}" > /dev/null
 fi
 
 sshclientcountconfig='ClientAliveCountMax 3'
-sudo sed -i'.backup' -E "s/#*ClientAliveCountMax\s+([0-9]+)/ClientAliveCountMax 3/g" /etc/ssh/sshd_config
-if ! sudo grep "^${sshclientcountconfig}" /etc/ssh/sshd_config > /dev/null
+sudo sed -i'.tmp' -E "s/#*ClientAliveCountMax\s+([0-9]+)/ClientAliveCountMax 3/g" "${sshconfigpath}"
+if ! sudo grep "^${sshclientcountconfig}" "${sshconfigpath}" > /dev/null
 then
-  echo "${sshclientcountconfig}" | sudo tee -a /etc/ssh/sshd_config > /dev/null
+  echo "${sshclientcountconfig}" | sudo tee -a "${sshconfigpath}" > /dev/null
 fi
+
+# Remove tmp file
+sudo rm -f "${sshconfigpath}".tmp
 
 # Restart SSH
 sudo service ssh restart
@@ -119,13 +130,23 @@ sudo service ssh restart
 sudo apt update && sudo apt dist-upgrade -y
 
 # Make a backup of the config files
-sudo cp /etc/apt/apt.conf.d/10periodic /etc/apt/apt.conf.d/.10periodic.backup
-sudo cp /etc/apt/apt.conf.d/50unattended-upgrades /etc/apt/apt.conf.d/.50unattended-upgrades.backup
+periodicconfigpath=/etc/apt/apt.conf.d/10periodic
+periodicconfigbackuppath=/etc/apt/apt.conf.d/.10periodic.backup
+unattendedupgradeconfigpath=/etc/apt/apt.conf.d/50unattended-upgrades
+unattendedupgradeconfigbackuppath=/etc/apt/apt.conf.d/.50unattended-upgrades.backup
+if ! test -f "${periodicconfigbackuppath}"
+then
+  sudo cp "${periodicconfigpath}" "${periodicconfigbackuppath}"
+fi
+if ! test -f "${unattendedupgradeconfigbackuppath}"
+then
+  sudo cp "${unattendedupgradeconfigpath}" "${unattendedupgradeconfigbackuppath}"
+fi
 
 # Download upgradable packages automatically
 echo "APT::Periodic::Update-Package-Lists \"1\";
 APT::Periodic::Download-Upgradeable-Packages \"1\";
-APT::Periodic::AutocleanInterval \"7\";" | sudo tee /etc/apt/apt.conf.d/10periodic > /dev/null
+APT::Periodic::AutocleanInterval \"7\";" | sudo tee "${periodicconfigpath}" > /dev/null
 
 # Install updates automatically
 updateconfig="Unattended-Upgrade::Allowed-Origins {
@@ -146,12 +167,23 @@ updateconfig+="
 Unattended-Upgrade::Mail \"${email}\";
 Unattended-Upgrade::MailOnlyOnError \"true\";"
 fi
-echo "${updateconfig}" | sudo tee /etc/apt/apt.conf.d/50unattended-upgrades > /dev/null
+echo "${updateconfig}" | sudo tee "${unattendedupgradeconfigpath}" > /dev/null
 
 ### Default umask
 
+# Backup config file
+umaskconfigpath=/etc/login.defs
+umaskconfigbackuppath=/etc/.login.defs.backup
+if ! test -f "${umaskconfigbackuppath}"
+then
+  sudo cp "${umaskconfigpath}" "${umaskconfigbackuppath}"
+fi
+
 # Change default system umask
-sudo sed -i'.backup' -E 's/UMASK(\s+)([0-9]+)/UMASK\1002/g' /etc/login.defs
+sudo sed -i'.tmp' -E 's/UMASK(\s+)([0-9]+)/UMASK\1002/g' "${umaskconfigpath}"
+
+# Remove tmp file
+sudo rm "${umaskconfigpath}".tmp
 
 ### Postfix (optional)
 
@@ -160,9 +192,19 @@ then
   # Install
   sudo DEBIAN_FRONTEND=noninteractive apt install -y postfix mailutils
 
-  # Make a backup of the config files
-  sudo cp /etc/postfix/main.cf /etc/postfix/.main.cf.backup
-  sudo cp /etc/aliases /etc/.aliases.backup
+  # Backup config file
+  postfixconfigpath=/etc/postfix/main.cf
+  postfixconfigbackuppath=/etc/postfix/.main.cf.backup
+  aliasesconfigfile=/etc/aliases
+  aliasesconfigbackupfile=/etc/.aliases.backup
+  if ! test -f "${postfixconfigbackuppath}"
+  then
+    sudo cp "${postfixconfigpath}" "${postfixconfigbackuppath}"
+  fi
+  if ! test -f "${aliasesconfigbackupfile}"
+  then
+    sudo cp "${aliasesconfigfile}" "${aliasesconfigbackupfile}"
+  fi
 
   if [[ "${remotesmtp}" == 'y' ]]
   then
@@ -214,7 +256,7 @@ smtp_use_tls = yes
 smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
 sender_canonical_classes = envelope_sender, header_sender
 sender_canonical_maps =  regexp:/etc/postfix/sender_canonical_maps
-smtp_header_checks = regexp:/etc/postfix/header_check" | sudo tee /etc/postfix/main.cf > /dev/null
+smtp_header_checks = regexp:/etc/postfix/header_check" | sudo tee "${postfixconfigpath}" > /dev/null
 
     # Save SMTP credentials
     echo "[${smtphostname}]:${smtpport} ${smtpusername}:${smtppassword}" | sudo tee /etc/postfix/sasl_passwd > /dev/null
@@ -230,7 +272,11 @@ smtp_header_checks = regexp:/etc/postfix/header_check" | sudo tee /etc/postfix/m
   fi
 
   # Forwarding System Mail to your email address
-  echo "root:     ${email}" | sudo tee -a /etc/aliases > /dev/null
+  aliasesconfig="root:     ${email}"
+  if ! sudo grep "^${aliasesconfig}" "${aliasesconfigfile}" > /dev/null
+  then
+    echo "${aliasesconfig}" | sudo tee -a "${aliasesconfigfile}" > /dev/null
+  fi
 
   # Enable aliases
   sudo newaliases
@@ -267,11 +313,19 @@ then
   sudo a2enmod proxy_http
   sudo a2enmod headers
 
+  # Backup config file
+  apacheenvarsconfigpath=/etc/apache2/envvars
+  apacheenvarsconfigbackuppath=/etc/apache2/.envvars.backup
+  if ! test -f "${apacheenvarsconfigbackuppath}"
+  then
+    sudo cp "${apacheenvarsconfigpath}" "${apacheenvarsconfigbackuppath}"
+  fi
+
   # Set umask of the Apache user
   umaskconfig='umask 002'
-  if ! sudo grep "^${umaskconfig}" /etc/apache2/envvars > /dev/null
+  if ! sudo grep "^${umaskconfig}" "${apacheenvarsconfigpath}" > /dev/null
   then
-    echo "${umaskconfig}" | sudo tee -a /etc/apache2/envvars > /dev/null
+    echo "${umaskconfig}" | sudo tee -a "${apacheenvarsconfigpath}" > /dev/null
   fi
 
   # Disable default site
