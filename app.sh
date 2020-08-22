@@ -312,10 +312,10 @@ then
   sudo username="${appname}" use_basic_commands=n bash -c "$(wget --no-cache -O- https://raw.githubusercontent.com/RomainFallet/chroot-jail/master/create.sh)"
 
   # Mount the app folder into the jail
-  sudo mount --bind "/var/www/${appname}" "/home/jails/${appname}/home/${appname}"
+  sudo mount --bind "/var/www/${appname}" "/jails/${appname}/home/${appname}"
 
   # Make the mount permanent
-  mountconfig="/var/www/${appname} /home/jails/${appname}/home/${appname} none rw,bind 0 0"
+  mountconfig="/var/www/${appname} /jails/${appname}/home/${appname} none rw,bind 0 0"
   if ! grep "${mountconfig}" /etc/fstab > /dev/null
   then
     echo "${mountconfig}" | sudo tee -a /etc/fstab > /dev/null
