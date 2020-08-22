@@ -249,15 +249,15 @@ then
     read -r -p "Enter the port on the remote machine that will be used to access this app: " sshreverseremoteport
 
     autosshconfig="[Unit]
-    Description=AutoSSH tunnel service for ${appname} on port ${localport}
-    After=network-online.target
+Description=AutoSSH tunnel service for ${appname} on port ${localport}
+After=network-online.target
 
-    [Service]
-    Environment=\"AUTOSSH_GATETIME=0\"
-    ExecStart=/usr/bin/autossh -NC -M 0 -o \"ServerAliveInterval 30\" -o \"ServerAliveCountMax 3\" -o \"PubkeyAuthentication=yes\" -o \"PasswordAuthentication=no\" -i ~/.ssh/id_rsa -p ${sshreverseport} -R ${localport}:127.0.0.1:${sshreverseremoteport} ${sshreverseuser}@${sshreversehost}
+[Service]
+Environment=\"AUTOSSH_GATETIME=0\"
+ExecStart=/usr/bin/autossh -NC -M 0 -o \"ServerAliveInterval 30\" -o \"ServerAliveCountMax 3\" -o \"PubkeyAuthentication=yes\" -o \"PasswordAuthentication=no\" -i ~/.ssh/id_rsa -p ${sshreverseport} -R ${localport}:127.0.0.1:${sshreverseremoteport} ${sshreverseuser}@${sshreversehost}
 
-    [Install]
-    WantedBy=multi-user.target"
+[Install]
+WantedBy=multi-user.target"
 
     echo "${autosshconfig}" | sudo tee "/etc/systemd/system/autossh-${appname}.service" > /dev/null
 
