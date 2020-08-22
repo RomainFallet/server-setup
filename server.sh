@@ -292,14 +292,38 @@ then
   # Install
   sudo apt install -y certbot
 
+  certbot --version
+fi
+
+### Crontab
+
+# Backup config file
+crontabconfigpath=/etc/crontab
+crontabconfigbackuppath=/etc/.crontab.backup
+if ! test -f "${crontabconfigbackuppath}"
+then
+  sudo cp "${crontabconfigpath}" "${crontabconfigbackuppath}"
+fi
+
+# Receive emails with cron result
+if [[ "${monitoringemails}" == 'y' ]]
+then
+  mailmonitoringconfig="MAILTO=${email}"
+  if ! sudo grep "^${mailmonitoringconfig}" "${crontabconfigpath}" > /dev/null
+  then
+    sudo sed -i'.tmp' -E "s/^PATH=(.+?)/PATH=\1\n${mailmonitoringconfig}/" "${crontabconfigpath}" >  /dev/null
+  fi
+fi
+
+# Renew TSL certificates every month
+if [[ "${apache}" == 'y' ]]
+then
   # Check certificates renewal every month
   certbotrenewconfig='0 0    1 * *    root    certbot renew'
-  if ! sudo grep "^${certbotrenewconfig}" /etc/crontab > /dev/null
+  if ! sudo grep "^${certbotrenewconfig}" "${crontabconfigpath}" > /dev/null
   then
-    echo "${certbotrenewconfig}" | sudo tee -a /etc/crontab > /dev/null
+    echo "${certbotrenewconfig}" | sudo tee -a "${crontabconfigpath}" > /dev/null
   fi
-
-  certbot --version
 fi
 
 ### Firewall
