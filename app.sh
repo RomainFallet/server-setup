@@ -236,6 +236,7 @@ then
       AllowOverride All
       Options FollowSymLinks MultiViews
       php_admin_value open_basedir '/var/www/${appname}'
+      php_admin_value upload_tmp_dir '/var/www/${appname}/tmp'
   </Directory>
   <IfModule mod_dav.c>
     Dav off
