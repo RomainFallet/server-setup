@@ -129,6 +129,25 @@ then
   # Proxy all requests
   ProxyPass / http://127.0.0.1:${proxyport}/
 "
+
+  # Ask nextcloudproxy
+  if [[ -z "${nextcloudproxy}" ]]
+  then
+    read -r -p "Are you proxying to a Nextcloud app? [N/y]: " nextcloudproxy
+    nextcloudproxy=${nextcloudproxy:-n}
+    nextcloudproxy=$(echo "${nextcloudproxy}" | awk '{print tolower($0)}')
+
+    if [[ "${nextcloudproxy}" == 'y' ]]
+    then
+      apacheconfig+="
+  # Well known config
+  RewriteEngine On
+  RewriteRule ^/\.well-known/carddav https://%{SERVER_NAME}/remote.php/dav/ [R=301,L]
+  RewriteRule ^/\.well-known/caldav https://%{SERVER_NAME}/remote.php/dav/ [R=301,L]
+"
+    fi
+  fi
+
 fi
 
 # Serving case
@@ -221,14 +240,6 @@ then
   <IfModule mod_dav.c>
     Dav off
   </IfModule>
-
-  # Well known config
-  RewriteEngine on
-  RewriteRule ^\.well-known/host-meta /public.php?service=host-meta [QSA,L]
-  RewriteRule ^\.well-known/host-meta\.json /public.php?service=host-meta-json [QSA,L]
-  RewriteRule ^\.well-known/webfinger /public.php?service=webfinger [QSA,L]
-  RewriteRule ^\.well-known/carddav /remote.php/dav/ [R=301,L]
-  RewriteRule ^\.well-known/caldav /remote.php/dav/ [R=301,L]
 "
 fi
 
