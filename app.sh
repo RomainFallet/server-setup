@@ -70,6 +70,9 @@ then
   SSLEngine on
   SSLCertificateFile /etc/letsencrypt/live/${appdomain}/fullchain.pem
   SSLCertificateKeyFile /etc/letsencrypt/live/${appdomain}/privkey.pem
+
+  # Enable HTTP Strict Transport Security
+  Header always set Strict-Transport-Security \"max-age=15552000; includeSubDomains\"
 "
 fi
 
