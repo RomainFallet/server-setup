@@ -288,7 +288,7 @@ WantedBy=multi-user.target"
 
     sudo systemctl daemon-reload
     sudo systemctl enable autossh-"${appname}"
-    sudo systemctl start autossh-"${appname}"
+    sudo systemctl restart autossh-"${appname}"
   fi
 
 fi
