@@ -279,7 +279,7 @@ After=network-online.target
 Restart=always
 RestartSec=30s
 Environment=\"AUTOSSH_GATETIME=0\"
-ExecStart=/usr/bin/autossh -NC -M 0 -o \"ServerAliveInterval 30\" -o \"ServerAliveCountMax 3\" -o \"PubkeyAuthentication=yes\" -o \"PasswordAuthentication=no\" -i /home/$(whoami)/.ssh/id_rsa -p ${sshreverseport} -R ${sshreverseremoteport}:127.0.0.1:${localport} ${sshreverseuser}@${sshreversehost}
+ExecStart=/usr/bin/autossh -NC -M 0 -o \"ExitOnForwardFailure yes\" -o \"ServerAliveInterval 30\" -o \"ServerAliveCountMax 3\" -o \"PubkeyAuthentication=yes\" -o \"PasswordAuthentication=no\" -i /home/$(whoami)/.ssh/id_rsa -p ${sshreverseport} -R ${sshreverseremoteport}:127.0.0.1:${localport} ${sshreverseuser}@${sshreversehost}
 
 [Install]
 WantedBy=multi-user.target"
