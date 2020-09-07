@@ -156,12 +156,14 @@ Login to your machine's sudo user and run the following commands.
 
 ```bash
 git clone https://github.com/RomainFallet/server-setup
+
+cd ./server-setup
 ```
 
 ### Server setup
 
 ```bash
-bash -c "$(cat ~/server-setup/server.sh)"
+bash -c "$(cat ./scripts/server.sh)"
 ```
 
 This will install all softwares needed to host production apps.
@@ -169,7 +171,7 @@ This will install all softwares needed to host production apps.
 ### Configure a new app
 
 ```bash
-bash -c "$(cat ~/server-setup/app.sh)"
+bash -c "$(cat ./scripts/app.sh)"
 ```
 
 After that, you will be able to login to your app with:

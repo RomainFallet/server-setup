@@ -345,7 +345,7 @@ then
   ### Create a chroot jail for this user
 
   # Create the jail
-  sudo username="${appname}" use_basic_commands=n bash -c "$(wget --no-cache -O- https://raw.githubusercontent.com/RomainFallet/chroot-jail/master/create.sh)"
+  sudo username="${appname}" use_basic_commands=n bash -c "$(cat "${PWD}"/scripts/jail.sh)"
 
   # Mount the app folder into the jail
   sudo mount --bind "/var/www/${appname}" "/jails/${appname}/home/${appname}"
