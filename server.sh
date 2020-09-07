@@ -26,42 +26,6 @@ then
   then
     read -r -p "Enter your email: " email
   fi
-
-
-  # Ask for remote SMTP
-  if [[ -z "${remotesmtp}" ]]
-  then
-    read -r -p "Send monitoring emails from a remote SMTP server instead of this machine? (recommended) [Y/n]: " remotesmtp
-    remotesmtp=${remotesmtp:-y}
-    remotesmtp=$(echo "${remotesmtp}" | awk '{print tolower($0)}')
-  fi
-
-  if [[ "${remotesmtp}" == 'y' ]]
-  then
-    # Ask SMTP hostname if not already set
-    if [[ -z "${smtphostname}" ]]
-    then
-    read -r -p "Enter your remote SMTP server hostname: " smtphostname
-    fi
-
-    # Ask SMTP port if not already set
-    if [[ -z "${smtpport}" ]]
-    then
-    read -r -p "Enter your remote SMTP server port: " smtpport
-    fi
-
-    # Ask SMTP username if not already set
-    if [[ -z "${smtpusername}" ]]
-    then
-    read -r -p "Enter your remote SMTP server username: " smtpusername
-    fi
-
-    # Ask SMTP username if not already set
-    if [[ -z "${smtppassword}" ]]
-    then
-    read -r -p "Enter your SMTP password: " smtppassword
-    fi
-  fi
 fi
 
 ### Timezone
@@ -187,10 +151,18 @@ sudo rm "${umaskconfigpath}".tmp
 
 ### Postfix (optional)
 
-if [[ "${monitoringemails}" == 'y' ]]
+# Ask for Postfix
+if [[ -z "${postfix}" ]]
+then
+  read -r -p "Do you want to install Postfix email server (a mail server is needed if you want email monitoring)? [N/y]: " postfix
+  postfix=${postfix:-n}
+  postfix=$(echo "${postfix}" | awk '{print tolower($0)}')
+fi
+
+if [[ "${postfix}" == 'y' ]]
 then
   # Install
-  sudo DEBIAN_FRONTEND=noninteractive apt install -y postfix mailutils
+  sudo DEBIAN_FRONTEND=noninteractive apt install -y postfix
 
   # Backup config file
   postfixconfigpath=/etc/postfix/main.cf
@@ -204,6 +176,41 @@ then
   if ! test -f "${aliasesconfigbackupfile}"
   then
     sudo cp "${aliasesconfigfile}" "${aliasesconfigbackupfile}"
+  fi
+
+  # Ask for remote SMTP
+  if [[ -z "${remotesmtp}" ]]
+  then
+    read -r -p "Send emails from a remote SMTP server instead of this machine? [Y/n]: " remotesmtp
+    remotesmtp=${remotesmtp:-y}
+    remotesmtp=$(echo "${remotesmtp}" | awk '{print tolower($0)}')
+  fi
+
+  if [[ "${remotesmtp}" == 'y' ]]
+  then
+    # Ask SMTP hostname if not already set
+    if [[ -z "${smtphostname}" ]]
+    then
+    read -r -p "Enter your remote SMTP server hostname: " smtphostname
+    fi
+
+    # Ask SMTP port if not already set
+    if [[ -z "${smtpport}" ]]
+    then
+    read -r -p "Enter your remote SMTP server port: " smtpport
+    fi
+
+    # Ask SMTP username if not already set
+    if [[ -z "${smtpusername}" ]]
+    then
+    read -r -p "Enter your remote SMTP server username: " smtpusername
+    fi
+
+    # Ask SMTP username if not already set
+    if [[ -z "${smtppassword}" ]]
+    then
+    read -r -p "Enter your SMTP password: " smtppassword
+    fi
   fi
 
   if [[ "${remotesmtp}" == 'y' ]]
@@ -286,6 +293,14 @@ smtp_header_checks = regexp:/etc/postfix/header_check" | sudo tee "${postfixconf
 
   # Display Postfix version
   postconf mail_version
+fi
+
+### Email monitoring (optional)
+
+if [[ "${monitoringemails}" == 'y' ]]
+then
+  # Install mailutils
+  sudo apt install -y mailutils
 
   # Send email
   echo "Email monitoring is enabled for your machine: ${hostname}." | mail -s "Email monitoring is enabled." "${email}"
@@ -384,7 +399,7 @@ fi
 
 # Add rules and activate firewall
 sudo ufw allow 3022
-if [[ "${monitoringemails}" == 'y' ]]
+if [[ "${postfix}" == 'y' ]]
 then
 sudo ufw allow Postfix
 fi
@@ -412,7 +427,11 @@ port = ssh
 filter = sshd
 logpath = /var/log/auth.log
 maxretry = 3
+"
 
+if [[ "${postfix}" == 'y' ]]
+then
+  fail2banconfig+="
 [postfix]
 enabled  = true
 port     = smtp
@@ -420,6 +439,7 @@ filter   = postfix
 logpath  = /var/log/mail.log
 maxretry = 5
 "
+fi
 
 if [[ "${apache}" == 'y' ]]
 then
