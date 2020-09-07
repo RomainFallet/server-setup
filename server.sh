@@ -404,14 +404,8 @@ sudo apt install -y fail2ban
 # Add default configuration
 fail2banconfig="[DEFAULT]
 findtime = 3600
-bantime = 86400"
-if [[ "${monitoringemails}" == 'y' ]]
-then
-  fail2banconfig+="
-destemail = ${email}
-action = %(action_mwl)s"
-fi
-fail2banconfig+="
+bantime = 86400
+
 [sshd]
 enabled = true
 port = ssh
@@ -578,7 +572,7 @@ fi
 # Ask for Samba server
 if [[ -z "${samba}" ]]
 then
-  read -r -p "Do you want to install a Samba server? [N/y]: " samba
+  read -r -p "Do you want to install Samba server? [N/y]: " samba
   samba=${samba:-n}
   samba=$(echo "${samba}" | awk '{print tolower($0)}')
 fi
