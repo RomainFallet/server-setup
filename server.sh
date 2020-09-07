@@ -572,3 +572,18 @@ if [[ "${nodejs}" == 'y' ]]; then
   # Install
   sudo apt install -y mariadb-server-10.4
 fi
+
+### Samba server (optional)
+
+# Ask for Samba server
+if [[ -z "${samba}" ]]
+then
+  read -r -p "Do you want to install a Samba server? [N/y]: " samba
+  samba=${samba:-n}
+  samba=$(echo "${samba}" | awk '{print tolower($0)}')
+fi
+
+if [[ "${samba}" == 'y' ]]
+then
+  sudo apt install -y samba
+fi
