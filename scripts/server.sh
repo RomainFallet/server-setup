@@ -395,22 +395,6 @@ then
   fi
 fi
 
-### Firewall
-
-# Add rules and activate firewall
-sudo ufw allow 3022
-if [[ "${postfix}" == 'y' ]]
-then
-sudo ufw allow Postfix
-fi
-if [[ "${apache}" == 'y' ]]
-then
-  sudo ufw allow "Apache Full"
-fi
-echo 'y' | sudo ufw enable
-
-sudo ufw status
-
 ### Fail2ban
 
 # Install
@@ -600,4 +584,26 @@ fi
 if [[ "${samba}" == 'y' ]]
 then
   sudo apt install -y samba
+  sudo mkdir /samba
+  sudo chgrp sambashare /samba
 fi
+
+### Firewall
+
+# Add rules and activate firewall
+sudo ufw allow 3022
+if [[ "${postfix}" == 'y' ]]
+then
+sudo ufw allow Postfix
+fi
+if [[ "${apache}" == 'y' ]]
+then
+  sudo ufw allow "Apache Full"
+fi
+if [[ "${samba}" == 'y' ]]
+then
+  sudo ufw allow "Samba"
+fi
+echo 'y' | sudo ufw enable
+
+sudo ufw status
