@@ -21,35 +21,16 @@ The goal is to provide an opinionated environment that just work for commons sce
 
 [Back to top ↑](#table-of-contents)
 
-By default, if you install Ubuntu manually, it will ask you to create
-a user account with sudo privileges and disable root login automatically.
-This is how you are supposed to use your machine. This is because part of
-the power inherent with the root account is the ability to make very
-destructive changes, even by accident.
+By default, Ubuntu comes preinstalled with a non-root sudo user named "ubuntu".
+The "root" user exists but is not accessible through SSH.
+This is how you are supposed to use your machine, because
+part of the power inherent with the root account is the
+ability to make very destructive changes, even by accident.
 
-But, in most cases, the Ubuntu install process is handled by your hosting
-provider which gives you directly access to the root account.
-If you are in this case, follow these steps:
-
-```bash
-# Login to your machine's root account
-ssh root@<ipAddress>
-
-# Create a new user
-adduser <username>
-
-# Grant sudo privileges to the newly created user
-usermod -aG sudo <username>
-
-# Disable root password
-passwd -l root
-
-# Disconnect
-exit
-```
-
-Sometimes, Ubuntu comes already preinstalled with a non-root sudo user named
-"ubuntu". In that case, you probably just want to rename it before using it:
+But you will probably want something more meaningful
+than "ubuntu" as a username, so you can rename it by
+enabling temporary access to the "root" account
+(because you can't rename the user you currently logged in).
 
 <!-- markdownlint-disable MD013 -->
 ```bash
@@ -86,8 +67,8 @@ passwd <newUserName>
 # Disable root password
 passwd -l root
 
-# Disallow root login with password through SSH
-sed -i'.backup' -e 's/PermitRootLogin yes/#PermitRootLogin prohibit-password/g' /etc/ssh/sshd_config
+# Restore initial SSH config
+mv /etc/ssh/sshd_config.backup /etc/ssh/sshd_config
 
 # Restart SSH
 service ssh restart
@@ -104,18 +85,25 @@ Download the update if you have an error when using SSH command in PowerShell._
 
 [Back to top ↑](#table-of-contents)
 
-Before going any further, you need to generate an SSH key
-and add it to your server machine.
+Before going any further, you need to generate an SSH key.
 
 ```bash
 ssh-keygen -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa
 ```
 
-Then add it to your machine by using:
+Then add it to your server by using:
 
 <!-- markdownlint-disable MD013 -->
 ```bash
 ssh <yourUserName>@<yourIpAddress> "echo '$(cat ~/.ssh/id_rsa.pub)' | tee -a ~/.ssh/authorized_keys > /dev/null"
+```
+<!-- markdownlint-enable MD013 -->
+
+You can also add it to the root account:
+
+<!-- markdownlint-disable MD013 -->
+```bash
+ssh -t <yourUserName>@<yourIpAddress> "echo '$(cat ~/.ssh/id_rsa.pub)' | sudo tee -a /root/.ssh/authorized_keys > /dev/null"
 ```
 <!-- markdownlint-enable MD013 -->
 
@@ -146,27 +134,60 @@ Instead of:
 ssh <username>@50.70.150.30
 ```
 
-## Quickstart
+## Installation
 
 [Back to top ↑](#table-of-contents)
 
-Login to your machine's sudo user and run the following commands.
-
-### Installation
+Login to your machine's sudo user and run the following command.
 
 ```bash
-git clone https://github.com/RomainFallet/server-setup
-
-cd ./server-setup
+git clone https://github.com/RomainFallet/server-setup ./server-setup
 ```
 
-### Server setup
+## Usage
+
+### Server basic setup
 
 ```bash
-bash -c "$(cat ./scripts/server.sh)"
+bash ./server-setup/scripts/server/basic.sh
 ```
 
-This will install all softwares needed to host production apps.
+This will configure the timezone, the hostname, SSH, automatic updates,
+Fail2Ban and the firewall.
+
+### Web server setup
+
+```bash
+bash ./server-setup/scripts/server/web-server.sh
+```
+
+This will configure Apache and Certbot.
+
+### Mail server setup
+
+```bash
+bash ./server-setup/scripts/server/mail-server.sh
+```
+
+This will configure Postfix.
+
+## PHP environment setup
+
+```bash
+bash ./server-setup/scripts/server/environments/php/php7.3.sh
+```
+
+## NodeJS environment setup
+
+```bash
+bash ./server-setup/scripts/server/environments/nodejs/nodejs-14.sh
+```
+
+## MariaDB database setup
+
+```bash
+bash ./server-setup/scripts/server/databases/mariadb/mariadb-10-4.sh
+```
 
 ### Configure a new app
 
