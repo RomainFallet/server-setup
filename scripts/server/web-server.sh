@@ -108,6 +108,9 @@ apache2 -v
 # Show Apache modules
 sudo apache2ctl -M
 
+# Allow Apache connections
+sudo ufw allow 'Apache Full'
+
 ### Certbot
 
 # Add Certbot official repositories

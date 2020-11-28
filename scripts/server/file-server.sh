@@ -7,3 +7,6 @@ set -e
 
 # Install
 sudo apt install -y samba
+
+# Allow Samba connections
+sudo ufw allow samba

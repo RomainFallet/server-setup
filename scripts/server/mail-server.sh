@@ -140,3 +140,6 @@ sudo service fail2ban restart
 
 # Display Postfix version
 postconf mail_version
+
+# Allow Postfix connections
+sudo ufw allow Postfix
