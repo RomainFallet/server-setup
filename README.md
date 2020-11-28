@@ -161,7 +161,7 @@ Fail2Ban and the firewall.
 bash ~/server-setup/scripts/server/web-server.sh
 ```
 
-This will configure Apache and Certbot.
+This will install and configure Apache and Certbot.
 
 ### Mail server setup
 
@@ -169,7 +169,15 @@ This will configure Apache and Certbot.
 bash ~/server-setup/scripts/server/mail-server.sh
 ```
 
-This will configure Postfix.
+This will install and configure Postfix.
+
+### File server setup
+
+```bash
+bash ~/server-setup/scripts/server/file-server.sh
+```
+
+This will install Samba.
 
 ## PHP environment setup
 
