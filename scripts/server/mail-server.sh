@@ -3,7 +3,7 @@
 # Exit script on error
 set -e
 
-### Postfix mailserver
+### Postfix mail server
 
 # Install
 sudo DEBIAN_FRONTEND=noninteractive apt install -y postfix
