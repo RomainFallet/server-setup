@@ -149,7 +149,7 @@ git clone https://github.com/RomainFallet/server-setup ./server-setup
 ### Server basic setup
 
 ```bash
-bash ./server-setup/scripts/server/basic.sh
+bash ~/server-setup/scripts/server/basic.sh
 ```
 
 This will configure the timezone, the hostname, SSH, automatic updates,
@@ -158,7 +158,7 @@ Fail2Ban and the firewall.
 ### Web server setup
 
 ```bash
-bash ./server-setup/scripts/server/web-server.sh
+bash ~/server-setup/scripts/server/web-server.sh
 ```
 
 This will configure Apache and Certbot.
@@ -166,7 +166,7 @@ This will configure Apache and Certbot.
 ### Mail server setup
 
 ```bash
-bash ./server-setup/scripts/server/mail-server.sh
+bash ~/server-setup/scripts/server/mail-server.sh
 ```
 
 This will configure Postfix.
@@ -174,19 +174,19 @@ This will configure Postfix.
 ## PHP environment setup
 
 ```bash
-bash ./server-setup/scripts/server/environments/php/php7.3.sh
+bash ~/server-setup/scripts/server/environments/php/php7.3.sh
 ```
 
 ## NodeJS environment setup
 
 ```bash
-bash ./server-setup/scripts/server/environments/nodejs/nodejs-14.sh
+bash ~/server-setup/scripts/server/environments/nodejs/nodejs-14.sh
 ```
 
 ## MariaDB database setup
 
 ```bash
-bash ./server-setup/scripts/server/databases/mariadb/mariadb-10-4.sh
+bash ~/server-setup/scripts/server/databases/mariadb/mariadb-10-4.sh
 ```
 
 ### Configure a new app
