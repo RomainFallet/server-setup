@@ -234,7 +234,15 @@ bash ~/server-setup/scripts/server/databases/mariadb/mariadb-10-4.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/server-setup/scripts/server/accessmanagement/samba/create-user.sh
+bash ~/server-setup/scripts/server/access-management/samba/create-user.sh
+```
+
+### Create chroot jail
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ~/server-setup/scripts/server/access-management/chroot/create-jail.sh
 ```
 
 ## App setup
