@@ -1,17 +1,29 @@
 # Server setup instructions
 
-The purpose of this repository is to provide instructions to set up a machine
-(SSH login, firewall, faill2ban, monitoring...) with (optionally) web hosting capabilities.
+The purpose of this repository is to provide instructions
+to set up a machine with file sharing and web hosting capabilities.
 
 The goal is to provide an opinionated environment that just work for commons scenarios.
 
 ## Table of contents
 
 - [Prerequisites](#prerequisites)
-  - [Create a user account with sudo privileges](#create-a-user-account-with-sudo-privileges)
+  - [Rename default user account](#create-a-user-account-with-sudo-privileges)
   - [Configure an SSH key](#configure-an-ssh-key)
   - [Point your domain names to your machine IP address](#point-your-domain-names-to-your-machine-ip-address)
-- [Quickstart](#quickstart)
+- [Installation](#Installation)
+- [Server setup](#server-setup)
+  - [Basic](#basic)
+  - [Web server](#web-server)
+  - [Mail server](#mail-server)
+  - [File server](#file-server)
+- [Environment setup](#environment-setup)
+  - [PHP](#php)
+  - [NodeJS](#nodejs)
+- [Database setup](#database-setup)
+  - [MariaDB](#mariadb)
+- [Access management setup](#access-management-setup)
+  - [Create Samba user](#create-samba-user)
 - [Transfer your files from your computer](#transfer-your-files-from-your-computer)
 - [Transfer your files from CI/CD](#transfer-your-files-from-cicd)
 
@@ -22,7 +34,7 @@ The goal is to provide an opinionated environment that just work for commons sce
 [Back to top ↑](#table-of-contents)
 
 By default, Ubuntu comes preinstalled with a non-root sudo user named "ubuntu".
-The "root" user exists but is not accessible through SSH.
+The "root" user exists but is not accessible through SSH with a password.
 This is how you are supposed to use your machine, because
 part of the power inherent with the root account is the
 ability to make very destructive changes, even by accident.
@@ -144,9 +156,11 @@ Login to your machine's sudo user and run the following command.
 git clone https://github.com/RomainFallet/server-setup ./server-setup
 ```
 
-## Usage
+## Server setup
 
-### Server basic setup
+### Basic
+
+[Back to top ↑](#table-of-contents)
 
 ```bash
 bash ~/server-setup/scripts/server/basic.sh
@@ -155,7 +169,9 @@ bash ~/server-setup/scripts/server/basic.sh
 This will configure the timezone, the hostname, SSH, automatic updates,
 Fail2Ban and the firewall.
 
-### Web server setup
+### Web server
+
+[Back to top ↑](#table-of-contents)
 
 ```bash
 bash ~/server-setup/scripts/server/web-server.sh
@@ -163,7 +179,9 @@ bash ~/server-setup/scripts/server/web-server.sh
 
 This will install and configure Apache and Certbot.
 
-### Mail server setup
+### Mail server
+
+[Back to top ↑](#table-of-contents)
 
 ```bash
 bash ~/server-setup/scripts/server/mail-server.sh
@@ -171,7 +189,9 @@ bash ~/server-setup/scripts/server/mail-server.sh
 
 This will install and configure Postfix.
 
-### File server setup
+### File server
+
+[Back to top ↑](#table-of-contents)
 
 ```bash
 bash ~/server-setup/scripts/server/file-server.sh
@@ -179,23 +199,45 @@ bash ~/server-setup/scripts/server/file-server.sh
 
 This will install Samba.
 
-## PHP environment setup
+## Environment setup
+
+### PHP
+
+[Back to top ↑](#table-of-contents)
 
 ```bash
 bash ~/server-setup/scripts/server/environments/php/php7.3.sh
 ```
 
-## NodeJS environment setup
+### NodeJS
+
+[Back to top ↑](#table-of-contents)
 
 ```bash
 bash ~/server-setup/scripts/server/environments/nodejs/nodejs-14.sh
 ```
 
-## MariaDB database setup
+## Database setup
+
+### MariaDB
+
+[Back to top ↑](#table-of-contents)
 
 ```bash
 bash ~/server-setup/scripts/server/databases/mariadb/mariadb-10-4.sh
 ```
+
+## Access management setup
+
+### Create Samba user
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ~/server-setup/scripts/server/accessmanagement/samba/create-user.sh
+```
+
+## App setup
 
 ### Configure a new app
 
