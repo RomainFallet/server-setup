@@ -6,14 +6,10 @@ set -e
 ### Apache web server
 
 # Install
-sudo apt install -y apache2
+sudo apt install -y apache2 libapache2-mod-fcgid
 
 # Enable modules
-sudo a2enmod ssl
-sudo a2enmod rewrite
-sudo a2enmod proxy
-sudo a2enmod proxy_http
-sudo a2enmod headers
+sudo a2enmod ssl rewrite proxy proxy_http headers actions fcgid alias proxy_fcgi
 
 # Backup config file
 apacheenvarsconfigpath=/etc/apache2/envvars
@@ -43,54 +39,6 @@ port     = http,https
 filter   = apache-auth
 logpath  = /var/log/apache*/*error.log
 maxretry = 6
-
-[apache-noscript]
-enabled  = true
-port     = http,https
-filter   = apache-noscript
-logpath  = /var/log/apache*/*error.log
-maxretry = 6
-
-[apache-overflows]
-enabled  = true
-port     = http,https
-filter   = apache-overflows
-logpath  = /var/log/apache*/*error.log
-maxretry = 2
-
-[apache-nohome]
-enabled  = true
-port     = http,https
-filter   = apache-nohome
-logpath  = /var/log/apache*/*error.log
-maxretry = 2
-
-[apache-botsearch]
-enabled  = true
-port     = http,https
-filter   = apache-botsearch
-logpath  = /var/log/apache*/*error.log
-maxretry = 2
-
-[apache-shellshock]
-enabled  = true
-port     = http,https
-filter   = apache-shellshock
-logpath  = /var/log/apache*/*error.log
-maxretry = 2
-
-[apache-fakegooglebot]
-enabled  = true
-port     = http,https
-filter   = apache-fakegooglebot
-logpath  = /var/log/apache*/*error.log
-maxretry = 2
-
-[php-url-fopen]
-enabled = true
-port    = http,https
-filter  = php-url-fopen
-logpath = /var/log/apache*/*access.log
 "
 fail2banconfigfile=/etc/fail2ban/jail.local
 

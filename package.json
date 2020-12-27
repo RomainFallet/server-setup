@@ -14,7 +14,7 @@
   "scripts": {
     "lint": "npm-run-all lint:*",
     "format": "npm-run-all format:*",
-    "lint:sh": "shellcheck ./*.sh",
+    "lint:sh": "shellcheck./*.sh",
     "lint:md": "markdownlint ./*.md --ignore ./node_modules",
     "format:md": "markdownlint --fix ./*.md --ignore ./node_modules"
   },

@@ -24,6 +24,9 @@ The goal is to provide an opinionated environment that just work for commons sce
   - [MariaDB](#mariadb)
 - [Access management setup](#access-management-setup)
   - [Create Samba user](#create-samba-user)
+  - [Create Chroot jail](#create-chroot-jail)
+- [App setup](#app-setup)
+  - [Get TLS certificate](#get-tls-certificate)
 - [Transfer your files from your computer](#transfer-your-files-from-your-computer)
 - [Transfer your files from CI/CD](#transfer-your-files-from-cicd)
 
@@ -150,10 +153,12 @@ ssh <username>@50.70.150.30
 
 [Back to top ↑](#table-of-contents)
 
-Login to your machine's sudo user and run the following command.
+Login to your machine's sudo user and run the following commands.
 
 ```bash
-git clone https://github.com/RomainFallet/server-setup ./server-setup
+git clone https://github.com/RomainFallet/server-setup ~/server-setup
+
+cd ~/server-setup
 ```
 
 ## Server setup
@@ -163,7 +168,7 @@ git clone https://github.com/RomainFallet/server-setup ./server-setup
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/server-setup/scripts/server/basic.sh
+bash ~/scripts/server/basic.sh
 ```
 
 This will configure the timezone, the hostname, SSH, automatic updates,
@@ -174,7 +179,7 @@ Fail2Ban and the firewall.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/server-setup/scripts/server/web-server.sh
+bash ~/scripts/server/web-server.sh
 ```
 
 This will install and configure Apache and Certbot.
@@ -184,7 +189,7 @@ This will install and configure Apache and Certbot.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/server-setup/scripts/server/mail-server.sh
+bash ~/scripts/server/mail-server.sh
 ```
 
 This will install and configure Postfix.
@@ -194,7 +199,7 @@ This will install and configure Postfix.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/server-setup/scripts/server/file-server.sh
+bash ~/scripts/server/file-server.sh
 ```
 
 This will install Samba.
@@ -206,7 +211,7 @@ This will install Samba.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/server-setup/scripts/server/environments/php/php7.3.sh
+bash ~/scripts/server/environments/php/php7.3.sh
 ```
 
 ### NodeJS
@@ -214,7 +219,7 @@ bash ~/server-setup/scripts/server/environments/php/php7.3.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/server-setup/scripts/server/environments/nodejs/nodejs-14.sh
+bash ~/scripts/server/environments/nodejs/nodejs-14.sh
 ```
 
 ## Database setup
@@ -224,7 +229,7 @@ bash ~/server-setup/scripts/server/environments/nodejs/nodejs-14.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/server-setup/scripts/server/databases/mariadb/mariadb-10-4.sh
+bash ~/scripts/server/databases/mariadb/mariadb-10-4.sh
 ```
 
 ## Access management setup
@@ -234,7 +239,7 @@ bash ~/server-setup/scripts/server/databases/mariadb/mariadb-10-4.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/server-setup/scripts/server/access-management/samba/create-user.sh
+bash ~/scripts/server/access-management/samba/create-user.sh
 ```
 
 ### Create chroot jail
@@ -242,24 +247,28 @@ bash ~/server-setup/scripts/server/access-management/samba/create-user.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/server-setup/scripts/server/access-management/chroot/create-jail.sh
+bash ~/scripts/server/access-management/chroot/create-jail.sh
 ```
 
 ## App setup
 
-### Configure a new app
+### Get TLS certificate
 
 ```bash
-bash -c "$(cat ./scripts/app.sh)"
+bash ~/scripts/apps/apache-cerbot/tls-certificate.sh
 ```
 
-After that, you will be able to login to your app with:
+### Configure an app with a domain name
 
 ```bash
-ssh -p 3022 <appname>@<hostname>
+bash ~/scripts/apps/apache-certbot/domaine-name-app.sh
 ```
 
-If you need to deploy your app through CI & CD, follow [these instructions](#transfer-your-files-from-cicd).
+### Configure an app with a local port
+
+```bash
+bash ~/scripts/apps/apache-certbot/local-port-app.sh
+```
 
 ### Transfer your files from your computer
 
