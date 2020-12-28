@@ -24,8 +24,7 @@ apacheconfig="<VirtualHost *:443>
   Header always set Stirct-Transport-Security 'max-age=15552000;'
   ErrorLog /var/log/apache2/${appname}.error.log
   CustomLog /var/log/apache2/${appname}.access.log combined
-</VirtualHost>
-"
+</VirtualHost>"
 apacheconfigfile="/etc/apache2/sites-available/${appname}-public-${appdomain//\./}.conf"
 
 if ! sudo grep "${apacheconfig}" "${apacheconfigfile}" > /dev/null

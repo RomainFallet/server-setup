@@ -37,8 +37,7 @@ apacheconfig="<VirtualHost *:80>
   RewriteEngine on
   RewriteRule ^\/.well-known\/acme-challenge\/.+$ - [END]
   RewriteRule ^.+$ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
-</VirtualHost>
-"
+</VirtualHost>"
 apacheconfigfile="/etc/apache2/sites-available/${appname}-wellknown-${appdomain//\./}.conf"
 
 if ! sudo grep "${apacheconfig}" "${apacheconfigfile}" > /dev/null
