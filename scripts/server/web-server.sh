@@ -33,16 +33,17 @@ sudo a2dissite 000-default.conf
 sudo service apache2 restart
 
 # Fail2ban config
-fail2banconfig+="[apache]
+fail2banconfig="
+[apache]
 enabled  = true
 port     = http,https
 filter   = apache-auth
 logpath  = /var/log/apache*/*error.log
-maxretry = 6
-"
+maxretry = 6"
 fail2banconfigfile=/etc/fail2ban/jail.local
-
-if ! sudo grep "${fail2banconfig}" "${fail2banconfigfile}" > /dev/null
+pattern=$(echo "${fail2banconfig}" | tr -d '\n')
+content=$(< "${fail2banconfigfile}" tr -d '\n')
+if [[ "${content}" != *"${pattern}"* ]]
 then
   echo "${fail2banconfig}" | sudo tee -a "${fail2banconfigfile}" > /dev/null
 fi

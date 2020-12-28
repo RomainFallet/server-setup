@@ -121,16 +121,17 @@ fi
 sudo service postfix restart
 
 # Fail2ban config
-fail2banconfig+="[postfix]
+fail2banconfig="
+[postfix]
 enabled  = true
 port     = smtp
 filter   = postfix
 logpath  = /var/log/mail.log
-maxretry = 5
-"
+maxretry = 5"
 fail2banconfigfile=/etc/fail2ban/jail.local
-
-if ! sudo grep "${fail2banconfig}" "${fail2banconfigfile}" > /dev/null
+pattern=$(echo "${fail2banconfig}" | tr -d '\n')
+content=$(< "${fail2banconfigfile}" tr -d '\n')
+if [[ "${content}" != *"${pattern}"* ]]
 then
   echo "${fail2banconfig}" | sudo tee -a "${fail2banconfigfile}" > /dev/null
 fi
