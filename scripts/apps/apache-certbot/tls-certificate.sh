@@ -45,7 +45,7 @@ then
   echo "${apacheconfig}" | sudo tee "${apacheconfigfile}" > /dev/null
 fi
 
-sudo a2ensite "${appname}"
+sudo a2ensite "${appname}-wellknown-${appdomain//\./}"
 
 sudo service apache2 restart
 
