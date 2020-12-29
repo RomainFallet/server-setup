@@ -13,7 +13,7 @@ then
 fi
 
 # shellcheck source=_config-from-app-type.sh
-source ~/server-setup/scripts/apache/_config-from-app-type.sh "${appname}"
+source ~/server-setup/scripts/apache-certbot/_config-from-app-type.sh "${appname}"
 
 apacheconfig="<VirtualHost *:443>
   ServerName ${appdomain}
@@ -27,7 +27,9 @@ apacheconfig="<VirtualHost *:443>
 </VirtualHost>"
 apacheconfigfile="/etc/apache2/sites-available/${appname}-public-${appdomain//\./}.conf"
 
-if ! sudo grep "${apacheconfig}" "${apacheconfigfile}" > /dev/null
+pattern=$(echo "${apacheconfig}" | tr -d '\n')
+content=$(< "${apacheconfigfile}" tr -d '\n')
+if [[ "${content}" != *"${pattern}"* ]]
 then
   echo "${apacheconfig}" | sudo tee "${apacheconfigfile}" > /dev/null
 fi
