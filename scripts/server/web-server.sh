@@ -62,12 +62,8 @@ sudo ufw allow 'Apache Full'
 
 ### Certbot
 
-# Add Certbot official repositories
-sudo add-apt-repository universe
-sudo add-apt-repository -y ppa:certbot/certbot
-
 # Install
-sudo apt install -y certbot
+sudo snap install --classic certbot
 
 # Show Certbot version
 certbot --version
