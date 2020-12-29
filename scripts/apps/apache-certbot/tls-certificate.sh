@@ -44,13 +44,16 @@ if ! test -d "/var/www/${appname}"
 then
   sudo mkdir "/var/www/${appname}"
 fi
+
+sudo chown www-data:www-data "/var/www/${appname}"
+sudo chmod 775 "/var/www/${appname}"
+
 if ! test -f "${apacheconfigfile}"
 then
   sudo touch "${apacheconfigfile}"
 fi
-pattern=$(echo "${apacheconfig}" | tr -d '\n')
-content=$(< "${apacheconfigfile}" tr -d '\n')
-if [[ "${content}" != *"${pattern}"* ]]
+
+if [[ $(< "${apacheconfigfile}") != "${apacheconfig}" ]]
 then
   echo "${apacheconfig}" | sudo tee "${apacheconfigfile}" > /dev/null
 fi

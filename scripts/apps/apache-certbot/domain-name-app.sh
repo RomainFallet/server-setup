@@ -27,11 +27,24 @@ apacheconfig="<VirtualHost *:443>
 </VirtualHost>"
 apacheconfigfile="/etc/apache2/sites-available/${appname}-public-${appdomain//\./}.conf"
 
-if [[ $(< "${apacheconfigfile}") != *"${apacheconfig}"* ]]
+if ! test -d "/var/www/${appname}"
+then
+  sudo mkdir "/var/www/${appname}"
+fi
+
+sudo chown www-data:www-data "/var/www/${appname}"
+sudo chmod 775 "/var/www/${appname}"
+
+if ! test -f "${apacheconfigfile}"
+then
+  sudo touch "${apacheconfigfile}"
+fi
+
+if [[ $(< "${apacheconfigfile}") != "${apacheconfig}" ]]
 then
   echo "${apacheconfig}" | sudo tee "${apacheconfigfile}" > /dev/null
 fi
 
-sudo a2ensite "${appname}"
+sudo a2ensite "${appname}-public-${appdomain//\./}"
 
 sudo service apache2 restart

@@ -45,9 +45,6 @@ fi
 
 if [[ "${apptype}" == '3' ]]
 then
-  sudo mkdir -p "/var/www/${appname}"
-  sudo chown www-data:www-data "/var/www/${appname}"
-  sudo chmod 775 "/var/www/${appname}"
   apacheconfigfromapptype="DocumentRoot /var/www/${appname}
 <Directory /var/www/${appname}>
   Require all granted
@@ -58,9 +55,6 @@ fi
 
 if [[ "${apptype}" == '4' ]]
 then
-  sudo mkdir -p "/var/www/${appname}"
-  sudo chown www-data:www-data "/var/www/${appname}"
-  sudo chmod 775 "/var/www/${appname}"
   apacheconfigfromapptype="DocumentRoot /var/www/${appname}
 <Directory /var/www/${appname}>
   Require all granted
@@ -74,10 +68,10 @@ fi
 
 if [[ "${apptype}" == '5' ]]
 then
-  sudo mkdir -p "/var/www/${appname}"
-  sudo mkdir -p "/var/www/${appname}/tmp"
-  sudo chown www-data:www-data "/var/www/${appname}"
-  sudo chmod 775 "/var/www/${appname}"
+  if ! test -d "/var/www/${appname}/tmp"
+  then
+    sudo mkdir "/var/www/${appname}/tmp"
+  fi
   apacheconfigfromapptype="DocumentRoot /var/www/${appname}
 <Directory /var/www/${appname}/public>
   Require all granted
