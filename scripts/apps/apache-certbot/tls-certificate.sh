@@ -40,7 +40,17 @@ apacheconfig="<VirtualHost *:80>
 </VirtualHost>"
 apacheconfigfile="/etc/apache2/sites-available/${appname}-wellknown-${appdomain//\./}.conf"
 
-if ! sudo grep "${apacheconfig}" "${apacheconfigfile}" > /dev/null
+if ! test -d "/var/www/${appname}"
+then
+  sudo mkdir "/var/www/${appname}"
+fi
+if ! test -f "${apacheconfigfile}"
+then
+  sudo touch "${apacheconfigfile}"
+fi
+pattern=$(echo "${apacheconfig}" | tr -d '\n')
+content=$(< "${apacheconfigfile}" tr -d '\n')
+if [[ "${content}" != *"${pattern}"* ]]
 then
   echo "${apacheconfig}" | sudo tee "${apacheconfigfile}" > /dev/null
 fi
