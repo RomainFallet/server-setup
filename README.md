@@ -255,13 +255,13 @@ bash ./scripts/server/access-management/chroot/create-jail.sh
 ### Get TLS certificate
 
 ```bash
-bash ./scripts/apps/apache-cerbot/tls-certificate.sh
+bash ./scripts/apps/apache-certbot/tls-certificate.sh
 ```
 
 ### Configure an app with a domain name
 
 ```bash
-bash ./scripts/apps/apache-certbot/domaine-name-app.sh
+bash ./scripts/apps/apache-certbot/domain-name-app.sh
 ```
 
 ### Configure an app with a local port
