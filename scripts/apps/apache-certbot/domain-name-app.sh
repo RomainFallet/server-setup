@@ -13,7 +13,7 @@ then
 fi
 
 # shellcheck source=_config-from-app-type.sh
-source ~/server-setup/scripts/apache-certbot/_config-from-app-type.sh "${appname}"
+source ~/server-setup/scripts/apps/apache-certbot/_config-from-app-type.sh "${appname}"
 
 apacheconfig="<VirtualHost *:443>
   ServerName ${appdomain}
