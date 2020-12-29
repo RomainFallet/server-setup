@@ -27,9 +27,7 @@ apacheconfig="<VirtualHost *:443>
 </VirtualHost>"
 apacheconfigfile="/etc/apache2/sites-available/${appname}-public-${appdomain//\./}.conf"
 
-pattern=$(echo "${apacheconfig}" | tr -d '\n')
-content=$(< "${apacheconfigfile}" tr -d '\n')
-if [[ "${content}" != *"${pattern}"* ]]
+if [[ $(< "${apacheconfigfile}") != *"${apacheconfig}"* ]]
 then
   echo "${apacheconfig}" | sudo tee "${apacheconfigfile}" > /dev/null
 fi
