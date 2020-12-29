@@ -199,7 +199,7 @@ This will install and configure Postfix.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/scripts/server/file-server.sh
+bash ./scripts/server/file-server.sh
 ```
 
 This will install Samba.
@@ -211,7 +211,7 @@ This will install Samba.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/scripts/server/environments/php/php7.3.sh
+bash ./scripts/server/environments/php/php7.3.sh
 ```
 
 ### NodeJS
@@ -219,7 +219,7 @@ bash ~/scripts/server/environments/php/php7.3.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/scripts/server/environments/nodejs/nodejs-14.sh
+bash ./scripts/server/environments/nodejs/nodejs-14.sh
 ```
 
 ## Database setup
@@ -229,7 +229,7 @@ bash ~/scripts/server/environments/nodejs/nodejs-14.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/scripts/server/databases/mariadb/mariadb-10-4.sh
+bash ./scripts/server/databases/mariadb/mariadb-10-4.sh
 ```
 
 ## Access management setup
@@ -239,7 +239,7 @@ bash ~/scripts/server/databases/mariadb/mariadb-10-4.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/scripts/server/access-management/samba/create-user.sh
+bash ./scripts/server/access-management/samba/create-user.sh
 ```
 
 ### Create chroot jail
@@ -247,7 +247,7 @@ bash ~/scripts/server/access-management/samba/create-user.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/scripts/server/access-management/chroot/create-jail.sh
+bash ./scripts/server/access-management/chroot/create-jail.sh
 ```
 
 ## App setup
@@ -255,19 +255,19 @@ bash ~/scripts/server/access-management/chroot/create-jail.sh
 ### Get TLS certificate
 
 ```bash
-bash ~/scripts/apps/apache-cerbot/tls-certificate.sh
+bash ./scripts/apps/apache-cerbot/tls-certificate.sh
 ```
 
 ### Configure an app with a domain name
 
 ```bash
-bash ~/scripts/apps/apache-certbot/domaine-name-app.sh
+bash ./scripts/apps/apache-certbot/domaine-name-app.sh
 ```
 
 ### Configure an app with a local port
 
 ```bash
-bash ~/scripts/apps/apache-certbot/local-port-app.sh
+bash ./scripts/apps/apache-certbot/local-port-app.sh
 ```
 
 ### Transfer your files from your computer
