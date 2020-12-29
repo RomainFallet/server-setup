@@ -17,10 +17,12 @@ source ~/server-setup/scripts/apps/apache-certbot/_config-from-app-type.sh "${ap
 
 apacheconfig="<VirtualHost *:443>
   ServerName ${appdomain}
+
   ${apacheconfigfromapptype}
+
   SSLEngine on
-  SSLCertificateFile /etc/letsencrypt/live/yourname-yourappname.local.tolk.ai/fullchain.pem
-  SSLCertificateKeyFile /etc/letsencrypt/live/yourname-yourappname.local.tolk.ai/privkey.pem
+  SSLCertificateFile /etc/letsencrypt/live/${appdomain}/fullchain.pem
+  SSLCertificateKeyFile /etc/letsencrypt/live/${appdomain}/privkey.pem
   Header always set Stirct-Transport-Security 'max-age=15552000;'
   ErrorLog /var/log/apache2/${appname}.error.log
   CustomLog /var/log/apache2/${appname}.access.log combined
