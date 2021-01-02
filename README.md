@@ -168,7 +168,7 @@ cd ~/server-setup
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/scripts/server/basic.sh
+bash ./scripts/server/basic.sh
 ```
 
 This will configure the timezone, the hostname, SSH, automatic updates,
@@ -179,7 +179,7 @@ Fail2Ban and the firewall.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/scripts/server/web-server.sh
+bash ./scripts/server/web-server.sh
 ```
 
 This will install and configure Apache and Certbot.
@@ -189,7 +189,7 @@ This will install and configure Apache and Certbot.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ~/scripts/server/mail-server.sh
+bash ./scripts/server/mail-server.sh
 ```
 
 This will install and configure Postfix.
