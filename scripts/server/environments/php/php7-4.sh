@@ -34,3 +34,6 @@ sudo rm "${phpinipath}.tmp"
 
 # Restart Apache
 sudo service apache2 restart
+
+# Restart PHP-FPM
+sudo service php7.4-fpm restart

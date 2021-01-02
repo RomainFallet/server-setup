@@ -32,8 +32,8 @@ sudo sed -i'.tmp' -E 's/;*\s*disable_functions\s=\s*(\w+)/disable_functions = er
 # Remove temporary file
 sudo rm "${phpinipath}.tmp"
 
-# Enable PHP mod
-sudo a2enmod php7.3
-
 # Restart Apache
 sudo service apache2 restart
+
+# Restart PHP-FPM
+sudo service php7.4-fpm restart
