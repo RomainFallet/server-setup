@@ -18,7 +18,7 @@ sudo apt install -y redis-server
 sudo apt install -y php7.3-mbstring php7.3-mysql php7.3-xml php7.3-curl php7.3-zip php7.3-intl php7.3-gd php7.3-bcmath php7.3-gmp php-redis php-imagick
 
 # Make a backup of the config file
-phpinipath=/etc/php/7.3/apache2/php.ini
+phpinipath=/etc/php/7.3/apache2/fpm/php.ini
 sudo cp "${phpinipath}" "$(dirname "${phpinipath}")/.php.ini.backup"
 
 # Update some configuration in php.ini
