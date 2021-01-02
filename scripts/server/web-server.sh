@@ -14,9 +14,15 @@ sudo a2enmod ssl rewrite proxy proxy_http headers actions fcgid alias proxy_fcgi
 # Backup config file
 apacheenvarsconfigpath=/etc/apache2/envvars
 apacheenvarsconfigbackuppath=/etc/apache2/.envvars.backup
+apachesecurityconfigpath=/etc/apache2/conf-available/security.conf
+apachesecurityconfigbackuppath=/etc/apache2/conf-available/.security.conf.backup
 if ! test -f "${apacheenvarsconfigbackuppath}"
 then
   sudo cp "${apacheenvarsconfigpath}" "${apacheenvarsconfigbackuppath}"
+fi
+if ! test -f "${apachesecurityconfigbackuppath}"
+then
+  sudo cp "${apachesecurityconfigpath}" "${apachesecurityconfigbackuppath}"
 fi
 
 # Set umask of the Apache user
@@ -25,6 +31,11 @@ if ! sudo grep "^${umaskconfig}" "${apacheenvarsconfigpath}" > /dev/null
 then
   echo "${umaskconfig}" | sudo tee -a "${apacheenvarsconfigpath}" > /dev/null
 fi
+
+# Set ServerTokens and ServerSignature directives
+sudo sed -i'.tmp' -E "s/ServerTokens\s+(\w+)/ServerTokens Prod/g" "${apachesecurityconfigpath}"
+sudo sed -i'.tmp' -E "s/ServerSignature\s+(\w+)/ServerSignature Off/g" "${apachesecurityconfigpath}"
+sudo rm "${apachesecurityconfigpath}".tmp
 
 # Disable default site
 sudo a2dissite 000-default.conf
