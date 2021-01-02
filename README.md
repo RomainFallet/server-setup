@@ -212,6 +212,8 @@ This will install Samba.
 
 ```bash
 bash ./scripts/server/environments/php/php7.3.sh
+
+bash ./scripts/server/environments/php/php7.4.sh
 ```
 
 ### NodeJS
