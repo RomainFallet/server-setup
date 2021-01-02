@@ -29,12 +29,11 @@ apacheconfig="<VirtualHost *:443>
 
   Header set Strict-Transport-Security \"max-age=15552000; preload;\"
   Header set Expect-CT \"max-age=86400, enforce\"
-  Header set Content-Security-Policy \"default-src 'self';\"
+  Header set Content-Security-Policy \"default-src 'self' 'unsafe-inline';\"
   Header set X-Frame-Options \"deny\"
   Header set X-Content-Type-Options \"nosniff\"
-  Header set Permissions-Policy \"microphone=(); geolocation=(); camera=();\"
   Header set Referrer-Policy \"same-origin\"
-  Header set Clear-Site-Data \"*\"
+  Header set Permissions-Policy \"microphone=(); geolocation=(); camera=();\"
 </VirtualHost>"
 apacheconfigfile="/etc/apache2/sites-available/${appname}-public-${appdomain//\./}.conf"
 

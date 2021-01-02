@@ -24,10 +24,9 @@ apacheconfig="Listen ${localport}
   ErrorLog /var/log/apache2/${appname}.error.log
   CustomLog /var/log/apache2/${appname}.access.log combined
 
-  Header set Content-Security-Policy \"default-src 'self';\"
+  Header set Content-Security-Policy \"default-src 'self' 'unsafe-inline';\"
   Header set X-Frame-Options \"deny\"
   Header set X-Content-Type-Options \"nosniff\"
-  Header set Clear-Site-Data \"*\"
   Header set Referrer-Policy \"same-origin\"
   Header set Permissions-Policy \"microphone=(); geolocation=(); camera=();\"
 </VirtualHost>"
