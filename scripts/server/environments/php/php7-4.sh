@@ -18,7 +18,7 @@ sudo apt install -y redis-server
 sudo apt install -y php7.4-mbstring php7.4-mysql php7.4-xml php7.4-curl php7.4-zip php7.4-intl php7.4-gd php7.4-bcmath php7.4-gmp php-redis php-imagick
 
 # Make a backup of the config file
-phpinipath=/etc/php/7.4/apache2/fpm/php.ini
+phpinipath=/etc/php/7.4/fpm/php.ini
 sudo cp "${phpinipath}" "$(dirname "${phpinipath}")/.php.ini.backup"
 
 # Update some configuration in php.ini
