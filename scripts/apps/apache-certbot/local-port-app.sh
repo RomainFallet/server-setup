@@ -18,18 +18,40 @@ source ~/server-setup/scripts/apache/_config-from-app-type.sh "${appname}"
 apacheconfig="Listen ${localport}
 <VirtualHost *:${localport}>
   ServerName 127.0.0.1
+
   ${apacheconfigfromapptype}
+
   ErrorLog /var/log/apache2/${appname}.error.log
   CustomLog /var/log/apache2/${appname}.access.log combined
+
+  Header set Content-Security-Policy \"default-src 'self';\"
+  Header set X-Frame-Options \"deny\"
+  Header set X-Content-Type-Options \"nosniff\"
+  Header set Clear-Site-Data \"*\"
+  Header set Referrer-Policy \"same-origin\"
+  Header set Feature-Policy \"microphone 'none'; geolocation 'none'; camera 'none';\"
 </VirtualHost>"
 apacheconfigfile="/etc/apache2/sites-available/${appname}-localport-${localport}.conf"
 
-if ! sudo grep "${apacheconfig}" "${apacheconfigfile}" > /dev/null
+if ! test -d "/var/www/${appname}"
+then
+  sudo mkdir "/var/www/${appname}"
+fi
+
+sudo chown www-data:www-data "/var/www/${appname}"
+sudo chmod 775 "/var/www/${appname}"
+
+if ! test -f "${apacheconfigfile}"
+then
+  sudo touch "${apacheconfigfile}"
+fi
+
+if [[ $(< "${apacheconfigfile}") != "${apacheconfig}" ]]
 then
   echo "${apacheconfig}" | sudo tee "${apacheconfigfile}" > /dev/null
 fi
 
-sudo a2ensite "${appname}"
+sudo a2ensite "${appname}-localport-${localport}"
 
 sudo service apache2 restart
 

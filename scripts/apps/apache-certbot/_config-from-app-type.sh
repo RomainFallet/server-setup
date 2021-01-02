@@ -38,6 +38,7 @@ then
   fi
 
   apacheconfigfromapptype="ProxyPass / http://127.0.0.1:${proxyport}/
+
   RewriteEngine On
   RewriteRule ^/\.well-known/carddav https://%{SERVER_NAME}/remote.php/dav/ [R=301,L]
   RewriteRule ^/\.well-known/caldav https://%{SERVER_NAME}/remote.php/dav/ [R=301,L]"
@@ -46,6 +47,7 @@ fi
 if [[ "${apptype}" == '3' ]]
 then
   apacheconfigfromapptype="DocumentRoot /var/www/${appname}
+
   <Directory /var/www/${appname}>
     Require all granted
     Options -Indexes -FollowSymLinks
@@ -56,6 +58,7 @@ fi
 if [[ "${apptype}" == '4' ]]
 then
   apacheconfigfromapptype="DocumentRoot /var/www/${appname}
+
   <Directory /var/www/${appname}>
     Require all granted
     Options -Indexes -FollowSymLinks
@@ -73,6 +76,7 @@ then
     sudo mkdir "/var/www/${appname}/tmp"
   fi
   apacheconfigfromapptype="DocumentRoot /var/www/${appname}
+
   <Directory /var/www/${appname}/public>
     Require all granted
     Options -Indexes -FollowSymLinks
@@ -84,6 +88,7 @@ then
   <Directory /var/www/${appname}/public/bundles>
     FallbackResource disabled
   </Directory>
+
   <FilesMatch \.php$>
     SetHandler 'proxy:unix:/run/php/php7.3-fpm.sock|fcgi://localhost'
   </FilesMatch>"
@@ -93,6 +98,7 @@ if [[ "${apptype}" == '6' ]]
 then
   # shellcheck disable=SC2034
   apacheconfigfromapptype="DocumentRoot /var/www/${appname}
+
   <Directory /var/www/${appname}>
     Require all granted
     Options +FollowSymLinks +MultiViews
@@ -103,6 +109,7 @@ then
   <IfModule mod_dav.c>
     Dav off
   </IfModule>
+
   <FilesMatch \.php$>
     SetHandler 'proxy:unix:/run/php/php7.3-fpm.sock|fcgi://localhost'
   </FilesMatch>"

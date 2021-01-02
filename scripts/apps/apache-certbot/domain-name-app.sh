@@ -20,12 +20,21 @@ apacheconfig="<VirtualHost *:443>
 
   ${apacheconfigfromapptype}
 
+  ErrorLog /var/log/apache2/${appname}.error.log
+  CustomLog /var/log/apache2/${appname}.access.log combined
+
   SSLEngine on
   SSLCertificateFile /etc/letsencrypt/live/${appdomain}/fullchain.pem
   SSLCertificateKeyFile /etc/letsencrypt/live/${appdomain}/privkey.pem
-  Header always set Stirct-Transport-Security 'max-age=15552000;'
-  ErrorLog /var/log/apache2/${appname}.error.log
-  CustomLog /var/log/apache2/${appname}.access.log combined
+
+  Header set Strict-Transport-Security \"max-age=15552000; preload;\"
+  Header set Expect-CT \"max-age=86400, enforce\"
+  Header set Content-Security-Policy \"default-src 'self';\"
+  Header set X-Frame-Options \"deny\"
+  Header set X-Content-Type-Options \"nosniff\"
+  Header set Clear-Site-Data \"*\"
+  Header set Referrer-Policy \"same-origin\"
+  Header set Feature-Policy \"microphone 'none'; geolocation 'none'; camera 'none';\"
 </VirtualHost>"
 apacheconfigfile="/etc/apache2/sites-available/${appname}-public-${appdomain//\./}.conf"
 
