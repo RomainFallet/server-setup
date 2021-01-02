@@ -6,13 +6,10 @@
 set -e
 
 # Add PHP official repository
-if ! test -f /etc/apt/sources.list.d/ondrej-ubuntu-php-*.list
-then
-  sudo add-apt-repository -y ppa:ondrej/php
-fi
+sudo add-apt-repository -y ppa:ondrej/php
 
 # Install PHP
-sudo apt install -y php7.3 php7.3-fpm
+sudo apt install -y php7.3 php7.3-fpm libapache2-mod-php7.3
 
 # Install Redis for PHP cache
 sudo apt install -y redis-server
@@ -34,3 +31,9 @@ sudo sed -i'.tmp' -E 's/;*\s*disable_functions\s=\s*(\w+)/disable_functions = er
 
 # Remove temporary file
 sudo rm "${phpinipath}.tmp"
+
+# Enable PHP mod
+sudo a2enmod php7.3
+
+# Restart Apache
+sudo service apache2 restart
