@@ -33,6 +33,7 @@ sudo sed -i'.tmp' -E 's/;*\s*disable_functions\s=\s*(\w+)/disable_functions = er
 sudo rm "${phpinipath}.tmp"
 
 # Restart Apache
+sudo a2enconf php7.3-fpm
 sudo service apache2 restart
 
 # Restart PHP-FPM
