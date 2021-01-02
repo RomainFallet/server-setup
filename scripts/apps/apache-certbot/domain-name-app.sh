@@ -32,9 +32,9 @@ apacheconfig="<VirtualHost *:443>
   Header set Content-Security-Policy \"default-src 'self';\"
   Header set X-Frame-Options \"deny\"
   Header set X-Content-Type-Options \"nosniff\"
-  Header set Clear-Site-Data \"*\"
+  Header set Permissions-Policy \"microphone=(); geolocation=(); camera=();\"
   Header set Referrer-Policy \"same-origin\"
-  Header set Feature-Policy \"microphone 'none'; geolocation 'none'; camera 'none';\"
+  Header set Clear-Site-Data \"*\"
 </VirtualHost>"
 apacheconfigfile="/etc/apache2/sites-available/${appname}-public-${appdomain//\./}.conf"
 

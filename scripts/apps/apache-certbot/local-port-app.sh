@@ -29,7 +29,7 @@ apacheconfig="Listen ${localport}
   Header set X-Content-Type-Options \"nosniff\"
   Header set Clear-Site-Data \"*\"
   Header set Referrer-Policy \"same-origin\"
-  Header set Feature-Policy \"microphone 'none'; geolocation 'none'; camera 'none';\"
+  Header set Permissions-Policy \"microphone=(); geolocation=(); camera=();\"
 </VirtualHost>"
 apacheconfigfile="/etc/apache2/sites-available/${appname}-localport-${localport}.conf"
 
