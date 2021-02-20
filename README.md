@@ -185,8 +185,6 @@ This will install and configure Apache and Certbot.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/server/environments/php/php7-3.sh
-
 bash ./scripts/server/environments/php/php7-4.sh
 ```
 

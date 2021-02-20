@@ -90,7 +90,7 @@ then
   </Directory>
 
   <FilesMatch \.php$>
-    SetHandler 'proxy:unix:/run/php/php7.3-fpm.sock|fcgi://localhost'
+    SetHandler 'proxy:unix:/run/php/php7.4-fpm.sock|fcgi://localhost'
   </FilesMatch>"
 fi
 
@@ -111,6 +111,6 @@ then
   </IfModule>
 
   <FilesMatch \.php$>
-    SetHandler 'proxy:unix:/run/php/php7.3-fpm.sock|fcgi://localhost'
+    SetHandler 'proxy:unix:/run/php/php7.4-fpm.sock|fcgi://localhost'
   </FilesMatch>"
 fi
