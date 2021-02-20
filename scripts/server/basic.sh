@@ -120,6 +120,13 @@ sudo rm "${umaskconfigpath}".tmp
 # Install
 sudo apt install -y fail2ban
 
+# Create config file
+fail2banconfigfile=/etc/fail2ban/jail.local
+if ! test -f "${fail2banconfigfile}"
+then
+  sudo touch /etc/fail2ban/jail.local
+fi
+
 # Add default configuration
 fail2banconfig="[DEFAULT]
 findtime = 3600
@@ -131,7 +138,6 @@ port = ssh
 filter = sshd
 logpath = /var/log/auth.log
 maxretry = 3"
-fail2banconfigfile=/etc/fail2ban/jail.local
 pattern=$(echo "${fail2banconfig}" | tr -d '\n')
 content=$(< "${fail2banconfigfile}" tr -d '\n')
 if [[ "${content}" != *"${pattern}"* ]]
