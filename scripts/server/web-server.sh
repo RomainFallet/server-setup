@@ -40,8 +40,18 @@ sudo rm "${apachesecurityconfigpath}".tmp
 # Disable default site
 sudo a2dissite 000-default.conf
 
+# Remove default site
+sudo rm -rf /var/www/html
+
 # Restart Apache
 sudo service apache2 restart
+
+# Create config file
+fail2banconfigfile=/etc/fail2ban/jail.local
+if ! test -f "${fail2banconfigfile}"
+then
+  sudo touch /etc/fail2ban/jail.local
+fi
 
 # Fail2ban config
 fail2banconfig="
