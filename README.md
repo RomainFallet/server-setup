@@ -174,7 +174,7 @@ Fail2Ban and the firewall.
 
 ```bash
 # Nginx
-bash ./scripts/server/web-server/apache.sh
+bash ./scripts/server/web-server/nginx.sh
 
 # Apache
 bash ./scripts/server/web-server/apache.sh
