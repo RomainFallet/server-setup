@@ -9,7 +9,7 @@ set -e
 sudo add-apt-repository -y ppa:ondrej/php
 
 # Install PHP
-sudo apt install -y php7.4 php7.4-fpm libapache2-mod-php7.4
+sudo apt install -y php7.4 php7.4-fpm
 
 # Install Redis for PHP cache
 sudo apt install -y redis-server
@@ -32,9 +32,13 @@ sudo sed -i'.tmp' -E 's/;*\s*disable_functions\s=\s*(\w+)/disable_functions = er
 # Remove temporary file
 sudo rm "${phpinipath}.tmp"
 
-# Restart Apache
-sudo a2enconf php7.4-fpm
-sudo service apache2 restart
-
 # Restart PHP-FPM
 sudo service php7.4-fpm restart
+
+# Apache configuration
+if dpkg --get-selections | grep 'apache2'
+then
+  sudo apt install -y libapache2-mod-php7.4
+  sudo a2enconf php7.4-fpm
+  sudo service apache2 restart
+fi
