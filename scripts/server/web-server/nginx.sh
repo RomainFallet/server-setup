@@ -17,7 +17,7 @@ then
 fi
 
 # Set server_tokens directive
-sudo sed -i'.tmp' -E "s/#*server_tokens\s+(.+);/server_tokens off;/g" "${nginxconfigpath}"
+sudo sed -i'.tmp' -E "s/#*\s*server_tokens\s+\w+;/server_tokens off;/g" "${nginxconfigpath}"
 
 # Disable default site
 sudo rm -f /etc/nginx/sites-enabled/default
