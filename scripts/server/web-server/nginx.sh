@@ -8,6 +8,9 @@ set -e
 # Install
 sudo apt install -y nginx
 
+# Disable default site
+sudo rm /etc/nginx/sites-enabled/default
+
 # Remove default site
 sudo rm -rf /var/www/html
 
