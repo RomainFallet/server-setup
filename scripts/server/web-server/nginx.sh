@@ -25,6 +25,9 @@ sudo rm -f /etc/nginx/sites-enabled/default
 # Remove default site
 sudo rm -rf /var/www/html
 
+# Restart Nginx
+sudo service nginx restart
+
 # Create config file
 fail2banconfigfile=/etc/fail2ban/jail.local
 if ! test -f "${fail2banconfigfile}"
