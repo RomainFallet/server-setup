@@ -31,7 +31,7 @@ nginxconfig="server {
   add_header Referrer-Policy \"same-origin\";
   add_header Permissions-Policy \"microphone=(); geolocation=(); camera=();\";
 }"
-nginxconfigfile="/etc/apache2/sites-available/${appname}-localport-${localport}.conf"
+nginxconfigfile="/etc/nginx/conf.d/${appname}-localport-${localport}.conf"
 
 if ! test -d "/var/www/${appname}"
 then
