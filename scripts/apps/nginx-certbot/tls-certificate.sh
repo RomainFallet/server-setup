@@ -30,7 +30,7 @@ nginxcconfig="server {
   location /.well-known/acme-challenge/ {
     try_files \$uri =404;
   }
-</VirtualHost>"
+}"
 nginxcconfigfile="/etc/nginx/conf.d/${appname}-wellknown-${appdomain//\./}.conf"
 
 if ! test -d "/var/www/${appname}"
