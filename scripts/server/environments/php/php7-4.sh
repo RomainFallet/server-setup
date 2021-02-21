@@ -38,7 +38,8 @@ serviceconfigpath=/etc/systemd/system/php7.4-fpm.service
 serviceconfig="UMask=0002"
 if ! grep "${serviceconfig}" "${serviceconfigpath}"
 then
-  sudo sed -E "s/\[Service\]/[Service]\n${serviceconfig}/g" "${serviceconfigpath}"
+  sudo sed -i'.tpm' -E "s/\[Service\]/[Service]\n${serviceconfig}/g" "${serviceconfigpath}"
+  sudo rm "${serviceconfigpath}".tmp
 fi
 sudo systemctl daemon-reload
 
