@@ -40,6 +40,7 @@ if ! grep "${serviceconfig}" "${serviceconfigpath}"
 then
   sudo sed -E "s/\[Service\]/[Service]\n${serviceconfig}/g" "${serviceconfigpath}"
 fi
+sudo systemctl daemon-reload
 
 # Restart PHP-FPM
 sudo service php7.4-fpm restart
