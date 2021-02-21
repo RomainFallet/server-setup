@@ -36,7 +36,7 @@ nginxconfig="server {
   add_header Referrer-Policy \"same-origin\";
   add_header Permissions-Policy \"microphone=(); geolocation=(); camera=();\";
 }"
-nginxconfigfile="/etc/nginx/conf.d/${appname}-public-${appdomain//\./}.conf"
+nginxconfigfile="/etc/nginx/sites-available/${appname}-public-${appdomain//\./}.conf"
 
 if ! test -d "/var/www/${appname}"
 then
@@ -55,5 +55,7 @@ if [[ $(< "${nginxconfigfile}") != "${nginxconfig}" ]]
 then
   echo "${nginxconfig}" | sudo tee "${nginxconfigfile}" > /dev/null
 fi
+
+sudo ln -s /etc/nginx/sites-available/"${appname}-public-${appdomain//\./}".conf /etc/nginx/sites-enabled/
 
 sudo service nginx restart

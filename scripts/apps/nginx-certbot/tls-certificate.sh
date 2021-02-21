@@ -31,7 +31,7 @@ nginxcconfig="server {
     try_files \$uri =404;
   }
 }"
-nginxcconfigfile="/etc/nginx/conf.d/${appname}-wellknown-${appdomain//\./}.conf"
+nginxcconfigfile="/etc/nginx/sites-available/${appname}-wellknown-${appdomain//\./}.conf"
 
 if ! test -d "/var/www/${appname}"
 then
@@ -50,6 +50,8 @@ if [[ $(< "${nginxcconfigfile}") != "${nginxcconfig}" ]]
 then
   echo "${nginxcconfig}" | sudo tee "${nginxcconfigfile}" > /dev/null
 fi
+
+sudo ln -s /etc/nginx/sites-available/"${appname}-wellknown-${appdomain//\./}".conf /etc/nginx/sites-enabled/
 
 sudo service nginx restart
 
