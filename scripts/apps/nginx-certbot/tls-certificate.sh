@@ -30,6 +30,9 @@ nginxcconfig="server {
   location /.well-known/acme-challenge/ {
     try_files \$uri =404;
   }
+  location / {
+    return 301 https://\$host\$request_uri;
+  }
 }"
 nginxconfigfile="/etc/nginx/sites-available/${appname}-wellknown-${appdomain//\./}.conf"
 
