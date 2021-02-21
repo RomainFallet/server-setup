@@ -20,7 +20,7 @@ fi
 sudo sed -i'.tmp' -E "s/#*server_tokens\s+(.+);/server_tokens off;/g" "${nginxconfigpath}"
 
 # Disable default site
-sudo rm /etc/nginx/sites-enabled/default
+sudo rm -f /etc/nginx/sites-enabled/default
 
 # Remove default site
 sudo rm -rf /var/www/html
