@@ -51,8 +51,6 @@ then
   echo "${nginxcconfig}" | sudo tee "${nginxcconfigfile}" > /dev/null
 fi
 
-sudo a2ensite "${appname}-wellknown-${appdomain//\./}"
-
-sudo service nginxc2 restart
+sudo service nginx restart
 
 sudo certbot certonly --webroot -w "/var/www/${appname}" -d "${appdomain}" -m "${email}" -n --agree-tos
