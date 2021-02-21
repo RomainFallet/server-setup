@@ -29,7 +29,7 @@ apacheconfig="<VirtualHost *:443>
 
   Header set Strict-Transport-Security \"max-age=15552000; preload;\"
   Header set Expect-CT \"max-age=86400, enforce\"
-  Header set Content-Security-Policy \"default-src 'self' 'unsafe-inline';\"
+  Header set Content-Security-Policy \"default-src 'self';\"
   Header set X-Frame-Options \"deny\"
   Header set X-Content-Type-Options \"nosniff\"
   Header set Referrer-Policy \"same-origin\"
