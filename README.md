@@ -173,10 +173,14 @@ Fail2Ban and the firewall.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/server/web-server.sh
+# Nginx
+bash ./scripts/server/web-server/apache.sh
+
+# Apache
+bash ./scripts/server/web-server/apache.sh
 ```
 
-This will install and configure Apache and Certbot.
+This will install and configure Apache or Nginx and Certbot.
 
 ## Environment setup
 
