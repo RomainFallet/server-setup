@@ -8,6 +8,17 @@ set -e
 # Install
 sudo apt install -y nginx
 
+# Backup config file
+nginxconfigpath=/etc/nginx/nginx.conf
+nginxconfigbackuppath=/etc/nginx/.nginx.conf.backup
+if ! test -f "${nginxconfigbackuppath}"
+then
+  sudo cp "${nginxconfigpath}" "${nginxconfigbackuppath}"
+fi
+
+# Set server_tokens directive
+sudo sed -i'.tmp' -E "s/#*server_tokens\s+(.+);/server_tokens off;/g" "${nginxconfigpath}"
+
 # Disable default site
 sudo rm /etc/nginx/sites-enabled/default
 
