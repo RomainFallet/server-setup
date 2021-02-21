@@ -51,7 +51,10 @@ then
   echo "${nginxconfig}" | sudo tee "${nginxconfigfile}" > /dev/null
 fi
 
-sudo ln -s /etc/nginx/sites-available/"${appname}-localport-${localport}".conf /etc/nginx/sites-enabled/
+if ! test -f /etc/nginx/sites-enabled/"${appname}-localport-${localport}".conf
+then
+  sudo ln -s "${nginxconfigfile}" /etc/nginx/sites-enabled/
+fi
 
 sudo service nginx restart
 

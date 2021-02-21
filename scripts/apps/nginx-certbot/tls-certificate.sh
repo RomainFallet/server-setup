@@ -31,7 +31,7 @@ nginxcconfig="server {
     try_files \$uri =404;
   }
 }"
-nginxcconfigfile="/etc/nginx/sites-available/${appname}-wellknown-${appdomain//\./}.conf"
+nginxconfigfile="/etc/nginx/sites-available/${appname}-wellknown-${appdomain//\./}.conf"
 
 if ! test -d "/var/www/${appname}"
 then
@@ -41,17 +41,20 @@ fi
 sudo chown www-data:www-data "/var/www/${appname}"
 sudo chmod 775 "/var/www/${appname}"
 
-if ! test -f "${nginxcconfigfile}"
+if ! test -f "${nginxconfigfile}"
 then
-  sudo touch "${nginxcconfigfile}"
+  sudo touch "${nginxconfigfile}"
 fi
 
-if [[ $(< "${nginxcconfigfile}") != "${nginxcconfig}" ]]
+if [[ $(< "${nginxconfigfile}") != "${nginxcconfig}" ]]
 then
-  echo "${nginxcconfig}" | sudo tee "${nginxcconfigfile}" > /dev/null
+  echo "${nginxcconfig}" | sudo tee "${nginxconfigfile}" > /dev/null
 fi
 
-sudo ln -s /etc/nginx/sites-available/"${appname}-wellknown-${appdomain//\./}".conf /etc/nginx/sites-enabled/
+if ! test -f /etc/nginx/sites-enabled/"${appname}-wellknown-${appdomain//\./}".conf
+then
+  sudo ln -s "${nginxconfigfile}" /etc/nginx/sites-enabled/
+fi
 
 sudo service nginx restart
 
