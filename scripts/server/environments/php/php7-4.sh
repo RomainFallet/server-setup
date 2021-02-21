@@ -33,21 +33,12 @@ sudo sed -i'.tmp' -E 's/;*\s*disable_functions\s=\s*(\w+)/disable_functions = er
 sudo rm "${phpinipath}.tmp"
 
 # Set umask
-overrideconfigfolder=/etc/systemd/system/php7.4-fpm.service.d
-overrideconfigpath="${overrideconfigfolder}"/override.conf
-overrideconfig="[Service]
-UMask=0002"
-if ! test -d "${overrideconfigfolder}"
+sudo cp /lib/systemd/system/php7.4-fpm.service /etc/systemd/system/
+serviceconfigpath=/etc/systemd/system/php7.4-fpm.service
+serviceconfig="UMask=0002"
+if ! grep "${serviceconfig}" "${serviceconfigpath}"
 then
-  sudo mkdir -p "${overrideconfigfolder}"
-fi
-if ! test -f "${overrideconfigpath}"
-then
-  sudo touch "${overrideconfigpath}"
-fi
-if [[ $(< "${overrideconfigpath}") != "${overrideconfig}" ]]
-then
-  echo "${overrideconfig}" | sudo tee "${overrideconfigpath}" > /dev/null
+  sudo sed -E "s/\[Service\]/[Service]\n${serviceconfig}/g" "${serviceconfigpath}"
 fi
 
 # Restart PHP-FPM
