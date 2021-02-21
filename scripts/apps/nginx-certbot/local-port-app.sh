@@ -16,8 +16,8 @@ fi
 source ~/server-setup/scripts/apps/nginx-certbot/_config-from-app-type.sh "${appname}"
 
 nginxconfig="server {
-  listen ${localport}      http2;
-  listen [::]:${localport} http2;
+  listen ${localport};
+  listen [::]:${localport};
   server_name 127.0.0.1;
 
   ${nginxconfigfromapptype}

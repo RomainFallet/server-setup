@@ -18,8 +18,8 @@ then
 fi
 
 nginxcconfig="server {
-  listen 80      http2;
-  listen [::]:80 http2;
+  listen 80;
+  listen [::]:80;
   server_name ${appdomain};
 
   root /var/www/${appname};
