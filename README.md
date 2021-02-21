@@ -199,6 +199,10 @@ bash ./scripts/server/environments/php/php7-4.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
+# Nginx
+bash ./scripts/apps/nginx-certbot/tls-certificate.sh
+
+# Apache
 bash ./scripts/apps/apache-certbot/tls-certificate.sh
 ```
 
@@ -207,6 +211,10 @@ bash ./scripts/apps/apache-certbot/tls-certificate.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
+# Nginx
+bash ./scripts/apps/nginx-certbot/domain-name-app.sh
+
+# Apache
 bash ./scripts/apps/apache-certbot/domain-name-app.sh
 ```
 
@@ -215,5 +223,9 @@ bash ./scripts/apps/apache-certbot/domain-name-app.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
+# Nginx
+bash ./scripts/apps/nginx-certbot/local-port-app.sh
+
+# Apache
 bash ./scripts/apps/apache-certbot/local-port-app.sh
 ```
