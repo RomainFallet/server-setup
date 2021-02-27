@@ -192,6 +192,16 @@ This will install and configure Apache or Nginx and Certbot.
 bash ./scripts/server/environments/php/php7-4.sh
 ```
 
+## Database setup
+
+### MariaDB
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/server/databases/mariadb/mariadb-10.5.sh
+```
+
 ## App setup
 
 ### Get TLS certificate
@@ -216,16 +226,4 @@ bash ./scripts/apps/nginx-certbot/domain-name-app.sh
 
 # Apache
 bash ./scripts/apps/apache-certbot/domain-name-app.sh
-```
-
-### Configure an app with a local port
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-# Nginx
-bash ./scripts/apps/nginx-certbot/local-port-app.sh
-
-# Apache
-bash ./scripts/apps/apache-certbot/local-port-app.sh
 ```
