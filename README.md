@@ -199,8 +199,6 @@ bash ./scripts/server/environments/php/php7-4.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/server/databases/mariadb/mariadb-10-4.sh
-
 bash ./scripts/server/databases/mariadb/mariadb-10-5.sh
 ```
 
