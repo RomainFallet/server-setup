@@ -76,14 +76,14 @@ fi
 if ! test -d /usr/local/mariadb/10.5/bin
 then
   sudo mkdir -p /usr/local/mariadb/10.5/bin
-  sudo mv /usr/bin/mysql* /usr/bin/mariadb* /usr/local/mariadb/10.5/bin/
+  sudo mv /usr/bin/mariadb* /usr/local/mariadb/10.5/bin/
 fi
 
 # Create sbin directory
 if ! test -d /usr/local/mariadb/10.5/sbin
 then
   sudo mkdir -p /usr/local/mariadb/10.5/sbin
-  sudo mv /usr/bin/mysql* /usr/sbin/mariadb* /usr/local/mariadb/10.5/sbin/
+  sudo mv /usr/sbin/mariadb* /usr/local/mariadb/10.5/sbin/
 fi
 
 # Clean up installation
