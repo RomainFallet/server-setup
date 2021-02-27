@@ -17,6 +17,9 @@ then
   sudo apt update
 fi
 
+# Install deps
+sudo apt install -y galera-4 libcgi-fast-perl libcgi-pm-perl libdbd-mariadb-perl libdbi-perl libencode-locale-perl libfcgi-perl libhtml-parser-perl libhtml-tagset-perl libhtml-template-perl libhttp-date-perl libhttp-message-perl libio-html-perl liblwp-mediatypes-perl libmariadb3 libmysqlclient21 libterm-readkey-perl libtimedate-perl liburi-perl mariadb-common mysql-common python3-xkit socat ubuntu-drivers-common
+
 # Install
 sudo apt install -y mariadb-server-10.4
 
@@ -33,7 +36,7 @@ fi
 if ! test -d /etc/mariadb/10.4
 then
   sudo mv /etc/mysql /etc/mariadb/10.4
-  sudo rm /etc/mariadb/10.4/my.cnf
+  sudo rm -f /etc/mariadb/10.4/my.cnf
   echo "[client-server]
   socket=/var/run/mariadb/10.4/mariadb.sock
   port=3308
