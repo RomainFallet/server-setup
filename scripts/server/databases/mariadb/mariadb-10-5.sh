@@ -76,19 +76,19 @@ fi
 if ! test -d /usr/local/mariadb/10.5/bin
 then
   sudo mkdir -p /usr/local/mariadb/10.5/bin
-  sudo mv /usr/bin/mariadb* /usr/local/mariadb/10.5/bin/
+  sudo mv /usr/bin/mysql* /usr/bin/mariadb* /usr/local/mariadb/10.5/bin/
 fi
 
 # Create sbin directory
 if ! test -d /usr/local/mariadb/10.5/sbin
 then
   sudo mkdir -p /usr/local/mariadb/10.5/sbin
-  sudo mv /usr/sbin/mariadb* /usr/local/mariadb/10.5/sbin/
+  sudo mv /usr/bin/mysql* /usr/sbin/mariadb* /usr/local/mariadb/10.5/sbin/
 fi
 
 # Clean up installation
+sudo apt autoremove --purge -y mariadb-server-10.5
 sudo rm -rf /usr/bin/mysql* /usr/sbin/mysql* /usr/bin/maridb* /usr/sbin/maridb* /var/lib/mysql /etc/mysql /var/run/mysqld /var/log/mysql /usr/share/mysql
-sudo apt remove --purge -y mariadb-server-10.5
 
 # Create service file
 if ! test -f /lib/systemd/system/mariadb-10.5.service
