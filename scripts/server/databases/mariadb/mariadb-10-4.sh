@@ -18,7 +18,7 @@ then
 fi
 
 # Install deps
-sudo apt install -y galera-4 libcgi-fast-perl libcgi-pm-perl libdbd-mariadb-perl libdbi-perl libencode-locale-perl libfcgi-perl libhtml-parser-perl libhtml-tagset-perl libhtml-template-perl libhttp-date-perl libhttp-message-perl libio-html-perl liblwp-mediatypes-perl libmariadb3 libmysqlclient21 libterm-readkey-perl libtimedate-perl liburi-perl mariadb-common mysql-common python3-xkit socat ubuntu-drivers-common
+sudo apt install -y libdbd-mysql-perl galera-4 libcgi-fast-perl libcgi-pm-perl libdbd-mariadb-perl libdbi-perl libencode-locale-perl libfcgi-perl libhtml-parser-perl libhtml-tagset-perl libhtml-template-perl libhttp-date-perl libhttp-message-perl libio-html-perl liblwp-mediatypes-perl libmariadb3 libmysqlclient21 libterm-readkey-perl libtimedate-perl liburi-perl mariadb-common mysql-common python3-xkit socat ubuntu-drivers-common
 
 # Install
 sudo apt install -y mariadb-server-10.4
@@ -88,7 +88,7 @@ fi
 
 # Clean up installation
 sudo rm -rf /usr/bin/mysql* /usr/sbin/mysql* /usr/bin/maridb* /usr/sbin/maridb* /var/lib/mysql /etc/mysql /var/run/mysqld /var/log/mysql /usr/share/mysql
-sudo apt remove --purge -y mariadb-server-10.4
+sudo apt remove -y mariadb-server-10.4
 
 # Create service file
 if ! test -f /lib/systemd/system/mariadb-10.4.service
