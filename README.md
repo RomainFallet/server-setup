@@ -165,7 +165,7 @@ cd ~/server-setup
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/install/basic.sh
+bash ./scripts/server/basic.sh
 ```
 
 This will configure the timezone, the hostname, SSH, automatic updates,
@@ -176,7 +176,6 @@ Fail2Ban and the firewall.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-# Nginx
 bash ./scripts/server/web-server/nginx/install.sh
 ```
 
@@ -189,7 +188,7 @@ This will install and configure Nginx and Certbot.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/server/environments/php/7-4/install.sh
+bash ./scripts/server/environments/php/7.4/install.sh
 ```
 
 ## Database setup
