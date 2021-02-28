@@ -24,7 +24,7 @@ then
 fi
 
 # Install deps
-sudo apt install -y bzip2 rsync curl jq inetutils-ping smbclient coreutils
+sudo apt install -y jq inetutils-ping smbclient
 
 # Download owncloud
 wget https://download.owncloud.org/community/owncloud-10.6.0.tar.bz2 -o /tmp/owncloud-10.6.0.tar.bz2
