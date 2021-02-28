@@ -11,11 +11,11 @@ fi
 if [[ -z "${apptype}" ]]
 then
   read -r -p "Which type of app do you want to deploy?
-    - PHP/Nextcloud:                     [6]
+    - PHP/Owncloud:                     [1]
   Your choice: " apptype
 fi
 
-if [[ "${apptype}" == '6' ]]
+if [[ "${apptype}" == '1' ]]
 then
   # shellcheck disable=SC2034
   nginxconfigfromapptype="root /var/www/${appname};
