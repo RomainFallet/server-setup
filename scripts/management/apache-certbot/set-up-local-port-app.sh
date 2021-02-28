@@ -12,8 +12,7 @@ then
   read -r -p "Define your app running port (eg. 3000): " localport
 fi
 
-# shellcheck source=_config-from-app-type.sh
-source ~/server-setup/scripts/apache/_config-from-app-type.sh "${appname}"
+source ./_get-config-from-app-type.sh "${appname}"
 
 apacheconfig="Listen ${localport}
 <VirtualHost *:${localport}>

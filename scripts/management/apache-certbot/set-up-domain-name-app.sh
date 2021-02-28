@@ -12,8 +12,7 @@ then
   read -r -p "Enter the domain name on which you want your app to be served (eg. example.com or test.example.com): " appdomain
 fi
 
-# shellcheck source=_config-from-app-type.sh
-source ~/server-setup/scripts/apps/apache-certbot/_config-from-app-type.sh "${appname}"
+source ./_get-config-from-app-type.sh "${appname}"
 
 apacheconfig="<VirtualHost *:443>
   ServerName ${appdomain}

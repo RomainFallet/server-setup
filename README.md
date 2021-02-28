@@ -8,10 +8,10 @@ The goal is to provide an opinionated environment that just work for commons sce
 ## Table of contents
 
 - [Prerequisites](#prerequisites)
-  - [Rename default user account](#create-a-user-account-with-sudo-privileges)
+  - [Create a user account with sudo privileges](#create-a-user-account-with-sudo-privileges)
   - [Configure an SSH key](#configure-an-ssh-key)
   - [Point your domain names to your machine IP address](#point-your-domain-names-to-your-machine-ip-address)
-- [Installation](#Installation)
+- [Installation](#installation)
 - [Server setup](#server-setup)
   - [Basic](#basic)
   - [Web server](#web-server)
@@ -19,10 +19,13 @@ The goal is to provide an opinionated environment that just work for commons sce
   - [PHP](#php)
 - [Database setup](#database-setup)
   - [MariaDB](#mariadb)
-- [App setup](#app-setup)
-  - [Get TLS certificate](#get-tls-certificate)
-  - [Configure an app with a domain name](#configure-an-app-with-a-domain-name)
-  - [Configure an app with a local port](#configure-an-app-with-a-local-port)
+- [Management](#management)
+  - [Nginx - Cerbot](#nginx---cerbot)
+    - [Get TLS certificate](#get-tls-certificate)
+    - [Set up an app with a domain name](#set-up-an-app-with-a-domain-name)
+    - [Set up an app with a local port](#set-up-an-app-with-a-local-port)
+- [Apps](#apps)
+  - [Owncloud](#owncloud)
 
 ## Prerequisites
 
@@ -162,7 +165,7 @@ cd ~/server-setup
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/server/basic.sh
+bash ./scripts/install/basic.sh
 ```
 
 This will configure the timezone, the hostname, SSH, automatic updates,
@@ -174,13 +177,10 @@ Fail2Ban and the firewall.
 
 ```bash
 # Nginx
-bash ./scripts/server/web-server/nginx.sh
-
-# Apache
-bash ./scripts/server/web-server/apache.sh
+bash ./scripts/server/web-server/nginx/install.sh
 ```
 
-This will install and configure Apache or Nginx and Certbot.
+This will install and configure Nginx and Certbot.
 
 ## Environment setup
 
@@ -189,7 +189,7 @@ This will install and configure Apache or Nginx and Certbot.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/server/environments/php/php7-4.sh
+bash ./scripts/server/environments/php/7-4/install.sh
 ```
 
 ## Database setup
@@ -199,31 +199,43 @@ bash ./scripts/server/environments/php/php7-4.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/server/databases/mariadb/mariadb-10-5.sh
+bash ./scripts/server/databases/mariadb/10.5/install.sh
 ```
 
-## App setup
+## Management
 
-### Get TLS certificate
+### Nginx - Cerbot
+
+#### Get TLS certificate
 
 [Back to top ↑](#table-of-contents)
 
 ```bash
-# Nginx
-bash ./scripts/apps/nginx-certbot/tls-certificate.sh
-
-# Apache
-bash ./scripts/apps/apache-certbot/tls-certificate.sh
+bash ./scripts/management/nginx-certbot/get-tls-certificate.sh
 ```
 
-### Configure an app with a domain name
+#### Set up an app with a domain name
 
 [Back to top ↑](#table-of-contents)
 
 ```bash
-# Nginx
-bash ./scripts/apps/nginx-certbot/domain-name-app.sh
+bash ./scripts/management/nginx-certbot/set-up-domain-name-app.sh
+```
 
-# Apache
-bash ./scripts/apps/apache-certbot/domain-name-app.sh
+#### Set up an app with a local port
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/management/nginx-certbot/set-up-local-port-app.sh
+```
+
+## Apps
+
+### Owncloud
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/apps/owncloud/10.6/set-up.sh
 ```

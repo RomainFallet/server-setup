@@ -2,16 +2,19 @@
 
 set -e
 
+appname=$1
 if [[ -z "${appname}" ]]
 then
   read -r -p "Enter the name of your app without hyphens (eg. myawesomeapp): " appname
 fi
 
+email=$2
 if [[ -z "${email}" ]]
 then
   read -r -p "Enter your email (needed to request TLS certificate): " email
 fi
 
+appdomain=$3
 if [[ -z "${appdomain}" ]]
 then
   read -r -p "Enter the domain name on which you want your app to be served (eg. example.com or test.example.com): " appdomain
