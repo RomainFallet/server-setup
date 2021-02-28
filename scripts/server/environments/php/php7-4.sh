@@ -15,7 +15,7 @@ sudo apt install -y php7.4 php7.4-fpm
 sudo apt install -y redis-server
 
 # Install extensions
-sudo apt install -y php7.4-mbstring php7.4-mysql php7.4-xml php7.4-curl php7.4-zip php7.4-intl php7.4-gd php7.4-bcmath php7.4-gmp php-redis php-imagick
+sudo apt install -y php7.4-common php7.4-imap php7.4-json php7.4-mbstring php7.4-mysql php7.4-xml php7.4-curl php7.4-zip php7.4-intl php7.4-gd php7.4-bcmath php7.4-gmp php7.4-apcu php-redis php-imagick php-ldap php-smbclient php-ssh2
 
 # Make a backup of the config file
 phpinipath=/etc/php/7.4/fpm/php.ini
