@@ -12,7 +12,8 @@ then
   read -r -p "Enter the domain name on which you want your app to be served (eg. example.com or test.example.com): " appdomain
 fi
 
-source ./_get-config-from-app-type.sh "${appname}"
+# shellcheck source=./_get-config-from-app-type.sh
+source ~/server-setup/scripts/management/nginx-certbot/_get-config-from-app-type.sh "${appname}"
 
 nginxconfig="server {
   listen 443      ssl http2;

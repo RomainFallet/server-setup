@@ -12,7 +12,8 @@ then
   read -r -p "Define your app running port (eg. 3000): " localport
 fi
 
-source ./_get-config-from-app-type.sh "${appname}"
+# shellcheck source=./_get-config-from-app-type.sh
+source ~/server-setup/scripts/management/nginx-certbot/_get-config-from-app-type.sh "${appname}"
 
 nginxconfig="server {
   listen ${localport};
