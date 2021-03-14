@@ -88,7 +88,7 @@ fi
 
 # Clean up installation
 sudo rm -rf /usr/bin/mysql* /usr/sbin/mysql* /usr/bin/maridb* /usr/sbin/maridb* /var/lib/mysql /etc/mysql /var/run/mysqld /var/log/mysql /usr/share/mysql
-sudo apt autoremove --purge -y mariadb-server-10.5
+sudo apt autoremove -y mariadb-server-10.5
 
 # Create service file
 if ! test -f /lib/systemd/system/mariadb-10.5.service
