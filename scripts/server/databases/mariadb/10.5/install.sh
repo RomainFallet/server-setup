@@ -62,16 +62,6 @@ then
   sudo mv /var/lib/mysql /var/lib/mariadb/10.5
 fi
 
-# Create socket directory
-if ! test -d /var/run/mariadb
-then
-  sudo mkdir /var/run/mariadb
-fi
-if ! test -d /var/run/mariadb/10.5/
-then
-  sudo mv /var/run/mysqld /var/run/mariadb/10.5/
-fi
-
 # Create bin directory
 if ! test -d /usr/local/mariadb/10.5/bin
 then
@@ -88,7 +78,7 @@ fi
 
 # Clean up installation
 sudo rm -rf /usr/bin/mysql* /usr/sbin/mysql* /usr/bin/maridb* /usr/sbin/maridb* /var/lib/mysql /etc/mysql /var/run/mysqld /var/log/mysql /usr/share/mysql
-sudo apt autoremove -y mariadb-server-10.5
+sudo apt autoremove -y --purge mariadb-server-10.5
 
 # Create service file
 if ! test -f /lib/systemd/system/mariadb-10.5.service
@@ -101,7 +91,7 @@ then
 
   [Service]
   Type=simple
-  ExecStart=/usr/local/mariadb/10.5/sbin/mariadbd --defaults-file=/etc/mariadb/10.5/my.cnf
+  ExecStart=mkdir -p /var/run/mariadb/10.5 && touch /var/run/mariadb/10.5/mariadb.sock && /usr/local/mariadb/10.5/sbin/mariadbd --defaults-file=/etc/mariadb/10.5/my.cnf
   Restart=on-failure
   RestartSec=10
   KillMode=mixed
