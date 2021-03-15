@@ -27,22 +27,25 @@ fi
 sudo apt install -y jq inetutils-ping smbclient
 
 # Download owncloud
-wget https://download.owncloud.org/community/owncloud-10.6.0.tar.bz2 -o /tmp/owncloud-10.6.0.tar.bz2
+wget https://download.owncloud.org/community/owncloud-complete-20201216.tar.bz2 -O /tmp/owncloud-10.6.tar.bz2
 
 # Install files
-tar -xjf /tmp/owncloud-10.6.0.tar.bz2 --directory /tmp/owncloud-10.6.0
-sudo mv /tmp/owncloud-10.6.0 /var/www/"${appname}"
+mkdir -p /tmp/owncloud-10.6
+tar -xvjf /tmp/owncloud-10.6.tar.bz2 --directory /tmp/owncloud-10.6
+sudo mv /tmp/owncloud-10.6/owncloud/* /var/www/"${appname}"/
 
 # Set permissions
 sudo chown -R www-data:www-data /var/www/"${appname}"
 
 # Clean up install files
-sudo rm -rf /tmp/owncloud-10.6.0 /tmp/owncloud-10.6.0.tar.bz2
+sudo rm -rf /tmp/owncloud-10.6 /tmp/owncloud-10.6.tar.bz2
 
 # Create database
-source ./../../../management/mariadb/10.5/create-database.sh
+# shellcheck source=./../../../management/mariadb/10.5/create-database.sh
+source ~/server-setup/scripts/management/mariadb/10.5/create-database.sh
 
 # Create database user
+# shellcheck source=./../../../management/mariadb/10.5/create-database.sh
 source ./../../../management/mariadb/10.5/create-user.sh
 
 # Create owncloud admin account
