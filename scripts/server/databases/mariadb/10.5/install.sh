@@ -91,7 +91,7 @@ then
 
   [Service]
   Type=simple
-  ExecStart=sudo mkdir -p /var/run/mariadb/10.5 && touch /var/run/mariadb/10.5/mariadb.sock && /usr/local/mariadb/10.5/sbin/mariadbd --defaults-file=/etc/mariadb/10.5/my.cnf
+  ExecStart=sudo mkdir -p /var/run/mariadb/10.5 && sudo touch /var/run/mariadb/10.5/mariadb.sock && /usr/local/mariadb/10.5/sbin/mariadbd --defaults-file=/etc/mariadb/10.5/my.cnf
   Restart=on-failure
   RestartSec=10
   KillMode=mixed
