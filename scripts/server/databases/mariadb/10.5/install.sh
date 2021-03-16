@@ -91,7 +91,7 @@ then
 
   [Service]
   Type=simple
-  ExecStart=sudo mkdir -p /var/run/mariadb/10.5 && sudo touch /var/run/mariadb/10.5/mariadb.sock && /usr/local/mariadb/10.5/sbin/mariadbd --defaults-file=/etc/mariadb/10.5/my.cnf
+  ExecStart=sudo mkdir -p /var/run/mariadb/10.5 && sudo chown -R mysql:mysql /var/run/mariadb/ && sudo /usr/local/mariadb/10.5/sbin/mariadbd --defaults-file=/etc/mariadb/10.5/my.cnf --socket=/var/run/mariadb/10.5/mariadb.sock
   Restart=on-failure
   RestartSec=10
   KillMode=mixed
