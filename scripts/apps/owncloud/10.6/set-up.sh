@@ -45,15 +45,20 @@ sudo rm -rf /tmp/owncloud-10.6 /tmp/owncloud-10.6.tar.bz2
 source ~/server-setup/scripts/management/mariadb/10.5/create-database.sh
 
 # Create database user
-# shellcheck source=./../../../management/mariadb/10.5/create-database.sh
-source ./../../../management/mariadb/10.5/create-user.sh
+# shellcheck source=./../../../management/mariadb/10.5/create-user.sh
+source ~/server-setup/scripts/management/mariadb/10.5/create-user.sh
 
 # Create owncloud admin account
 sudo -u www-data /usr/bin/php /var/www/"${appname}"/occ maintenance:install --database-connection-string="mysql://${dbusername}:${dbpassword}@localhost:3307/${dbname}" --admin-user "${adminusername}" --admin-pass "${adminpassword}"
 
 # Config cron jobs
 sudo -u www-data /usr/bin/php /var/www/"${appname}"/occ background:cron
-echo "*/15  *  *  *  * /var/www/${appname}/occ system:cron" | sudo tee /var/spool/cron/crontabs/www-data > /dev/null
+cronconfig="*/15  *  *  *  * /var/www/${appname}/occ system:cron"
+cronpath=/var/spool/cron/crontabs/www-data
+if [[ $(< "${cronpath}") != *"${cronconfig}"* ]]
+then
+  echo "${cronconfig}" | sudo tee -a "${cronpath}" > /dev/null
+fi
 sudo chown www-data.crontab /var/spool/cron/crontabs/www-data
 sudo chmod 0600 /var/spool/cron/crontabs/www-data
 
