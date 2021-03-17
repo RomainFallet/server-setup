@@ -51,6 +51,7 @@ if ! test -d /var/log/mariadb/10.5
 then
   sudo mkdir -p /var/log/mariadb/10.5
 fi
+sudo chown -R mysql:mysql /var/log/mariadb/10.5
 
 # Create data directory
 if ! test -d /var/lib/mariadb
@@ -61,6 +62,7 @@ if ! test -d /var/lib/mariadb/10.5
 then
   sudo mv /var/lib/mysql /var/lib/mariadb/10.5
 fi
+sudo chown -R mysql:mysql /var/lib/mariadb/10.5
 
 # Create bin directory
 if ! test -d /usr/local/mariadb/10.5/bin
@@ -91,7 +93,9 @@ then
 
   [Service]
   Type=simple
-  ExecStart=sudo mkdir -p /var/run/mariadb/10.5 && sudo chown -R mysql:mysql /var/run/mariadb/ && sudo /usr/local/mariadb/10.5/sbin/mariadbd --defaults-file=/etc/mariadb/10.5/my.cnf --socket=/var/run/mariadb/10.5/mariadb.sock
+  ExecStartPre=/usr/bin/mkdir -p /var/run/mariadb/10.5
+  ExecStartPre=/usr/bin/chown -R mysql:mysql /var/run/mariadb/10.5
+  ExecStart=/usr/local/mariadb/10.5/sbin/mariadbd --defaults-file=/etc/mariadb/10.5/my.cnf --socket=/var/run/mariadb/10.5/mariadb.sock
   Restart=on-failure
   RestartSec=10
   KillMode=mixed
