@@ -39,7 +39,7 @@ then
   sudo rm -f /etc/mariadb/10.5/my.cnf
   echo "[client-server]
   socket=/var/run/mariadb/10.5/mariadb.sock
-  port=3307
+  port=3306
   [mysqld]
   user=mysql
   datadir=/var/lib/mariadb/10.5
