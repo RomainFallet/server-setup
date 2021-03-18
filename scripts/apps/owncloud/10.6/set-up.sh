@@ -49,7 +49,7 @@ source ~/server-setup/scripts/management/mariadb/10.5/create-database.sh
 source ~/server-setup/scripts/management/mariadb/10.5/create-user.sh
 
 # Create owncloud admin account
-sudo -u www-data /usr/bin/php /var/www/"${appname}"/occ maintenance:install --database-connection-string="mysql://${dbusername}:${dbpassword}@localhost:3307/${dbname}" --admin-user "${adminusername}" --admin-pass "${adminpassword}"
+sudo -u www-data /usr/bin/php /var/www/"${appname}"/occ maintenance:install --database "mysql" --database-name "${dbname}" --database-user "${dbusername}" --database-pass "${dbpassword}" --admin-user "${adminusername}" --admin-pass "${adminpassword}"
 
 # Config cron jobs
 sudo -u www-data /usr/bin/php /var/www/"${appname}"/occ background:cron
