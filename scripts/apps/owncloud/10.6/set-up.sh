@@ -54,10 +54,10 @@ sudo -u www-data /usr/bin/php /var/www/"${appname}"/occ maintenance:install --da
 # Config cron jobs
 sudo -u www-data /usr/bin/php /var/www/"${appname}"/occ background:cron
 cronconfig="*/15  *  *  *  * /var/www/${appname}/occ system:cron"
-cronpath=/var/spool/cron/crontabs/www-data
-if [[ $(< "${cronpath}") != *"${cronconfig}"* ]]
+content=$(sudo cat /var/spool/cron/crontabs/www-data)
+if [[ $("${content}") != *"${cronconfig}"* ]]
 then
-  echo "${cronconfig}" | sudo tee -a "${cronpath}" > /dev/null
+  echo "${cronconfig}" | sudo tee -a "${content}" > /dev/null
 fi
 sudo chown www-data.crontab /var/spool/cron/crontabs/www-data
 sudo chmod 0600 /var/spool/cron/crontabs/www-data
