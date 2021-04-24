@@ -40,15 +40,15 @@ then
 fi
 
 # Keep alive client connections
-sshclientintervalconfig='ClientAliveInterval 120'
-sudo sed -i'.tmp' -E "s/#*ClientAliveInterval\s+([0-9]+)/ClientAliveInterval 120/g" "${sshconfigpath}"
+sshclientintervalconfig='ClientAliveInterval 60'
+sudo sed -i'.tmp' -E "s/#*ClientAliveInterval\s+([0-9]+)/ClientAliveInterval 60/g" "${sshconfigpath}"
 if ! sudo grep "^${sshclientintervalconfig}" "${sshconfigpath}" > /dev/null
 then
   echo "${sshclientintervalconfig}" | sudo tee -a "${sshconfigpath}" > /dev/null
 fi
 
-sshclientcountconfig='ClientAliveCountMax 3'
-sudo sed -i'.tmp' -E "s/#*ClientAliveCountMax\s+([0-9]+)/ClientAliveCountMax 3/g" "${sshconfigpath}"
+sshclientcountconfig='ClientAliveCountMax 10'
+sudo sed -i'.tmp' -E "s/#*ClientAliveCountMax\s+([0-9]+)/ClientAliveCountMax 10/g" "${sshconfigpath}"
 if ! sudo grep "^${sshclientcountconfig}" "${sshconfigpath}" > /dev/null
 then
   echo "${sshclientcountconfig}" | sudo tee -a "${sshconfigpath}" > /dev/null
