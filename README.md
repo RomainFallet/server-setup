@@ -229,12 +229,12 @@ bash ./scripts/management/nginx-certbot/set-up-domain-name-app.sh
 bash ./scripts/management/nginx-certbot/set-up-local-port-app.sh
 ```
 
-## Apps
+### Disks
 
-### Owncloud
+#### Set up a data disk
 
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/apps/owncloud/10.6/set-up.sh
+bash ./scripts/management/disks/set-up-data-disk.sh
 ```
