@@ -13,7 +13,10 @@ then
   echo "${permanentMountConfig}" | sudo tee -a /etc/fstab > /dev/null
 fi
 
-sudo mount /mnt/sda /dev/sda
+if ! findmnt -t ext4 -S /dev/sda -T /mnt/sda
+then
+  sudo mount /dev/sda /mnt/sda
+fi
 
 while read -r line; do
   userName=$(echo "${line}" | cut -d: -f1)
