@@ -36,7 +36,9 @@ then
   healthChecksMonitorCommand=" && curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
 fi
 
-backupScript="(pgrep 'rsync' || rsync -av --delete ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath})${healthChecksMonitorCommand}"
+backupScript="
+#!/bin/bash
+(pgrep 'rsync' || rsync -av --delete ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath})${healthChecksMonitorCommand}"
 backupScriptPath=/etc/cron.hourly/backup.sh
 
 if ! test -f "${backupScriptPath}"
@@ -44,7 +46,9 @@ then
   echo "${backupScript}" | sudo tee "${backupScriptPath}" > /dev/null
 fi
 
-if ! grep "${backupScript}" "${backupScriptPath}" > /dev/null
+pattern=$(echo "${backupScript}" | tr -d '\n')
+content=$(< "${backupScriptPath}" tr -d '\n')
+if [[ "${content}" != *"${pattern}"* ]]
 then
   echo "${backupScript}" | sudo tee "${backupScriptPath}" > /dev/null
 fi
