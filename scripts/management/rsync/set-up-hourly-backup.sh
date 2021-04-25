@@ -24,7 +24,19 @@ then
   read -r -p "Enter the destination path on the remote side: " destinationPath
 fi
 
-backupScript="pgrep 'rsync' || rsync -av --delete ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath}"
+destinationPath=$5
+if [[ -z "${healthChecksUuid}" ]]
+then
+  read -r -p "Enter your healthchecks.io uuid to monitor your backup job (optional): " healthChecksUuid
+fi
+
+healthChecksMonitorCommand=""
+if [[ -n "${healthChecksUuid}" ]]
+then
+  healthChecksMonitorCommand=" && curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
+fi
+
+backupScript="(pgrep 'rsync' || rsync -av --delete ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath})${healthChecksMonitorCommand}"
 backupScriptPath=/etc/cron.hourly/backup.sh
 
 if ! test -f "${backupScriptPath}"
@@ -32,7 +44,7 @@ then
   echo "${backupScript}" | sudo tee "${backupScriptPath}" > /dev/null
 fi
 
-if ! grep "${backupScript}" "${backupScriptPath}"
+if ! grep "${backupScript}" "${backupScriptPath}" > /dev/null
 then
   echo "${backupScript}" | sudo tee "${backupScriptPath}" > /dev/null
 fi
