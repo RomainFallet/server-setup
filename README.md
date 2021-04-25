@@ -238,3 +238,13 @@ bash ./scripts/management/nginx-certbot/set-up-local-port-app.sh
 ```bash
 bash ./scripts/management/disks/set-up-data-disk.sh
 ```
+
+### Rsync
+
+#### Set up an hourly backup
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/management/rsync/set-up-hourly-backup.sh
+```
