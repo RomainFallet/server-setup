@@ -13,7 +13,7 @@ then
   echo "${permanentMountConfig}" | sudo tee -a /etc/fstab > /dev/null
 fi
 
-if ! findmnt -t ext4 -S /dev/sda -T /mnt/sda
+if ! findmnt -t ext4 -S /dev/sda -T /mnt/sda > /dev/null
 then
   sudo mount /dev/sda /mnt/sda
 fi
