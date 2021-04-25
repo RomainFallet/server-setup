@@ -48,3 +48,5 @@ if ! grep "${backupScript}" "${backupScriptPath}" > /dev/null
 then
   echo "${backupScript}" | sudo tee "${backupScriptPath}" > /dev/null
 fi
+
+sudo chmod +x "${backupScriptPath}"
