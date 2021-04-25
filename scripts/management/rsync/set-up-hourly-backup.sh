@@ -36,8 +36,7 @@ then
   healthChecksMonitorCommand=" && curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
 fi
 
-backupScript="
-#!/bin/bash
+backupScript="#!/bin/bash
 (pgrep 'rsync' || rsync -av --delete ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath})${healthChecksMonitorCommand}"
 backupScriptPath=/etc/cron.hourly/backup.sh
 
