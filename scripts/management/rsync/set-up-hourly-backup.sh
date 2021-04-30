@@ -38,7 +38,7 @@ fi
 
 backupScript="#!/bin/bash
 (pgrep 'rsync' || rsync -av --delete ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath})${healthChecksMonitorCommand}"
-backupScriptPath=/etc/cron.hourly/backup.sh
+backupScriptPath=/etc/cron.hourly/backup
 
 if ! test -f "${backupScriptPath}"
 then
