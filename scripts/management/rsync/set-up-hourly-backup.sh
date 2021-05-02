@@ -24,7 +24,7 @@ then
   read -r -p "Enter the destination path on the remote side: " destinationPath
 fi
 
-destinationPath=$5
+healthChecksUuid=$5
 if [[ -z "${healthChecksUuid}" ]]
 then
   read -r -p "Enter your healthchecks.io uuid to monitor your backup job (optional): " healthChecksUuid
