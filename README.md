@@ -249,6 +249,14 @@ bash ./scripts/management/disks/set-up-data-disk.sh
 bash ./scripts/management/rsync/set-up-hourly-backup.sh
 ```
 
+#### Restore backup
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/management/rsync/restore-backup.sh
+```
+
 ## Apps
 
 ### Mailinabox
@@ -257,4 +265,14 @@ bash ./scripts/management/rsync/set-up-hourly-backup.sh
 
 ```bash
 bash ./scripts/apps/mailinabox/0.53a/install.sh
+```
+
+## Recipes
+
+### Mailserver
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/recipes/mail-server.sh
 ```
