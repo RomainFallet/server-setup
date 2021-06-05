@@ -25,7 +25,7 @@ The goal is to provide an opinionated environment that just work for commons sce
     - [Set up an app with a domain name](#set-up-an-app-with-a-domain-name)
     - [Set up an app with a local port](#set-up-an-app-with-a-local-port)
 - [Apps](#apps)
-  - [Owncloud](#owncloud)
+  - [Mailinabox](#mailinabox)
 
 ## Prerequisites
 
@@ -247,4 +247,14 @@ bash ./scripts/management/disks/set-up-data-disk.sh
 
 ```bash
 bash ./scripts/management/rsync/set-up-hourly-backup.sh
+```
+
+## Apps
+
+### Mailinabox
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/apps/mailinabox/0.53a/install.sh
 ```
