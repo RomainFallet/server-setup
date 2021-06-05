@@ -4,7 +4,10 @@ set -e
 
 cd ~/
 
-git clone https://github.com/mail-in-a-box/mailinabox
+if ! test -d ~/mailinabox
+then
+  git clone https://github.com/mail-in-a-box/mailinabox  ~/mailinabox
+fi
 
 cd ./mailinabox
 
