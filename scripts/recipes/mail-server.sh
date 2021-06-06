@@ -19,7 +19,7 @@ fi
 if [[ "${restorebackup}" == 'y' ]]
 then
   # shellcheck source=../management/rsync/restore-backup.sh
-  source ~/server-setup/scripts/management/rsync/restore-backup.sh /home/user-data
+  source ~/server-setup/scripts/management/rsync/restore-backup.sh /home/user-data/
 
   # shellcheck source=../apps/mailinabox/0.53a/install.sh
   source ~/server-setup/scripts/apps/mailinabox/0.53a/install.sh

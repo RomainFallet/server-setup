@@ -269,7 +269,7 @@ bash ./scripts/apps/mailinabox/0.53a/install.sh
 
 ## Recipes
 
-### Mailserver
+### Mail server
 
 [Back to top ↑](#table-of-contents)
 
