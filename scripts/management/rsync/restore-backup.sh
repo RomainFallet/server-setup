@@ -24,4 +24,4 @@ then
   read -r -p "Enter the local destination path: " destinationPath
 fi
 
-rsync -av --delete "${sshUser}"@"${sshHostname}":"${sourcePath}" "${destinationPath}"
+sudo rsync -av --delete "${sshUser}"@"${sshHostname}":"${sourcePath}" "${destinationPath}"
