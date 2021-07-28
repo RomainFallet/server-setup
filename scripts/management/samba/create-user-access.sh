@@ -13,6 +13,12 @@ if [[ -z ${username} ]]; then
   fi
 fi
 
+# Check if user already exists
+if sudo pdbedit -L | grep "${username}"; then
+  echo "Samba user already exists."
+  exit 0
+fi
+
 # Ask for password if not provided
 password=$2
 if [[ -z ${password} ]]; then
