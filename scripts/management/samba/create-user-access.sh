@@ -4,8 +4,9 @@
 set -e
 
 # Ask for username if not provided
+username=$1
 if [[ -z ${username} ]]; then
-  read -r -p "Choose the new Samba user name: " username
+  read -r -p "Choose the Samba user: " username
   if [[ -z ${username} ]]; then
     echo "User name must not be empty." 1>&2
     exit 1
@@ -13,19 +14,11 @@ if [[ -z ${username} ]]; then
 fi
 
 # Ask for password if not provided
+password=$2
 if [[ -z ${password} ]]; then
-  read -r -p "Choose the new Samba user password: " password
+  read -r -p "Create the Samba password for user \"${username}\": " password
   if [[ -z ${password} ]]; then
     echo "Password must not be empty." 1>&2
-    exit 1
-  fi
-fi
-
-# Create user if not exists
-USER_ID=$(id -u "${username}" 2> /dev/null)
-if [[ -z ${USER_ID} ]]; then
-  if ! sudo useradd "${username}" && echo "${username}:${password}"| chpasswd; then
-    echo "Unable to create the user." 1>&2
     exit 1
   fi
 fi
@@ -35,22 +28,28 @@ echo "${password}
 ${password}" | sudo smbpasswd -a "${username}"
 
 # Create Samba folder
-sambafolder=/home/"${username}"/share
-sudo mkdir -p /home/"${username}"/share
+sambafolder=/home/"${username}"/data
+if ! test -d "${sambafolder}"; then
+  sudo mkdir -p "${sambafolder}"
+fi
 
 # Add User config
 sambaconfig="
-[${username}share]
-comment = ${username} File Server Share
+[${username}]
+comment = ${username} files
 path = ${sambafolder}
 browsable = yes
-guest ok = yes
 read only = no
+guest ok = no
+public = no
 create mask = 0664
 directory mask = 0775"
 sambaconfigfile=/etc/samba/smb.conf
 
-if ! sudo grep "${sambaconfig}" "${sambaconfigfile}" > /dev/null
+
+pattern=$(echo "${sambaconfig}" | tr -d '\n')
+content=$(< "${sambaconfigfile}" tr -d '\n')
+if [[ "${content}" != *"${pattern}"* ]]
 then
   echo "${sambaconfig}" | sudo tee -a "${sambaconfigfile}" > /dev/null
 fi

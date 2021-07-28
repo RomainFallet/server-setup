@@ -171,6 +171,16 @@ bash ./scripts/server/basic.sh
 This will configure the timezone, the hostname, SSH, automatic updates,
 Fail2Ban and the firewall.
 
+### File server
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/server/file-server/samba/install.sh
+```
+
+This will install and configure Samba.
+
 ### Web server
 
 [Back to top ↑](#table-of-contents)
@@ -202,6 +212,16 @@ bash ./scripts/server/databases/mariadb/10.5/install.sh
 ```
 
 ## Management
+
+### Samba
+
+#### Create user access
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/management/samba/create-user-access.sh
+```
 
 ### Nginx - Cerbot
 
