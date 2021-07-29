@@ -215,14 +215,6 @@ bash ./scripts/server/databases/mariadb/10.5/install.sh
 
 ### Samba
 
-#### Create user access
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-bash ./scripts/management/samba/create-user-access.sh
-```
-
 #### Create users access
 
 [Back to top ↑](#table-of-contents)
