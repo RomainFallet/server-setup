@@ -28,3 +28,7 @@ sudo cp /tmp/wsdd-master/etc/systemd/wsdd.service /etc/systemd/system
 sudo systemctl daemon-reload
 sudo systemctl start wsdd
 sudo systemctl enable wsdd
+
+# Allow WSD connections
+sudo ufw allow 3702/udp
+sudo ufw allow 5357/tcp
