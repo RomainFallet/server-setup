@@ -18,7 +18,7 @@ while read -r line; do
       # Ask for password if not provided
       password=$2
       if [[ -z ${password} ]]; then
-        read -r -p "Create the Samba password for user \"${userName}\": " password
+        read -u 3 -r -p "Create the Samba password for user \"${userName}\": " password
         if [[ -z ${password} ]]; then
           echo "Password must not be empty." 1>&2
           exit 1
@@ -27,7 +27,7 @@ while read -r line; do
 
       # Create Samba password
       echo "${password}
-      ${password}" | sudo smbpasswd -a "${userName}"
+${password}" | sudo smbpasswd -a "${userName}"
 
       # Create Samba folder
       sambafolder=/home/"${userName}"/data
@@ -60,4 +60,4 @@ while read -r line; do
       sudo service smbd restart
     fi
   fi
-done </etc/passwd
+done 3<&0 </etc/passwd

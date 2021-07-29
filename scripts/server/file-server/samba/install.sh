@@ -25,6 +25,8 @@ unzip /tmp/master.zip -d /tmp
 mv /tmp/wsdd-master/src/wsdd.py /tmp/wsdd-master/src/wsdd
 sudo cp /tmp/wsdd-master/src/wsdd /usr/bin
 sudo cp /tmp/wsdd-master/etc/systemd/wsdd.service /etc/systemd/system
+sudo rm /tmp/master.zip
+sudo rm -rf /tmp/wsdd-master
 sudo systemctl daemon-reload
 sudo systemctl start wsdd
 sudo systemctl enable wsdd
