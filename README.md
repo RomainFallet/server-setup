@@ -223,6 +223,22 @@ bash ./scripts/server/databases/mariadb/10.5/install.sh
 bash ./scripts/management/samba/create-user-access.sh
 ```
 
+#### Create users access
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/management/samba/create-users-access.sh
+```
+
+#### Create shared access
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/management/samba/create-shared-access.sh
+```
+
 ### Nginx - Cerbot
 
 #### Get TLS certificate
@@ -295,4 +311,12 @@ bash ./scripts/apps/mailinabox/0.53a/install.sh
 
 ```bash
 bash ./scripts/recipes/mail-server.sh
+```
+
+### Files server
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/recipes/files-server.sh
 ```
