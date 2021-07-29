@@ -4,7 +4,14 @@
 set -e
 
 # Create Samba folder
-sambafolder=/mnt/sda/shared
+sambafolder=$1
+if [[ -z ${sambafolder} ]]; then
+  read -r -p "Choose your shared folder path: " sambafolder
+  if [[ -z ${sambafolder} ]]; then
+    echo "Path must not be empty." 1>&2
+    exit 1
+  fi
+fi
 if ! test -d "${sambafolder}"; then
   sudo mkdir -p "${sambafolder}"
 fi
