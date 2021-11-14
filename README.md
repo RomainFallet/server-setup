@@ -26,6 +26,9 @@ The goal is to provide an opinionated environment that just work for commons sce
     - [Set up an app with a local port](#set-up-an-app-with-a-local-port)
 - [Apps](#apps)
   - [Mailinabox](#mailinabox)
+- [Recipes](#recipes)
+  - [Mail server](#mail-server)
+  - [Files server](#files-server)
 
 ## Prerequisites
 
