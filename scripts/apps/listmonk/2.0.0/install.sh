@@ -9,7 +9,7 @@ then
   read -r -p "Choose your app name: " appName
 fi
 
-appName=$2
+appPort=$2
 if [[ -z "${appPort}" ]]
 then
   read -r -p "Choose your app port: " appPort
