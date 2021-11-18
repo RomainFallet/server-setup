@@ -206,6 +206,14 @@ bash ./scripts/server/environments/php/7.4/install.sh
 
 ## Database setup
 
+### PostgreSQL
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/server/databases/postgresql/14/install.sh
+```
+
 ### MariaDB
 
 [Back to top ↑](#table-of-contents)
@@ -296,6 +304,14 @@ bash ./scripts/management/rsync/restore-backup.sh
 
 ```bash
 bash ./scripts/apps/mailinabox/0.53a/install.sh
+```
+
+### Listmonk
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/apps/listmonk/2.0.0/install.sh
 ```
 
 ## Recipes

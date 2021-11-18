@@ -11,7 +11,7 @@ fi
 
 cd ./mailinabox
 
-git checkout v0.53a
+git checkout v0.55
 
 sudo ./setup/start.sh
 

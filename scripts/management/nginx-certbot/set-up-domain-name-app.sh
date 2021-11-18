@@ -2,18 +2,39 @@
 
 set -e
 
+appname=$1
 if [[ -z "${appname}" ]]
 then
   read -r -p "Enter the name of your app without hyphens (eg. myawesomeapp): " appname
 fi
 
+appdomain=$2
 if [[ -z "${appdomain}" ]]
 then
   read -r -p "Enter the domain name on which you want your app to be served (eg. example.com or test.example.com): " appdomain
 fi
 
-# shellcheck source=./_get-config-from-app-type.sh
-source ~/server-setup/scripts/management/nginx-certbot/_get-config-from-app-type.sh "${appname}"
+apptype=$3
+if [[ -z "${apptype}" ]]
+then
+  read -r -p "Which type of app do you want to deploy?
+    - Proxy to a local port:           [1]
+    - HTML/Static:                     [2]
+  Your choice: " apptype
+fi
+
+if [[ "${apptype}" == '1' ]]
+then
+  appport=$4
+  if [[ -z "${appport}" ]]
+  then
+    read -r -p "Enter your local app port: " appport
+  fi
+  nginxconfigfromapptype=$(bash ~/server-setup/scripts/management/nginx-certbot/_proxy-config.sh "${appname}" "${appport}")
+elif [[ "${apptype}" == '2' ]]
+then
+  nginxconfigfromapptype=$(bash ~/server-setup/scripts/management/nginx-certbot/_html-static-config.sh "${appname}")
+fi
 
 nginxconfig="server {
   listen 443      ssl http2;
@@ -38,13 +59,16 @@ nginxconfig="server {
 }"
 nginxconfigfile="/etc/nginx/sites-available/${appname}-public-${appdomain//\./}.conf"
 
-if ! test -d "/var/www/${appname}"
+if [[ "${apptype}" != '1' ]]
 then
-  sudo mkdir "/var/www/${appname}"
-fi
+  if ! test -d "/var/www/${appname}"
+  then
+    sudo mkdir "/var/www/${appname}"
+  fi
 
-sudo chown www-data:www-data "/var/www/${appname}"
-sudo chmod 775 "/var/www/${appname}"
+  sudo chown www-data:www-data "/var/www/${appname}"
+  sudo chmod 775 "/var/www/${appname}"
+fi
 
 if ! test -f "${nginxconfigfile}"
 then
