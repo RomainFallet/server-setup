@@ -50,7 +50,7 @@ bash ~/server-setup/scripts/server/databases/postgresql/14/install.sh
 
 databasesList=$(sudo -u postgres psql -l)
 usersList=$(sudo -u postgres psql -c "\du+")
-echo "${databasesList}" | grep "${appName}" || sudo -u postgres psql -c "CREATE DATABASE '${appName}';"
+echo "${databasesList}" | grep "${appName}" || sudo -u postgres psql -c "CREATE DATABASE ${appName};"
 echo "${usersList}"  | grep "${appName}" || sudo -u postgres psql -d "${appName}" -c "CREATE USER ${appName};"
 sudo -u postgres psql -d "${appName}" -c "ALTER USER \"${appName}\" with encrypted password '${databasePassword}';"
 sudo -u postgres psql -d "${appName}" -c "GRANT ALL PRIVILEGES ON DATABASE \"${appName}\" TO \"${appName}\";"
