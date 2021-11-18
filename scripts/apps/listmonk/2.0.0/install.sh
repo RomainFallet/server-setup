@@ -92,7 +92,7 @@ After=network-online.target
 [Service]
 Restart=always
 RestartSec=30s
-ExecStart=//opt/listmonk/listmonk
+ExecStart=/opt/listmonk/listmonk --config /opt/listmonk/config.toml
 
 [Install]
 WantedBy=multi-user.target
