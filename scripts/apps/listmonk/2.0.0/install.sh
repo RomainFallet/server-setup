@@ -79,7 +79,8 @@ max_idle = 25
 max_lifetime = \"300s\"
 "
 echo "${listmonkConfig}" | sudo tee /opt/listmonk/config.toml > /dev/null
-/opt/listmonk/listmonk --install --config /opt/listmonk/config.toml
+echo "y
+" | /opt/listmonk/listmonk --install --config /opt/listmonk/config.toml
 
 bash ~/server-setup/scripts/management/nginx-certbot/get-tls-certificate.sh "${appName}" "${email}" "${appDomain}"
 bash ~/server-setup/scripts/management/nginx-certbot/set-up-domain-name-app.sh "${appName}" "${email}" "1" "${appPort}"
