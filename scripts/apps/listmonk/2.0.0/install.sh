@@ -46,7 +46,7 @@ then
 fi
 
 #### Install dependencies
-bash ~/server-setup/scripts/server/postgresql/14/install.sh
+bash ~/server-setup/scripts/server/databases/postgresql/14/install.sh
 
 databasesList=$(sudo -u postgres psql -l)
 usersList=$(sudo -u postgres psql -c "\du+")
