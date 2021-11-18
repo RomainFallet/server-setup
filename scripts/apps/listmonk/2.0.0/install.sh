@@ -39,7 +39,7 @@ then
   read -r -p "Choose your database password: " databasePassword
 fi
 
-email=$6
+email=$7
 if [[ -z "${email}" ]]
 then
   read -r -p "Enter your email (needed to request TLS certificate): " email
