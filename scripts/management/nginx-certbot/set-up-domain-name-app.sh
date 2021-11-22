@@ -57,7 +57,7 @@ nginxconfig="server {
   add_header Referrer-Policy \"same-origin\";
   add_header Permissions-Policy \"microphone=(); geolocation=(); camera=();\";
 }"
-nginxconfigfile="/etc/nginx/sites-available/${appname}-public-${appdomain//\./}.conf"
+nginxconfigfilepath="/etc/nginx/sites-available/${appname}-public-${appdomain//\./}.conf"
 
 if [[ "${apptype}" != '1' ]]
 then
@@ -70,19 +70,21 @@ then
   sudo chmod 775 "/var/www/${appname}"
 fi
 
-if ! test -f "${nginxconfigfile}"
+if ! test -f "${nginxconfigfilepath}"
 then
-  sudo touch "${nginxconfigfile}"
+  sudo touch "${nginxconfigfilepath}"
 fi
 
-if [[ $(< "${nginxconfigfile}") != "${nginxconfig}" ]]
+pattern=$(echo "${nginxconfigfilepath}" | tr -d '\n')
+content=$(< "${nginxconfigfilepath}" tr -d '\n')
+if [[ "${content}" != *"${pattern}"* ]]
 then
-  echo "${nginxconfig}" | sudo tee "${nginxconfigfile}" > /dev/null
+  echo "${nginxconfig}" | sudo tee "${nginxconfigfilepath}" > /dev/null
 fi
 
 if ! test -f /etc/nginx/sites-enabled/"${appname}-public-${appdomain//\./}".conf
 then
-  sudo ln -s "${nginxconfigfile}" /etc/nginx/sites-enabled/
+  sudo ln -s "${nginxconfigfilepath}" /etc/nginx/sites-enabled/
 fi
 
 sudo service nginx restart
