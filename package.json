@@ -4,15 +4,15 @@
   "repository": "git@github.com:RomainFallet/server-setup.git",
   "license": "MIT",
   "devDependencies": {
-    "@commitlint/cli": "~11.0.0",
-    "@commitlint/config-conventional": "~11.0.0",
-    "husky": "~4.3.6",
-    "lint-staged": "~10.5.3",
-    "markdownlint": "~0.22.0",
-    "markdownlint-cli": "~0.26.0",
-    "npm-check": "~5.9.2",
+    "@commitlint/cli": "~15.0.0",
+    "@commitlint/config-conventional": "~15.0.0",
+    "husky": "~7.0.4",
+    "lint-staged": "~12.1.2",
+    "markdownlint": "~0.24.0",
+    "markdownlint-cli": "~0.30.0",
+    "npm-check-updates": "~12.0.2",
     "npm-run-all": "~4.1.5",
-    "shellcheck": "~0.4.4"
+    "shellcheck": "~1.0.0"
   },
   "scripts": {
     "lint": "npm-run-all lint:*",
@@ -20,7 +20,9 @@
     "lint:sh": "shellcheck./*.sh",
     "lint:md": "markdownlint ./*.md --ignore ./node_modules",
     "format:md": "markdownlint --fix ./*.md --ignore ./node_modules",
-    "deps:check": "npm-check --skip-unused --u"
+    "dep-upgrade:patch": "ncu -i -u --target patch",
+    "dep-upgrade:minor": "ncu -i -u --target minor",
+    "dep-upgrade:latest": "ncu -i -u --target latest"
   },
   "lint-staged": {
     "./*.sh": [
