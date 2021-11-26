@@ -1,13 +1,25 @@
 #!/bin/bash
 
+# Exit script on error
 set -e
 
-bash ~/server-setup/scripts/server/basic.sh
+### Set up a files server
 
-bash ~/server-setup/scripts/server/file-server/samba/install.sh
+# Get current directory path
+filePath=$(realpath -s "${0}")
+directoryPath=$(dirname "${filePath}")
 
-bash ~/server-setup/scripts/management/disks/set-up-data-disk.sh
+# Basic server setup
+bash "${directoryPath}"/../server/basic.sh
 
-bash ~/server-setup/scripts/management/samba/create-shared-access.sh /mnt/sda/shared
+# Install Samba
+bash "${directoryPath}"/../server/file-server/samba/install.sh
 
-bash ~/server-setup/scripts/management/samba/create-users-access.sh
+# Set up a data disk (to isolate system from user files)
+bash "${directoryPath}"/../management/disks/set-up-data-disk.sh
+
+# Create a shared Samba folder
+bash "${directoryPath}"/../management/samba/create-shared-access.sh /mnt/sda/shared
+
+# Create a personal Samba folder for each user
+bash "${directoryPath}"/../management/samba/create-users-access.sh

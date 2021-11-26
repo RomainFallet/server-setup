@@ -176,16 +176,6 @@ bash ./scripts/server/basic.sh
 This will configure the timezone, the hostname, SSH, automatic updates,
 Fail2Ban and the firewall.
 
-### File server
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-bash ./scripts/server/file-server/samba/install.sh
-```
-
-This will install and configure Samba.
-
 ### Web server
 
 [Back to top ↑](#table-of-contents)
@@ -196,7 +186,25 @@ bash ./scripts/server/web-server/nginx/install.sh
 
 This will install and configure Nginx and Certbot.
 
+### File server
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/server/file-server/samba/install.sh
+```
+
+This will install and configure Samba.
+
 ## Environment setup
+
+### NodeJS
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/server/environments/nodejs/16/install.sh
+```
 
 ### PHP
 
@@ -216,33 +224,7 @@ bash ./scripts/server/environments/php/7.4/install.sh
 bash ./scripts/server/databases/postgresql/14/install.sh
 ```
 
-### MariaDB
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-bash ./scripts/server/databases/mariadb/10.5/install.sh
-```
-
 ## Management
-
-### Samba
-
-#### Create users access
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-bash ./scripts/management/samba/create-users-access.sh
-```
-
-#### Create shared access
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-bash ./scripts/management/samba/create-shared-access.sh
-```
 
 ### Nginx - Cerbot
 
@@ -262,12 +244,14 @@ bash ./scripts/management/nginx-certbot/get-tls-certificate.sh
 bash ./scripts/management/nginx-certbot/set-up-domain-name-app.sh
 ```
 
-#### Set up an app with a local port
+### Chroot
+
+#### Create a chroot jail
 
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/management/nginx-certbot/set-up-local-port-app.sh
+bash ./scripts/management/chroot/create-jail.sh
 ```
 
 ### Disks
@@ -298,6 +282,24 @@ bash ./scripts/management/rsync/set-up-hourly-backup.sh
 bash ./scripts/management/rsync/restore-backup.sh
 ```
 
+### Samba
+
+#### Create users access
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/management/samba/create-users-access.sh
+```
+
+#### Create shared access
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+bash ./scripts/management/samba/create-shared-access.sh
+```
+
 ## Apps
 
 ### Mailinabox
@@ -305,15 +307,7 @@ bash ./scripts/management/rsync/restore-backup.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/apps/mailinabox/0.53a/install.sh
-```
-
-### Listmonk
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-bash ./scripts/apps/listmonk/2.0.0/install.sh
+bash ./scripts/apps/mailinabox/0.55/install.sh
 ```
 
 ## Recipes

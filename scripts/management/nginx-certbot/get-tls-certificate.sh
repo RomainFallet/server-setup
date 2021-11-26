@@ -1,34 +1,41 @@
 #!/bin/bash
 
+# Exit script on error
 set -e
 
-appname=$1
-if [[ -z "${appname}" ]]
+### Get TLS certificates
+
+# Ask app name if not already set
+appName=${1}
+if [[ -z "${appName}" ]]
 then
-  read -r -p "Enter the name of your app without hyphens (eg. myawesomeapp): " appname
+  read -r -p "Enter the name of your app without hyphens (eg. myawesomeapp): " appName
 fi
 
-email=$2
+# Ask email if not already set
+email=${2}
 if [[ -z "${email}" ]]
 then
   read -r -p "Enter your email (needed to request TLS certificate): " email
 fi
 
-appdomain=$3
-if [[ -z "${appdomain}" ]]
+# Ask app domain if not already set
+appDomain=${3}
+if [[ -z "${appDomain}" ]]
 then
-  read -r -p "Enter the domain name on which you want your app to be served (eg. example.com or test.example.com): " appdomain
+  read -r -p "Enter the domain name on which you want your app to be served (eg. example.com or test.example.com): " appDomain
 fi
 
-nginxcconfig="server {
+# Create HTTP config for ACME challenge
+nginxConfig="server {
   listen 80;
   listen [::]:80;
-  server_name ${appdomain};
+  server_name ${appDomain};
 
-  root /var/www/${appname};
+  root /var/www/${appName};
 
-  error_log  /var/log/nginx/${appname}.error.log error;
-  access_log /var/log/nginx/${appname}.access.log;
+  error_log  /var/log/nginx/${appName}.error.log error;
+  access_log /var/log/nginx/${appName}.access.log;
 
   location /.well-known/acme-challenge/ {
     try_files \$uri =404;
@@ -37,31 +44,32 @@ nginxcconfig="server {
     return 301 https://\$host\$request_uri;
   }
 }"
-nginxconfigfile="/etc/nginx/sites-available/${appname}-wellknown-${appdomain//\./}.conf"
-
-if ! test -d "/var/www/${appname}"
+nginxConfigPath="/etc/nginx/sites-available/${appName}-wellknown-${appDomain//\./}.conf"
+pattern=$(echo "${nginxConfig}" | tr -d '\n')
+content=$(< "${nginxConfigPath}" tr -d '\n')
+if [[ "${content}" != *"${pattern}"* ]]
 then
-  sudo mkdir "/var/www/${appname}"
+  echo "${nginxConfig}" | sudo tee "${nginxConfigPath}" > /dev/null
 fi
 
-sudo chown www-data:www-data "/var/www/${appname}"
-sudo chmod 775 "/var/www/${appname}"
-
-if ! test -f "${nginxconfigfile}"
+# Enable Nginx config
+if ! test -f /etc/nginx/sites-enabled/"${appName}-wellknown-${appDomain//\./}".conf
 then
-  sudo touch "${nginxconfigfile}"
+  sudo ln -s "${nginxConfigPath}" /etc/nginx/sites-enabled/
 fi
 
-if [[ $(< "${nginxconfigfile}") != "${nginxcconfig}" ]]
+# Create app directory
+if ! test -d "/var/www/${appName}"
 then
-  echo "${nginxcconfig}" | sudo tee "${nginxconfigfile}" > /dev/null
+  sudo mkdir "/var/www/${appName}"
 fi
 
-if ! test -f /etc/nginx/sites-enabled/"${appname}-wellknown-${appdomain//\./}".conf
-then
-  sudo ln -s "${nginxconfigfile}" /etc/nginx/sites-enabled/
-fi
+# Set permissions
+sudo chown www-data:www-data "/var/www/${appName}"
+sudo chmod 775 "/var/www/${appName}"
 
+# Restart Nginx
 sudo service nginx restart
 
-sudo certbot certonly --webroot -w "/var/www/${appname}" -d "${appdomain}" -m "${email}" -n --agree-tos
+# Generate certificate
+sudo certbot certonly --webroot -w "/var/www/${appName}" -d "${appDomain}" -m "${email}" -n --agree-tos

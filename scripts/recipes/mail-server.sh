@@ -1,29 +1,38 @@
 #!/bin/bash
 
+# Exit script on error
 set -e
 
-# shellcheck source=../server/basic.sh
-source ~/server-setup/scripts/server/basic.sh
+### Set up a mail server
 
-# shellcheck source=../apps/mailinabox/0.53a/install.sh
-source ~/server-setup/scripts/apps/mailinabox/0.53a/install.sh
+# Get current directory path
+filePath=$(realpath -s "${0}")
+directoryPath=$(dirname "${filePath}")
 
-restorebackup=$1
-if [[ -z "${restorebackup}" ]]
+# Basic server setup
+bash "${directoryPath}"/../server/basic.sh
+
+# Install Mailinabox
+bash "${directoryPath}"/../apps/mailinabox/0.55/install.sh
+
+# Ask to restore backup if not alrady set
+restoreBackup=$1
+if [[ -z "${restoreBackup}" ]]
 then
-  read -r -p "Restore data from pre-existing remote backup? [y/N]: " restorebackup
-  restorebackup=${restorebackup:-n}
-  restorebackup=$(echo "${restorebackup}" | awk '{print tolower($0)}')
+  read -r -p "Restore data from pre-existing remote backup? [y/N]: " restoreBackup
+  restorebackup=${restoreBackup:-n}
+  restorebackup=$(echo "${restoreBackup}" | awk '{print tolower($0)}')
 fi
+
 
 if [[ "${restorebackup}" == 'y' ]]
 then
-  # shellcheck source=../management/rsync/restore-backup.sh
-  source ~/server-setup/scripts/management/rsync/restore-backup.sh /home/user-data/
+  # Restore backup if needed
+  bash "${directoryPath}"/../management/rsync/restore-backup.sh /home/user-data/
 
-  # shellcheck source=../apps/mailinabox/0.53a/install.sh
-  source ~/server-setup/scripts/apps/mailinabox/0.53a/install.sh
+  # Restart Mailinabox install
+  bash "${directoryPath}"/../apps/mailinabox/0.55/install.sh
 fi
 
-# shellcheck source=../management/rsync/set-up-hourly-backup.sh
-source ~/server-setup/scripts/management/rsync/set-up-hourly-backup.sh /home/user-data
+# Set up hourly backups
+source "${directoryPath}"/../management/rsync/set-up-hourly-backup.sh /home/user-data

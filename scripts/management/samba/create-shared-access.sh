@@ -3,24 +3,28 @@
 # Exit script on error
 set -e
 
-# Create Samba folder
-sambafolder=$1
-if [[ -z ${sambafolder} ]]; then
-  read -r -p "Choose your shared folder path: " sambafolder
-  if [[ -z ${sambafolder} ]]; then
+### Create Samba shared access for all Samba users
+
+# Ask folder path if not already set
+sharedFolderPath=${1}
+if [[ -z ${sharedFolderPath} ]]; then
+  read -r -p "Choose your shared folder path: " sharedFolderPath
+  if [[ -z ${sharedFolderPath} ]]; then
     echo "Path must not be empty." 1>&2
     exit 1
   fi
 fi
-if ! test -d "${sambafolder}"; then
-  sudo mkdir -p "${sambafolder}"
+
+# Create Samba folder
+if ! test -d "${sharedFolderPath}"; then
+  sudo mkdir -p "${sharedFolderPath}"
 fi
 
 # Add config
-sambaconfig="
+sambaConfig="
 [shared]
 comment = Shared files
-path = ${sambafolder}
+path = ${sharedFolderPath}
 browsable = yes
 read only = no
 guest ok = no
@@ -29,18 +33,18 @@ directory mask = 0775
 
 [public]
 comment = Shared files
-path = ${sambafolder}
+path = ${sharedFolderPath}
 browsable = yes
 read only = yes
 guest ok = yes"
-sambaconfigfile=/etc/samba/smb.conf
+sambaConfigfile=/etc/samba/smb.conf
 
 
-pattern=$(echo "${sambaconfig}" | tr -d '\n')
-content=$(< "${sambaconfigfile}" tr -d '\n')
+pattern=$(echo "${sambaConfig}" | tr -d '\n')
+content=$(< "${sambaConfigfile}" tr -d '\n')
 if [[ "${content}" != *"${pattern}"* ]]
 then
-  echo "${sambaconfig}" | sudo tee -a "${sambaconfigfile}" > /dev/null
+  echo "${sambaConfig}" | sudo tee -a "${sambaConfigfile}" > /dev/null
 fi
 
 # Restart Samba

@@ -12,11 +12,11 @@ sudo apt install -y samba unzip
 sudo ufw allow samba
 
 # Backup config file
-sambaconfigpath=/etc/samba/smb.conf
-sambaconfigbackuppath=/etc/samba/smb.conf.backup
-if ! test -f "${sambaconfigbackuppath}"
+sambaConfigPath=/etc/samba/smb.conf
+sambaConfigbBackupPath=/etc/samba/smb.conf.backup
+if ! test -f "${sambaConfigbBackupPath}"
 then
-  sudo cp "${sambaconfigpath}" "${sambaconfigbackuppath}"
+  sudo cp "${sambaConfigPath}" "${sambaConfigbBackupPath}"
 fi
 
 # Download and install Windows Network Discovery

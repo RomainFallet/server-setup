@@ -1,53 +1,67 @@
 #!/bin/bash
 
+# Exit script on error
 set -e
 
-appname=$1
-if [[ -z "${appname}" ]]
+### Set up domain name app
+
+# Get current directory path
+filePath=$(realpath -s "${0}")
+directoryPath=$(dirname "${filePath}")
+
+# Ask app name if not already set
+appName=${1}
+if [[ -z "${appName}" ]]
 then
-  read -r -p "Enter the name of your app without hyphens (eg. myawesomeapp): " appname
+  read -r -p "Enter the name of your app without hyphens (eg. myawesomeapp): " appName
 fi
 
-appdomain=$2
-if [[ -z "${appdomain}" ]]
+# Ask app domain if not already set
+appDomain=${2}
+if [[ -z "${appDomain}" ]]
 then
-  read -r -p "Enter the domain name on which you want your app to be served (eg. example.com or test.example.com): " appdomain
+  read -r -p "Enter the domain name on which you want your app to be served (eg. example.com or test.example.com): " appDomain
 fi
 
-apptype=$3
-if [[ -z "${apptype}" ]]
+# Ask app type if not already set
+appType=${3}
+if [[ -z "${appType}" ]]
 then
   read -r -p "Which type of app do you want to deploy?
     - Proxy to a local port:           [1]
     - HTML/Static:                     [2]
-  Your choice: " apptype
+  Your choice: " appType
 fi
 
-if [[ "${apptype}" == '1' ]]
+# Get proxy config
+if [[ "${appType}" == '1' ]]
 then
-  appport=$4
-  if [[ -z "${appport}" ]]
+  appPort=${4}
+  if [[ -z "${appPort}" ]]
   then
-    read -r -p "Enter your local app port: " appport
+    read -r -p "Enter your local app port: " appPort
   fi
-  nginxconfigfromapptype=$(bash ~/server-setup/scripts/management/nginx-certbot/_proxy-config.sh "${appname}" "${appport}")
-elif [[ "${apptype}" == '2' ]]
+  nginxConfigFromAppType=$(bash "${directoryPath}"/_proxy-config.sh "${appName}" "${appPort}")
+
+# Get HTML/static
+elif [[ "${appType}" == '2' ]]
 then
-  nginxconfigfromapptype=$(bash ~/server-setup/scripts/management/nginx-certbot/_html-static-config.sh "${appname}")
+  nginxConfigFromAppType=$(bash "${directoryPath}"/_html-static-config.sh "${appName}")
 fi
 
-nginxconfig="server {
+# Create HTTPS config
+nginxConfig="server {
   listen 443      ssl http2;
   listen [::]:443 ssl http2;
-  server_name ${appdomain};
+  server_name ${appDomain};
 
-  ${nginxconfigfromapptype}
+  ${nginxConfigFromAppType}
 
-  error_log  /var/log/nginx/${appname}.error.log error;
-  access_log /var/log/nginx/${appname}.access.log;
+  error_log  /var/log/nginx/${appName}.error.log error;
+  access_log /var/log/nginx/${appName}.access.log;
 
-  ssl_certificate     /etc/letsencrypt/live/${appdomain}/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/${appdomain}/privkey.pem;
+  ssl_certificate     /etc/letsencrypt/live/${appDomain}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/${appDomain}/privkey.pem;
 
   add_header Strict-Transport-Security \"max-age=15552000; preload;\";
   add_header Expect-CT \"max-age=86400, enforce\";
@@ -57,34 +71,33 @@ nginxconfig="server {
   add_header Referrer-Policy \"same-origin\";
   add_header Permissions-Policy \"microphone=(); geolocation=(); camera=();\";
 }"
-nginxconfigfilepath="/etc/nginx/sites-available/${appname}-public-${appdomain//\./}.conf"
-
-if [[ "${apptype}" != '1' ]]
-then
-  if ! test -d "/var/www/${appname}"
-  then
-    sudo mkdir "/var/www/${appname}"
-  fi
-
-  sudo chown www-data:www-data "/var/www/${appname}"
-  sudo chmod 775 "/var/www/${appname}"
-fi
-
-if ! test -f "${nginxconfigfilepath}"
-then
-  sudo touch "${nginxconfigfilepath}"
-fi
-
-pattern=$(echo "${nginxconfigfilepath}" | tr -d '\n')
-content=$(< "${nginxconfigfilepath}" tr -d '\n')
+nginxConfigPath="/etc/nginx/sites-available/${appName}-public-${appDomain//\./}.conf"
+pattern=$(echo "${nginxConfig}" | tr -d '\n')
+content=$(< "${nginxConfigPath}" tr -d '\n')
 if [[ "${content}" != *"${pattern}"* ]]
 then
-  echo "${nginxconfig}" | sudo tee "${nginxconfigfilepath}" > /dev/null
+  echo "${nginxConfig}" | sudo tee "${nginxConfigPath}" > /dev/null
 fi
 
-if ! test -f /etc/nginx/sites-enabled/"${appname}-public-${appdomain//\./}".conf
+# Enable Nginx config
+if ! test -f /etc/nginx/sites-enabled/"${appName}-public-${appDomain//\./}".conf
 then
-  sudo ln -s "${nginxconfigfilepath}" /etc/nginx/sites-enabled/
+  sudo ln -s "${nginxConfigPath}" /etc/nginx/sites-enabled/
 fi
 
+# For all apps except proxy
+if [[ "${appType}" != '1' ]]
+then
+  # Create app directory
+  if ! test -d "/var/www/${appName}"
+  then
+    sudo mkdir "/var/www/${appName}"
+  fi
+
+  # Set permissions
+  sudo chown www-data:www-data "/var/www/${appName}"
+  sudo chmod 775 "/var/www/${appName}"
+fi
+
+# Restart Nginx
 sudo service nginx restart

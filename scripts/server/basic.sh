@@ -3,9 +3,10 @@
 # Exit script on error
 set -e
 
-### Set up variables
+### Ask informations
 
 # Ask hostname if not already set
+hostname=${1}
 if [[ -z "${hostname}" ]]
 then
   read -r -p "Enter your hostname (it must be a domain name pointing to this machine IP address): " hostname
@@ -24,38 +25,38 @@ sudo hostnamectl set-hostname "${hostname}"
 ### SSH
 
 # Backup config file
-sshconfigpath=/etc/ssh/sshd_config
-sshconfigbackuppath=/etc/ssh/.sshd_config.backup
-if ! test -f "${sshconfigbackuppath}"
+sshConfigPath=/etc/ssh/sshd_config
+sshConfigBackupPath=/etc/ssh/.sshd_config.backup
+if ! test -f "${sshConfigBackupPath}"
 then
-  sudo cp "${sshconfigpath}" "${sshconfigbackuppath}"
+  sudo cp "${sshConfigPath}" "${sshConfigBackupPath}"
 fi
 
 # Disable password authentication
-sshpassconfig='PasswordAuthentication no'
-sudo sed -i'.tmp' -E "s/#*PasswordAuthentication\s+(\w+)/PasswordAuthentication no/g" "${sshconfigpath}"
-if ! sudo grep "^${sshpassconfig}" "${sshconfigpath}" > /dev/null
+sshPasswordConfig='PasswordAuthentication no'
+sudo sed -i'.tmp' -E "s/#*PasswordAuthentication\s+(\w+)/PasswordAuthentication no/g" "${sshConfigPath}"
+if ! sudo grep "^${sshPasswordConfig}" "${sshConfigPath}" > /dev/null
 then
-  echo "${sshpassconfig}" | sudo tee -a "${sshconfigpath}" > /dev/null
+  echo "${sshPasswordConfig}" | sudo tee -a "${sshConfigPath}" > /dev/null
 fi
 
 # Keep alive client connections
-sshclientintervalconfig='ClientAliveInterval 60'
-sudo sed -i'.tmp' -E "s/#*ClientAliveInterval\s+([0-9]+)/ClientAliveInterval 60/g" "${sshconfigpath}"
-if ! sudo grep "^${sshclientintervalconfig}" "${sshconfigpath}" > /dev/null
+sshClientIntervalconfig='ClientAliveInterval 60'
+sudo sed -i'.tmp' -E "s/#*ClientAliveInterval\s+([0-9]+)/ClientAliveInterval 60/g" "${sshConfigPath}"
+if ! sudo grep "^${sshClientIntervalconfig}" "${sshConfigPath}" > /dev/null
 then
-  echo "${sshclientintervalconfig}" | sudo tee -a "${sshconfigpath}" > /dev/null
+  echo "${sshClientIntervalconfig}" | sudo tee -a "${sshConfigPath}" > /dev/null
 fi
 
-sshclientcountconfig='ClientAliveCountMax 10'
-sudo sed -i'.tmp' -E "s/#*ClientAliveCountMax\s+([0-9]+)/ClientAliveCountMax 10/g" "${sshconfigpath}"
-if ! sudo grep "^${sshclientcountconfig}" "${sshconfigpath}" > /dev/null
+sshClientCountConfig='ClientAliveCountMax 10'
+sudo sed -i'.tmp' -E "s/#*ClientAliveCountMax\s+([0-9]+)/ClientAliveCountMax 10/g" "${sshConfigPath}"
+if ! sudo grep "^${sshClientCountConfig}" "${sshConfigPath}" > /dev/null
 then
-  echo "${sshclientcountconfig}" | sudo tee -a "${sshconfigpath}" > /dev/null
+  echo "${sshClientCountConfig}" | sudo tee -a "${sshConfigPath}" > /dev/null
 fi
 
 # Remove tmp file
-sudo rm -f "${sshconfigpath}".tmp
+sudo rm -f "${sshConfigPath}".tmp
 
 # Restart SSH
 sudo service ssh restart
@@ -66,26 +67,26 @@ sudo service ssh restart
 sudo apt update && sudo apt dist-upgrade -y
 
 # Make a backup of the config files
-periodicconfigpath=/etc/apt/apt.conf.d/10periodic
-periodicconfigbackuppath=/etc/apt/apt.conf.d/.10periodic.backup
-unattendedupgradeconfigpath=/etc/apt/apt.conf.d/50unattended-upgrades
-unattendedupgradeconfigbackuppath=/etc/apt/apt.conf.d/.50unattended-upgrades.backup
-if ! test -f "${periodicconfigbackuppath}"
+periodicConfigPath=/etc/apt/apt.conf.d/10periodic
+periodicConfigBackupPath=/etc/apt/apt.conf.d/.10periodic.backup
+unattendedUpgradeConfigPath=/etc/apt/apt.conf.d/50unattended-upgrades
+unattendedUpgradeConfigBackupPath=/etc/apt/apt.conf.d/.50unattended-upgrades.backup
+if ! test -f "${periodicConfigBackupPath}"
 then
-  sudo cp "${periodicconfigpath}" "${periodicconfigbackuppath}"
+  sudo cp "${periodicConfigPath}" "${periodicConfigBackupPath}"
 fi
-if ! test -f "${unattendedupgradeconfigbackuppath}"
+if ! test -f "${unattendedUpgradeConfigBackupPath}"
 then
-  sudo cp "${unattendedupgradeconfigpath}" "${unattendedupgradeconfigbackuppath}"
+  sudo cp "${unattendedUpgradeConfigPath}" "${unattendedUpgradeConfigBackupPath}"
 fi
 
 # Download upgradable packages automatically
 echo "APT::Periodic::Update-Package-Lists \"1\";
 APT::Periodic::Download-Upgradeable-Packages \"1\";
-APT::Periodic::AutocleanInterval \"7\";" | sudo tee "${periodicconfigpath}" > /dev/null
+APT::Periodic::AutocleanInterval \"7\";" | sudo tee "${periodicConfigPath}" > /dev/null
 
 # Install updates automatically
-updateconfig="Unattended-Upgrade::Allowed-Origins {
+echo "Unattended-Upgrade::Allowed-Origins {
   \"\${distro_id}:\${distro_codename}\";
   \"\${distro_id}:\${distro_codename}-security\";
   \"\${distro_id}ESMApps:\${distro_codename}-apps-security\";
@@ -96,24 +97,23 @@ Unattended-Upgrade::DevRelease \"false\";
 Unattended-Upgrade::Remove-Unused-Kernel-Packages \"true\";
 Unattended-Upgrade::Remove-Unused-Dependencies \"true\";
 Unattended-Upgrade::Automatic-Reboot \"true\";
-Unattended-Upgrade::Automatic-Reboot-Time \"05:00\";"
-echo "${updateconfig}" | sudo tee "${unattendedupgradeconfigpath}" > /dev/null
+Unattended-Upgrade::Automatic-Reboot-Time \"05:00\";" | sudo tee "${unattendedUpgradeConfigPath}" > /dev/null
 
 ### Default umask
 
 # Backup config file
-umaskconfigpath=/etc/login.defs
-umaskconfigbackuppath=/etc/.login.defs.backup
-if ! test -f "${umaskconfigbackuppath}"
+umaskConfigPath=/etc/login.defs
+umaskConfigBackupPath=/etc/.login.defs.backup
+if ! test -f "${umaskConfigBackupPath}"
 then
-  sudo cp "${umaskconfigpath}" "${umaskconfigbackuppath}"
+  sudo cp "${umaskConfigPath}" "${umaskConfigBackupPath}"
 fi
 
 # Change default system umask
-sudo sed -i'.tmp' -E 's/UMASK(\s+)([0-9]+)/UMASK\1002/g' "${umaskconfigpath}"
+sudo sed -i'.tmp' -E 's/UMASK(\s+)([0-9]+)/UMASK\1002/g' "${umaskConfigPath}"
 
 # Remove tmp file
-sudo rm "${umaskconfigpath}".tmp
+sudo rm "${umaskConfigPath}".tmp
 
 ### Fail2ban
 
@@ -121,14 +121,14 @@ sudo rm "${umaskconfigpath}".tmp
 sudo apt install -y fail2ban
 
 # Create config file
-fail2banconfigfile=/etc/fail2ban/jail.local
-if ! test -f "${fail2banconfigfile}"
+fail2banConfigFile=/etc/fail2ban/jail.local
+if ! test -f "${fail2banConfigFile}"
 then
   sudo touch /etc/fail2ban/jail.local
 fi
 
 # Add default configuration
-fail2banconfig="[DEFAULT]
+fail2banConfig="[DEFAULT]
 findtime = 3600
 bantime = 86400
 
@@ -138,11 +138,11 @@ port = ssh
 filter = sshd
 logpath = /var/log/auth.log
 maxretry = 3"
-pattern=$(echo "${fail2banconfig}" | tr -d '\n')
-content=$(< "${fail2banconfigfile}" tr -d '\n')
+pattern=$(echo "${fail2banConfig}" | tr -d '\n')
+content=$(< "${fail2banConfigFile}" tr -d '\n')
 if [[ "${content}" != *"${pattern}"* ]]
 then
-  echo "${fail2banconfig}" | sudo tee -a "${fail2banconfigfile}" > /dev/null
+  echo "${fail2banConfig}" | sudo tee -a "${fail2banConfigFile}" > /dev/null
 fi
 
 # Restart Fail2ban

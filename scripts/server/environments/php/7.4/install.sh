@@ -1,9 +1,9 @@
 #!/bin/bash
 
-### PHP 7.4
-
 # Exit script on error
 set -e
+
+### PHP 7.4
 
 # Add PHP official repository
 sudo add-apt-repository -y ppa:ondrej/php
@@ -45,11 +45,3 @@ sudo systemctl daemon-reload
 
 # Restart PHP-FPM
 sudo service php7.4-fpm restart
-
-# Apache configuration
-if dpkg --get-selections | grep 'apache2'
-then
-  sudo apt install -y libapache2-mod-php7.4
-  sudo a2enconf php7.4-fpm
-  sudo service apache2 restart
-fi
