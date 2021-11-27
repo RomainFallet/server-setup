@@ -3,7 +3,7 @@
 # Exit script on error
 set -e
 
-### Set up hourly backup with Rsync
+### Set up daily backup with Rsync
 
 # Ask source path if not already set
 sourcePath=${1}
@@ -44,13 +44,15 @@ fi
 healthChecksMonitorCommand=""
 if [[ -n "${healthChecksUuid}" ]]
 then
-  healthChecksMonitorCommand=" && curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
+  healthChecksMonitorCommand="curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
 fi
 
 # Create backup script
 backupScript="#!/bin/bash
-(pgrep 'rsync' || rsync -av --delete ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath})${healthChecksMonitorCommand}"
-backupScriptPath=/etc/cron.hourly/backup
+set -e
+rsync -av --delete ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath})${healthChecksMonitorCommand}
+${healthChecksMonitorCommand}"
+backupScriptPath=/etc/cron.daily/rsync-backup
 if ! test -f "${backupScriptPath}"
 then
   sudo touch "${backupScriptPath}"

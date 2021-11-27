@@ -3,7 +3,7 @@
 # Exit script on error
 set -e
 
-### Set up a file server
+### Set up a file machine
 
 # Get current directory path
 filePath=$(realpath -s "${0}")

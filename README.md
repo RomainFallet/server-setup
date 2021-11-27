@@ -15,22 +15,36 @@ The goal is to provide an opinionated environment that just work for commons sce
 - [Server setup](#server-setup)
   - [Basic](#basic)
   - [Web server](#web-server)
+  - [File server](#file-server)
 - [Environment setup](#environment-setup)
-  - [PHP](#php)
+  - [NodeJS](#nodejs)
 - [Database setup](#database-setup)
-  - [MariaDB](#mariadb)
-  - [PostgreSQL](#postgresql)
+  - [PostgreSQL setup](#postgresql-setup)
 - [Management](#management)
   - [Nginx - Cerbot](#nginx---cerbot)
     - [Get TLS certificate](#get-tls-certificate)
     - [Set up an app with a domain name](#set-up-an-app-with-a-domain-name)
-    - [Set up an app with a local port](#set-up-an-app-with-a-local-port)
+    - [Set up daily dump (Nginx and Letsencrypt)](#set-up-daily-dump-nginx-and-letsencrypt)
+    - [Restore dump (Nginx and Letsencrypt)](#restore-dump-nginx-and-letsencrypt)
+  - [PostgreSQL](#postgresql)
+    - [Set up daily dump (PostgreSQL)](#set-up-daily-dump-postgresql)
+    - [Restore dump (PostgreSQL)](#restore-dump-PostgreSQL)
+  - [Chroot](#chroot)
+    - [Create a chroot jail](#create-a-chroot-jail)
+  - [Disks](#disks)
+    - [Set up a data disk](#set-up-a-data-disk)
+  - [Rsync](#rsync)
+    - [Set up an daily backup](#set-up-an-daily-backup)
+    - [Restore backup](#restore-backup)
+  - [Samba](#samba)
+    - [Create users access](#create-users-access)
+    - [Create shared access](#create-shared-access)
 - [Apps](#apps)
   - [Mailinabox](#mailinabox)
-  - [Listmonk](#listmonk)
 - [Recipes](#recipes)
-  - [Mail server](#mail-server)
-  - [Files server](#files-server)
+  - [Web machine](#web-machine)
+  - [File machine](#file-machine)
+  - [Mail machine](#mail-machine)
 
 ## Prerequisites
 
@@ -211,17 +225,9 @@ This will install and configure Samba.
 ss:environment:nodejs
 ```
 
-### PHP
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:environment:php
-```
-
 ## Database setup
 
-### PostgreSQL
+### PostgreSQL setup
 
 [Back to top ↑](#table-of-contents)
 
@@ -249,6 +255,40 @@ ss:nginx-certbot:tls
 ss:nginx-certbot:domain-name-app
 ```
 
+#### Set up daily dump (Nginx and Letsencrypt)
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:nginx-certbot:daily-dump
+```
+
+#### Restore dump (Nginx and Letsencrypt)
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:nginx-certbot:restore-dump
+```
+
+### PostgreSQL
+
+#### Set up daily dump (PostgreSQL)
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:postgresql:daily-dump
+```
+
+#### Restore dump (PostgreSQL)
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:postgresql:restore-dump
+```
+
 ### Chroot
 
 #### Create a chroot jail
@@ -271,12 +311,12 @@ ss:disks:data
 
 ### Rsync
 
-#### Set up an hourly backup
+#### Set up an daily backup
 
 [Back to top ↑](#table-of-contents)
 
 ```bash
-ss:rsync:hourly-backup
+ss:rsync:daily-backup
 ```
 
 #### Restore backup
@@ -317,18 +357,26 @@ ss:apps:mailinabox
 
 ## Recipes
 
-### Mail server
+### Web machine
 
 [Back to top ↑](#table-of-contents)
 
 ```bash
-ss:recipes:mail-server
+ss:recipes:web-machine
 ```
 
-### Files server
+### Mail machine
 
 [Back to top ↑](#table-of-contents)
 
 ```bash
-ss:recipes:file-server
+ss:recipes:mail-machine
+```
+
+### File machine
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:recipes:file-machine
 ```

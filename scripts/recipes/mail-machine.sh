@@ -3,7 +3,7 @@
 # Exit script on error
 set -e
 
-### Set up a mail server
+### Set up a mail machine
 
 # Get current directory path
 filePath=$(realpath -s "${0}")
@@ -15,7 +15,7 @@ bash "${directoryPath}"/../basic.sh
 # Install Mailinabox
 bash "${directoryPath}"/../apps/mailinabox/0.55/install.sh
 
-# Ask to restore backup if not alrady set
+# Ask to restore backup if not already set
 restoreBackup=$1
 if [[ -z "${restoreBackup}" ]]
 then
@@ -24,15 +24,14 @@ then
   restorebackup=$(echo "${restoreBackup}" | awk '{print tolower($0)}')
 fi
 
-
 if [[ "${restorebackup}" == 'y' ]]
 then
-  # Restore backup if needed
+  # Restore backup
   bash "${directoryPath}"/../rsync/restore-backup.sh /home/user-data/
 
   # Restart Mailinabox install
   bash "${directoryPath}"/../apps/mailinabox/0.55/install.sh
 fi
 
-# Set up hourly backups
-bash "${directoryPath}"/../rsync/set-up-hourly-backup.sh /home/user-data
+# Set up daily backups
+bash "${directoryPath}"/../rsync/set-up-daily-backup.sh /home/user-data
