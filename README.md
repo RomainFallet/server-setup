@@ -158,9 +158,14 @@ ssh <username>@50.70.150.30
 Login to your machine's sudo user and run the following commands.
 
 ```bash
+# Clone server-setup scripts in home directory
 git clone https://github.com/RomainFallet/server-setup ~/.server-setup
 
+# Install commands in ~/.bash_aliases
 bash ~/.server-setup/scripts/install.sh
+
+# Refresh aliases
+unalias -a && . ~/.bashrc
 ```
 
 ## Server setup
