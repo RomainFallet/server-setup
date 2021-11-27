@@ -25,3 +25,7 @@ alias ss:apps:mailinabox='bash ${directoryRootPath}/apps/mailinabox/0.55/install
 alias ss:recipes:mail-server='bash ${directoryRootPath}/recipes/mail-server.sh'
 alias ss:recipes:file-server='bash ${directoryRootPath}/recipes/file-server.sh'
 " | tee ~/.bash_aliases > /dev/null
+
+# Refresh aliases
+# shellcheck source=/dev/null
+unalias -a && . ~/.bashrc
