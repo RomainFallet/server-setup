@@ -86,6 +86,7 @@ if [[ -z "${commandsList}" ]] && [[ -z "${useBasicCommands}" ]]; then
 fi
 
 # Ask for the commands list we want for the user
+# bash,ls,rm,touch,mkdir,rmdir
 if [[ -z "${commandsList}" ]] && [[ "${useBasicCommands}" == 'y' ]]; then
   read -r -p "List basic commands (comma separated) you want to give access to: " commandsList
   if [[ -z "${commandsList}" ]]; then

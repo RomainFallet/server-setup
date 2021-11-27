@@ -158,9 +158,9 @@ ssh <username>@50.70.150.30
 Login to your machine's sudo user and run the following commands.
 
 ```bash
-git clone https://github.com/RomainFallet/server-setup ~/server-setup
+git clone https://github.com/RomainFallet/server-setup ~/.server-setup
 
-cd ~/server-setup
+bash ~/.server-setup/scripts/install.sh
 ```
 
 ## Server setup
@@ -170,7 +170,7 @@ cd ~/server-setup
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/server/basic.sh
+ss:basic
 ```
 
 This will configure the timezone, the hostname, SSH, automatic updates,
@@ -181,7 +181,7 @@ Fail2Ban and the firewall.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/server/web-server/nginx/install.sh
+ss:web-server:nginx
 ```
 
 This will install and configure Nginx and Certbot.
@@ -191,7 +191,7 @@ This will install and configure Nginx and Certbot.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/server/file-server/samba/install.sh
+ss:file-server:samba
 ```
 
 This will install and configure Samba.
@@ -203,7 +203,7 @@ This will install and configure Samba.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/server/environments/nodejs/16/install.sh
+ss:environment:nodejs
 ```
 
 ### PHP
@@ -211,7 +211,7 @@ bash ./scripts/server/environments/nodejs/16/install.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/server/environments/php/7.4/install.sh
+ss:environment:php
 ```
 
 ## Database setup
@@ -221,7 +221,7 @@ bash ./scripts/server/environments/php/7.4/install.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/server/databases/postgresql/14/install.sh
+ss:database:postgresql
 ```
 
 ## Management
@@ -233,7 +233,7 @@ bash ./scripts/server/databases/postgresql/14/install.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/management/nginx-certbot/get-tls-certificate.sh
+ss:nginx-certbot:tls
 ```
 
 #### Set up an app with a domain name
@@ -241,7 +241,7 @@ bash ./scripts/management/nginx-certbot/get-tls-certificate.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/management/nginx-certbot/set-up-domain-name-app.sh
+ss:nginx-certbot:domain-name-app
 ```
 
 ### Chroot
@@ -251,7 +251,7 @@ bash ./scripts/management/nginx-certbot/set-up-domain-name-app.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/management/chroot/create-jail.sh
+ss:chroot:jail
 ```
 
 ### Disks
@@ -261,7 +261,7 @@ bash ./scripts/management/chroot/create-jail.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/management/disks/set-up-data-disk.sh
+ss:disks:data
 ```
 
 ### Rsync
@@ -271,7 +271,7 @@ bash ./scripts/management/disks/set-up-data-disk.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/management/rsync/set-up-hourly-backup.sh
+ss:rsync:hourly-backup
 ```
 
 #### Restore backup
@@ -279,7 +279,7 @@ bash ./scripts/management/rsync/set-up-hourly-backup.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/management/rsync/restore-backup.sh
+ss:rsync:restore-backup
 ```
 
 ### Samba
@@ -289,7 +289,7 @@ bash ./scripts/management/rsync/restore-backup.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/management/samba/create-users-access.sh
+ss:samba:users
 ```
 
 #### Create shared access
@@ -297,7 +297,7 @@ bash ./scripts/management/samba/create-users-access.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/management/samba/create-shared-access.sh
+ss:samba:shared
 ```
 
 ## Apps
@@ -307,7 +307,7 @@ bash ./scripts/management/samba/create-shared-access.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/apps/mailinabox/0.55/install.sh
+ss:apps:mailinabox
 ```
 
 ## Recipes
@@ -317,7 +317,7 @@ bash ./scripts/apps/mailinabox/0.55/install.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/recipes/mail-server.sh
+ss:recipes:mail-server
 ```
 
 ### Files server
@@ -325,5 +325,5 @@ bash ./scripts/recipes/mail-server.sh
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash ./scripts/recipes/files-server.sh
+ss:recipes:file-server
 ```

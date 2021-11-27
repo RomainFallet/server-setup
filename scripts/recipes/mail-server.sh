@@ -10,7 +10,7 @@ filePath=$(realpath -s "${0}")
 directoryPath=$(dirname "${filePath}")
 
 # Basic server setup
-bash "${directoryPath}"/../server/basic.sh
+bash "${directoryPath}"/../basic.sh
 
 # Install Mailinabox
 bash "${directoryPath}"/../apps/mailinabox/0.55/install.sh
@@ -28,11 +28,11 @@ fi
 if [[ "${restorebackup}" == 'y' ]]
 then
   # Restore backup if needed
-  bash "${directoryPath}"/../management/rsync/restore-backup.sh /home/user-data/
+  bash "${directoryPath}"/../rsync/restore-backup.sh /home/user-data/
 
   # Restart Mailinabox install
   bash "${directoryPath}"/../apps/mailinabox/0.55/install.sh
 fi
 
 # Set up hourly backups
-source "${directoryPath}"/../management/rsync/set-up-hourly-backup.sh /home/user-data
+bash "${directoryPath}"/../rsync/set-up-hourly-backup.sh /home/user-data
