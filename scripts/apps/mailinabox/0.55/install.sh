@@ -13,7 +13,7 @@ fi
 
 # Select version
 cd ~/mailinabox
-git checkout v0.55
+git checkout v55
 
 # Install
 sudo ./setup/start.sh
