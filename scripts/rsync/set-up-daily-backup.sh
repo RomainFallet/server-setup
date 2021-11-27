@@ -50,7 +50,7 @@ fi
 # Create backup script
 backupScript="#!/bin/bash
 set -e
-rsync -av --delete ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath})${healthChecksMonitorCommand}
+rsync -av --delete ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath}
 ${healthChecksMonitorCommand}"
 backupScriptPath=/etc/cron.daily/rsync-backup
 if ! test -f "${backupScriptPath}"
