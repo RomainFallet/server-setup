@@ -47,7 +47,7 @@ fi
 
 # Set up daily dumps
 bash "${directoryPath}"/postgresql/set-up-daily-dump.sh /home/user-data/postgresql-dump.sql
-bash "${directoryPath}"/nginx-cerbot/set-up-daily-dump.sh /home/user-data
+bash "${directoryPath}"/nginx-certbot/set-up-daily-dump.sh /home/user-data
 
 # Set up daily backups
 bash "${directoryPath}"/rsync/set-up-daily-backup.sh /home/user-data/ ~/data/
