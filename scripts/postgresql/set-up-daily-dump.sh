@@ -29,7 +29,7 @@ fi
 # Create dump script
 dumpScript="#!/bin/bash
 set -e
-postgresqlDump=\$(sudo -u postgres pg_dumpall --clean)
+postgresqlDump=\$(sudo -u postgres pg_dumpall --clean --if-exists)
 echo \"\${postgresqlDump}\" | sudo tee ${destinationPath} > /dev/null
 ${healthChecksMonitorCommand}"
 dumpScriptPath=/etc/cron.daily/postgresql-dump
