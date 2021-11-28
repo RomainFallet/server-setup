@@ -33,24 +33,26 @@ sudo mkdir -p /home/user-data
 if [[ "${restorebackup}" == 'y' ]]
 then
   # Restore backup
-  bash "${directoryPath}"/rsync/restore-backup.sh /home/user-data/ ~/data/
+  # shellcheck disable=SC2088
+  bash "${directoryPath}"/rsync/restore-backup.sh "/home/user-data/" "~/data/"
 
   # Restore Nginx & Letsencrypt dump
-  bash "${directoryPath}"/nginx-certbot/restore-dump.sh /home/user-data
+  bash "${directoryPath}"/nginx-certbot/restore-dump.sh "/home/user-data"
 
   # Restart Nginx
   sudo services nginx restart
 
   # Restore PostgreSQL dump
-  bash "${directoryPath}"/postgresql/restore-dump.sh /home/user-data/postgresql-dump.sql
+  bash "${directoryPath}"/postgresql/restore-dump.sh "/home/user-data/postgresql-dump.sql"
 
   # Restart PostgreSQL
   sudo services postgresql restart
 fi
 
 # Set up daily dumps
-bash "${directoryPath}"/postgresql/set-up-daily-dump.sh /home/user-data/postgresql-dump.sql
-bash "${directoryPath}"/nginx-certbot/set-up-daily-dump.sh /home/user-data
+bash "${directoryPath}"/postgresql/set-up-daily-dump.sh "/home/user-data/postgresql-dump.sql"
+bash "${directoryPath}"/nginx-certbot/set-up-daily-dump.sh "/home/user-data"
 
 # Set up daily backups
-bash "${directoryPath}"/rsync/set-up-daily-backup.sh /home/user-data/ ~/data/
+# shellcheck disable=SC2088
+bash "${directoryPath}"/rsync/set-up-daily-backup.sh "/home/user-data/" "~/data/"
