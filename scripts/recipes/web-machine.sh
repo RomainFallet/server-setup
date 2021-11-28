@@ -16,7 +16,7 @@ bash "${directoryPath}"/basic.sh
 bash "${directoryPath}"/web-server/nginx/install.sh
 
 # Install NodeJS
-bash "${directoryPath}"/environments/nodejs/install.sh
+bash "${directoryPath}"/environments/nodejs/16/install.sh
 
 # Ask to restore backup if not already set
 restoreBackup=$1
