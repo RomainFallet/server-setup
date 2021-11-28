@@ -27,6 +27,9 @@ then
   restorebackup=$(echo "${restoreBackup}" | awk '{print tolower($0)}')
 fi
 
+# Define dump directory
+sudo mkdir -p /home/user-data
+
 if [[ "${restorebackup}" == 'y' ]]
 then
   # Restore backup

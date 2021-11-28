@@ -29,7 +29,6 @@ fi
 # Create dump script
 dumpScript="#!/bin/bash
 set -e
-sudo mkdir -p /home/user-data
 sudo rm -rf ${destinationPath}/www ${destinationPath}/nginx ${destinationPath}/letsencrypt
 sudo cp --archive /var/www ${destinationPath}/www
 sudo cp --archive /etc/nginx ${destinationPath}/nginx
