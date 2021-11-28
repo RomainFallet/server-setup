@@ -23,7 +23,7 @@ fi
 healthChecksMonitorCommand=""
 if [[ -n "${healthChecksUuid}" ]]
 then
-  healthChecksMonitorCommand=" && curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
+  healthChecksMonitorCommand="curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
 fi
 
 # Create dump script
