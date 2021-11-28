@@ -9,14 +9,14 @@ set -e
 destinationPath=${1}
 if [[ -z "${destinationPath}" ]]
 then
-  read -r -p "Enter the destination path of your SQL dump file: " destinationPath
+  read -r -p "Enter the destination path of your PostgreSQL dump file: " destinationPath
 fi
 
 # Ask health checks uuid if not already set
 healthChecksUuid=${2}
 if [[ -z "${healthChecksUuid}" ]]
 then
-  read -r -p "Enter your healthchecks.io uuid to monitor your dump job (optional): " healthChecksUuid
+  read -r -p "Enter your healthchecks.io uuid to monitor your PostgreSQL dump job (optional): " healthChecksUuid
 fi
 
 # Health checks ping command

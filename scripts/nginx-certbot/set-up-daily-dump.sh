@@ -16,7 +16,7 @@ fi
 healthChecksUuid=${2}
 if [[ -z "${healthChecksUuid}" ]]
 then
-  read -r -p "Enter your healthchecks.io uuid to monitor your dump job (optional): " healthChecksUuid
+  read -r -p "Enter your healthchecks.io uuid to monitor your Nginx & Letsencrypt dump job (optional): " healthChecksUuid
 fi
 
 # Health checks ping command
