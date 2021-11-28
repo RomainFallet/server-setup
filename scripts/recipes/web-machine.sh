@@ -18,6 +18,9 @@ bash "${directoryPath}"/web-server/nginx/install.sh
 # Install NodeJS
 bash "${directoryPath}"/environments/nodejs/16/install.sh
 
+# Install PostgreSQL
+bash "${directoryPath}"/databases/postgresql/14/install.sh
+
 # Ask to restore backup if not already set
 restoreBackup=$1
 if [[ -z "${restoreBackup}" ]]
