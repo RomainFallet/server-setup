@@ -7,13 +7,13 @@ set -e
 
 # Get current directory path
 filePath=$(realpath -s "${0}")
-directoryPath=$(dirname "${filePath}")
+directoryPath=$(dirname "${filePath}")/..
 
 # Basic server setup
-bash "${directoryPath}"/../basic.sh
+bash "${directoryPath}"/basic.sh
 
 # Install Mailinabox
-bash "${directoryPath}"/../apps/mailinabox/0.55/install.sh
+bash "${directoryPath}"/apps/mailinabox/0.55/install.sh
 
 # Ask to restore backup if not already set
 restoreBackup=$1
@@ -27,11 +27,11 @@ fi
 if [[ "${restorebackup}" == 'y' ]]
 then
   # Restore backup
-  bash "${directoryPath}"/../rsync/restore-backup.sh /home/user-data/
+  bash "${directoryPath}"/rsync/restore-backup.sh /home/user-data/
 
   # Restart Mailinabox install
-  bash "${directoryPath}"/../apps/mailinabox/0.55/install.sh
+  bash "${directoryPath}"/apps/mailinabox/0.55/install.sh
 fi
 
 # Set up daily backups
-bash "${directoryPath}"/../rsync/set-up-daily-backup.sh /home/user-data
+bash "${directoryPath}"/rsync/set-up-daily-backup.sh /home/user-data
