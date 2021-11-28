@@ -30,7 +30,7 @@ fi
 if [[ "${restorebackup}" == 'y' ]]
 then
   # Restore backup
-  bash "${directoryPath}"/rsync/restore-backup.sh /home/user-data/
+  bash "${directoryPath}"/rsync/restore-backup.sh /home/user-data/ ~/data/
 
   # Restore Nginx & Letsencrypt dump
   bash "${directoryPath}"/nginx-certbot/restore-dump.sh /home/user-data
@@ -39,15 +39,15 @@ then
   sudo services nginx restart
 
   # Restore PostgreSQL dump
-  bash "${directoryPath}"/postgresql/restore-dump.sh /home/user-data/postgresql14-dump.sql
+  bash "${directoryPath}"/postgresql/restore-dump.sh /home/user-data/postgresql-dump.sql
 
   # Restart PostgreSQL
   sudo services postgresql restart
 fi
 
 # Set up daily dumps
-bash "${directoryPath}"/postgesql/set-up-daily-dump.sh /home/user-data/postgresql14-dump.sql
+bash "${directoryPath}"/postgresql/set-up-daily-dump.sh /home/user-data/postgresql-dump.sql
 bash "${directoryPath}"/nginx-cerbot/set-up-daily-dump.sh /home/user-data
 
 # Set up daily backups
-bash "${directoryPath}"/rsync/set-up-daily-backup.sh /home/user-data
+bash "${directoryPath}"/rsync/set-up-daily-backup.sh /home/user-data/ ~/data/

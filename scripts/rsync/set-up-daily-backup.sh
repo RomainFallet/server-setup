@@ -12,25 +12,25 @@ then
   read -r -p "Enter the source path of the backup: " sourcePath
 fi
 
+# Ask destination path if not already set
+destinationPath=${2}
+if [[ -z "${destinationPath}" ]]
+then
+  read -r -p "Enter the destination path on the remote side: " destinationPath
+fi
+
 # Ask ssh user if not already set
-sshUser=${2}
+sshUser=${3}
 if [[ -z "${sshUser}" ]]
 then
   read -r -p "Enter the SSH username to use for the remote backup: " sshUser
 fi
 
 # Ask ssh hostname if not already set
-sshHostname=${3}
+sshHostname=${4}
 if [[ -z "${sshHostname}" ]]
 then
   read -r -p "Enter the SSH hostname to use for the remote backup: " sshHostname
-fi
-
-# Ask destination path if not already set
-destinationPath=${4}
-if [[ -z "${destinationPath}" ]]
-then
-  read -r -p "Enter the destination path on the remote side: " destinationPath
 fi
 
 # Ask health checks uuid if not already set
