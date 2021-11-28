@@ -39,14 +39,8 @@ then
   # Restore Nginx & Letsencrypt dump
   bash "${directoryPath}"/nginx-certbot/restore-dump.sh "/home/user-data"
 
-  # Restart Nginx
-  sudo services nginx restart
-
   # Restore PostgreSQL dump
   bash "${directoryPath}"/postgresql/restore-dump.sh "/home/user-data/postgresql-dump.sql"
-
-  # Restart PostgreSQL
-  sudo services postgresql restart
 fi
 
 # Set up daily dumps

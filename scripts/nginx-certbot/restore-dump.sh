@@ -19,3 +19,6 @@ sudo cp --archive "${sourcePath}"/nginx /etc/nginx
 sudo cp --archive "${sourcePath}"/letsencrypt /etc/letsencrypt
 sudo chown -R www-data:www-data /var/www
 sudo chown -R root:root /etc/nginx /etc/letsencrypt
+
+# Restart Nginx
+sudo service nginx restart
