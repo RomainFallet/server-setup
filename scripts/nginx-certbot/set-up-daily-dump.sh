@@ -29,12 +29,13 @@ fi
 # Create dump script
 dumpScript="#!/bin/bash
 set -e
+sudo mkdir -p /home/user-data
 sudo rm -rf ${destinationPath}/www ${destinationPath}/nginx ${destinationPath}/letsencrypt
 sudo cp --archive /var/www ${destinationPath}/www
 sudo cp --archive /etc/nginx ${destinationPath}/nginx
 sudo cp --archive /etc/letsencrypt ${destinationPath}/letsencrypt
 ${healthChecksMonitorCommand}"
-dumpScriptPath=/etc/cron.daily/postgresql-dump
+dumpScriptPath=/etc/cron.daily/nginx-letsencrypt-dump
 if ! test -f "${dumpScriptPath}"
 then
   sudo touch "${dumpScriptPath}"
