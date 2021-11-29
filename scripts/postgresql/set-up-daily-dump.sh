@@ -30,7 +30,7 @@ fi
 dumpScript="#!/bin/bash
 set -e
 postgresqlDump=\$(sudo -u postgres pg_dumpall --clean --if-exists)
-postgresqlDumpWithoutPostgresRole=\$(echo \"\${postgresqlDump}\" | sed -E \"s/DROP ROLE IF EXISTS postgres;//\") | sed -E \"s/CREATE ROLE postgres;//\"  | sed -E \"s/ALTER ROLE postgres WITH SUPERUSER .+?;//\")
+postgresqlDumpWithoutPostgresRole=\$(echo \"\${postgresqlDump}\" | sed -E \"s/DROP ROLE IF EXISTS postgres;//\" | sed -E \"s/CREATE ROLE postgres;//\"  | sed -E \"s/ALTER ROLE postgres WITH SUPERUSER .+?;//\")
 echo \"\${postgresqlDump}\" | sudo tee ${destinationPath} > /dev/null
 ${healthChecksMonitorCommand}"
 CREATE ROLE postgres;
