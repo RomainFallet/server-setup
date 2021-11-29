@@ -28,8 +28,8 @@ sudo -u postgres psql -c "CREATE DATABASE temporary_superadmin;"
 sudo -u temporary_superadmin psql --set ON_ERROR_STOP=on -f "${sourcePath}"
 
 # Remove temporary super user
-sudo -u postgres -c "DROP ROLE temporary_superadmin;"
-sudo -u postgres -c "DROP DATABASE temporary_superadmin;"
+sudo -u postgres psql -c "DROP ROLE temporary_superadmin;"
+sudo -u postgres psql -c "DROP DATABASE temporary_superadmin;"
 sudo userdel temporary_superadmin
 
 # Vaccumm and restart PostgreSQL to ensure everything is OK
