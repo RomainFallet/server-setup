@@ -16,8 +16,8 @@ if [[ -z ${username} ]]; then
 fi
 
 # Check if the user exists
-userId=$(id -u "${username}" 2> /dev/null)
-if [[ -z ${userId} ]]; then
+userInfos=$(grep "testuser" /etc/passwd > /dev/null)
+if [[ -z ${userInfos} ]]; then
   # Ask for password if not provided
   password=${2}
   if [[ -z ${password} ]]; then
