@@ -33,10 +33,10 @@ sudo chmod 0700 "${jailPath}/home/${username}"
 
 # Create dev files
 sudo mkdir -p "${jailPath}"/dev/
-sudo mknod -m 666 "${jailPath}"/dev/null c 1 3
-sudo mknod -m 666 "${jailPath}"/dev/tty c 5 0
-sudo mknod -m 666 "${jailPath}"/dev/zero c 1 5
-sudo mknod -m 666 "${jailPath}"/dev/random c 1 8
+test -f "${jailPath}"/dev/null || sudo mknod -m 666 "${jailPath}"/dev/null c 1 3
+test -f "${jailPath}"/dev/tty || sudo mknod -m 666 "${jailPath}"/dev/tty c 5 0
+test -f "${jailPath}"/dev/zero  || sudo mknod -m 666 "${jailPath}"/dev/zero c 1 5
+test -f "${jailPath}"/dev/random || sudo mknod -m 666 "${jailPath}"/dev/random c 1 8
 
 # Ask which type of jail we wants for the user
 # if [[ -z "${commandsList}" ]] && [[ -z "${useBasicCommands}" ]]; then
