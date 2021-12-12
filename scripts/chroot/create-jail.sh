@@ -31,6 +31,13 @@ fi
 sudo chown "${username}:${username}" "${jailPath}/home/${username}"
 sudo chmod 0700 "${jailPath}/home/${username}"
 
+# Create dev files
+sudo mkdir -p "${jailPath}"/dev/
+sudo mknod -m 666 "${jailPath}"/dev/null c 1 3
+sudo mknod -m 666 "${jailPath}"/dev/tty c 5 0
+sudo mknod -m 666 "${jailPath}"/dev/zero c 1 5
+sudo mknod -m 666 "${jailPath}"/dev/random c 1 8
+
 # Ask which type of jail we wants for the user
 # if [[ -z "${commandsList}" ]] && [[ -z "${useBasicCommands}" ]]; then
 #   read -r -p "Do you want your user to access only basic commands instead of all of them? [N/y]: " useBasicCommands
