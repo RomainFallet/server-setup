@@ -15,7 +15,7 @@ fi
 # Restart PostgreSQL to close any existing connection
 sudo service postgresql restart
 
-# Create a new UNIX user with in postgres group
+# Create a new UNIX user in postgres group
 posgresGroupInfos=$(getent group postgres)
 postgresGroupId=$(echo "${posgresGroupInfos}" | cut -d: -f3)
 sudo useradd temporary_superadmin -g "${postgresGroupId}"
