@@ -47,16 +47,14 @@ sudo chmod 0700 "${jailPath}/home/${username}"
 #     exit 1
 #   fi
 # fi
-commandsList="/bin/bash,/bin/ls,/bin/rm,/bin/touch,/bin/mkdir,/bin/rmdir"
+commandsList="/bin/bash,/bin/ls,/bin/cp,/bin/mv/bin/rm,/bin/touch,/bin/mkdir,/bin/rmdir,/usr/bin/dircolors,/usr/bin/vi"
 
 # Handle "basic commands access" case
 # if [[ -n "${commandsList}" ]]; then
 
 IFS=',' read -ra commandsList <<< "${commandsList}"
-for command in "${commandsList[@]}"
+for commandPath in "${commandsList[@]}"
 do
-  commandPath=$(command -v "${command}")
-
   # Deps
   for depPath in $( (ldd "${commandPath}" || true) | (grep -v dynamic || true) | (cut -d " " -f 3 || true) | (sed 's/://' || true) | (sort || true) | uniq )
   do
