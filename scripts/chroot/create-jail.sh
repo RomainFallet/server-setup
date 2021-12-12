@@ -36,6 +36,7 @@ echo "${username}:x:${userId}:${userId}::/home/${username}:/bin/bash
 echo "${username}:x:${userId}:
 " | sudo tee "${jailPath}"/etc/group > /dev/null
 sudo cp /etc/nsswitch.conf "${jailPath}"/etc/nsswitch.conf
+sudo cp -r /etc/skel "${jailPath}"/etc
 
 # Commands list to set up in the chroot jail
 commandsList="/bin/bash,/bin/ls,/bin/cp,/bin/mv,/bin/rm,/bin/touch,/bin/mkdir,/bin/rmdir,/usr/bin/vi,/usr/bin/rsync,/usr/bin/scp"
