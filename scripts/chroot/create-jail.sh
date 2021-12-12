@@ -28,7 +28,7 @@ if [[ ! -d "${jailPath}/home/${username}" ]]; then
 fi
 
 # Set permissions to home directory
-sudo chown "${username}:${username}" "${jailPath}/home/${username}"
+sudo chown "${username}:root" "${jailPath}/home/${username}"
 sudo chmod 0700 "${jailPath}/home/${username}"
 
 # Ask which type of jail we wants for the user
