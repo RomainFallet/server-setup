@@ -15,26 +15,8 @@ if [[ -z ${username} ]]; then
   fi
 fi
 
-# Check if the user exists
-if ! grep "${username}" /etc/passwd > /dev/null; then
-  # Ask for password if not provided
-  password=${2}
-  if [[ -z ${password} ]]; then
-    read -r -p "Choose the new user password: " password
-    if [[ -z ${password} ]]; then
-      echo "Password must not be empty." 1>&2
-      exit 1
-    fi
-  fi
-
-  # Create the user
-  sudo useradd "${username}" && echo "${password}
-  ${password}
-  " | sudo passwd "${username}"
-fi
-
 # Create jail directory if not existing
-jailPath=/home/${username}/jail/
+jailPath=/home/${username}/chroot-jail/
 sudo mkdir -p "${jailPath}"
 
 # Set permissions to jail directory
