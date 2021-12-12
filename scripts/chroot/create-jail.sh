@@ -70,7 +70,7 @@ fi
 
 # Enable SFTP
 sshSftpConfig='Subsystem sftp internal-sftp'
-sudo sed -i'.tmp' -E "s/#*Subsystem sftp\s+([\w-]+)/${sshSftpConfig}/g" "${sshConfigPath}"
+sudo sed -i'.tmp' -E "s/#*Subsystem\s+sftp\s+(.+)/${sshSftpConfig}/g" "${sshConfigPath}"
 sudo rm -f "${sshConfigPath}".tmp
 if ! sudo grep "^${sshSftpConfig}" "${sshConfigPath}" > /dev/null
 then
