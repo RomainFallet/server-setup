@@ -102,18 +102,18 @@ Unattended-Upgrade::Automatic-Reboot-Time \"05:00\";" | sudo tee "${unattendedUp
 ### Default umask
 
 # Backup config file
-umaskConfigPath=/etc/login.defs
-umaskConfigBackupPath=/etc/.login.defs.backup
-if ! test -f "${umaskConfigBackupPath}"
-then
-  sudo cp "${umaskConfigPath}" "${umaskConfigBackupPath}"
-fi
+# umaskConfigPath=/etc/login.defs
+# umaskConfigBackupPath=/etc/.login.defs.backup
+# if ! test -f "${umaskConfigBackupPath}"
+# then
+#   sudo cp "${umaskConfigPath}" "${umaskConfigBackupPath}"
+# fi
 
-# Change default system umask
-sudo sed -i'.tmp' -E 's/UMASK(\s+)([0-9]+)/UMASK\1002/g' "${umaskConfigPath}"
+# # Change default system umask
+# sudo sed -i'.tmp' -E 's/UMASK(\s+)([0-9]+)/UMASK\1002/g' "${umaskConfigPath}"
 
-# Remove tmp file
-sudo rm "${umaskConfigPath}".tmp
+# # Remove tmp file
+# sudo rm "${umaskConfigPath}".tmp
 
 ### Fail2ban
 
