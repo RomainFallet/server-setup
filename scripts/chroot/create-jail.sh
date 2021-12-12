@@ -150,12 +150,16 @@ done
 # fi
 
 # Set up chroot directory
-is_chroot_config_existing=$(sudo grep "Match User ${username}" /etc/ssh/sshd_config)
-
-if [[ -z ${is_chroot_config_existing} ]]; then
-  echo "
+sshConfig="
 Match User ${username}
-ChrootDirectory ${jailPath}" | sudo tee -a /etc/ssh/sshd_config > /dev/null
+ChrootDirectory ${jailPath}
+"
+sshConfigPath=/etc/ssh/sshd_config
+pattern=$(echo "${sshConfig}" | tr -d '\n')
+content=$(< "${sshConfigPath}" tr -d '\n')
+if [[ "${content}" != *"${pattern}"* ]]
+then
+  echo "${sshConfigPath}" | sudo tee -a "${sshConfigPath}" > /dev/null
 fi
 
 # Set bash as default shell
