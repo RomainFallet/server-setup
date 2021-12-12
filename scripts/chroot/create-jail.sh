@@ -21,9 +21,11 @@ sudo mkdir -p "${jailPath}"
 
 # Create home directory if not exising
 sudo mkdir -p "${jailPath}/home/${username}"
-
-# Set permissions to home directory
 sudo chown "${username}:${username}" "${jailPath}/home/${username}"
+
+# Create dev
+sudo mkdir -p "${jailPath}"/dev
+test -f "${jailPath}"/dev/null || sudo mknod -m 666 "${jailPath}"/dev/null c 1 3
 
 # Commands list to set up in the chroot jail
 commandsList="/bin/bash,/bin/ls,/bin/cp,/bin/mv,/bin/rm,/bin/touch,/bin/mkdir,/bin/rmdir,/usr/bin/vi,/usr/bin/rsync,/usr/bin/scp"
