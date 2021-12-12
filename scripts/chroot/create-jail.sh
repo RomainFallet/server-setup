@@ -14,6 +14,7 @@ if [[ -z ${username} ]]; then
     exit 1
   fi
 fi
+userId=$(id -u "${username}")
 
 # Create jail directory
 jailPath=/jails/${username}
@@ -22,6 +23,18 @@ sudo mkdir -p "${jailPath}"
 # Create home directory
 sudo mkdir -p "${jailPath}/home/${username}"
 sudo chown "${username}:${username}" "${jailPath}/home/${username}"
+
+# Create dev
+sudo mkdir -p "${jailPath}"/dev
+sudo rm -f "${jailPath}"/dev/null
+sudo mknod -m 666 "${jailPath}"/dev/null c 1 3
+
+# Create etc
+sudo mkdir -p "${jailPath}"/etc
+echo "${username}:x:${userId}:${userId}::/home/${username}:/bin/bash
+" | sudo tee "${jailPath}"/etc/passwd > /dev/null
+echo "${username}:x:${userId}:
+" | sudo tee "${jailPath}"/etc/group > /dev/null
 
 # Commands list to set up in the chroot jail
 commandsList="/bin/bash,/bin/ls,/bin/cp,/bin/mv,/bin/rm,/bin/touch,/bin/mkdir,/bin/rmdir,/usr/bin/vi,/usr/bin/rsync"
