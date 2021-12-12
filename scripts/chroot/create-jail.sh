@@ -54,7 +54,7 @@ sudo mknod -m 666 "${jailPath}"/dev/random c 1 8
 #     exit 1
 #   fi
 # fi
-commandsList="/bin/bash"
+commandsList="/bin/bash,/bin/ls"
 
 # Handle "basic commands access" case
 # if [[ -n "${commandsList}" ]]; then
