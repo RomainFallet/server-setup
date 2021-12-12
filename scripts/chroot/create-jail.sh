@@ -17,6 +17,7 @@ fi
 
 # Check if the user exists
 userInfos=$(grep "${username}" /etc/passwd > /dev/null)
+echo "1"
 if [[ -z ${userInfos} ]]; then
   # Ask for password if not provided
   password=${2}
@@ -31,14 +32,14 @@ if [[ -z ${userInfos} ]]; then
   # Create the user
   sudo useradd "${username}" && echo "${username}:${password}"| chpasswd
 fi
-
+echo "2"
 # Create jail directory if not existing
 jailPath=/home/${username}/jail/
 sudo mkdir -p "${jailPath}"
 
 # Set permissions to jail directory
 sudo chown root:root "${jailPath}" && sudo chmod 0755 "${jailPath}"
-
+echo "3"
 # Create home directory if not exising
 if [[ ! -d "${jailPath}/home/${username}" ]]; then
   sudo mkdir -p "${jailPath}/home/${username}"
@@ -96,7 +97,7 @@ do
     sudo cp --parents "${depPath}" "${jailPath}"
   fi
 done
-
+echo "4"
 # Handle "full commands access" case
 # else
 #   # List of directories to mount in the jail
@@ -180,3 +181,4 @@ sudo chsh -s /bin/bash "${username}"
 
 # Restart SSH service
 sudo service ssh restart
+echo "5"
