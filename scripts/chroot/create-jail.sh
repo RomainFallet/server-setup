@@ -26,7 +26,8 @@ sudo chown "${username}:${username}" "${jailPath}/home/${username}"
 
 # Create dev
 sudo mkdir -p "${jailPath}"/dev
-test -f "${jailPath}"/dev/null || sudo mknod -m 666 "${jailPath}"/dev/null c 1 3
+sudo rm -f "${jailPath}"/dev/null
+sudo mknod -m 666 "${jailPath}"/dev/null c 1 3
 
 # Create etc
 sudo mkdir -p "${jailPath}"/etc
