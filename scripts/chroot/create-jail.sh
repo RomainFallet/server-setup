@@ -16,7 +16,7 @@ if [[ -z ${username} ]]; then
 fi
 
 # Create jail directory if not existing
-jailPath=/var/jails/${username}
+jailPath=/jails/${username}
 sudo mkdir -p "${jailPath}"
 
 # Set permissions to jail directory
@@ -32,11 +32,15 @@ sudo chown "${username}:${username}" "${jailPath}/home/${username}"
 sudo chmod 0700 "${jailPath}/home/${username}"
 
 # Create dev files
-sudo mkdir -p "${jailPath}"/dev/
-! test -f "${jailPath}"/dev/null || sudo mknod -m 666 "${jailPath}"/dev/null c 1 3
-! test -f "${jailPath}"/dev/tty || sudo mknod -m 666 "${jailPath}"/dev/tty c 5 0
-! test -f "${jailPath}"/dev/zero  || sudo mknod -m 666 "${jailPath}"/dev/zero c 1 5
-! test -f "${jailPath}"/dev/random || sudo mknod -m 666 "${jailPath}"/dev/random c 1 8
+# sudo mkdir -p "${jailPath}"/dev/
+# ! test -f "${jailPath}"/dev/null || sudo mknod -m 666 "${jailPath}"/dev/null c 1 3
+# ! test -f "${jailPath}"/dev/tty || sudo mknod -m 666 "${jailPath}"/dev/tty c 5 0
+# ! test -f "${jailPath}"/dev/zero  || sudo mknod -m 666 "${jailPath}"/dev/zero c 1 5
+# ! test -f "${jailPath}"/dev/random || sudo mknod -m 666 "${jailPath}"/dev/random c 1 8
+
+# Create etc files
+# sudo mkdir -p /home/test/etc
+# sudo cp /etc/{passwd,group} /home/test/etc/
 
 # Ask which type of jail we wants for the user
 # if [[ -z "${commandsList}" ]] && [[ -z "${useBasicCommands}" ]]; then
@@ -54,7 +58,7 @@ sudo mkdir -p "${jailPath}"/dev/
 #     exit 1
 #   fi
 # fi
-commandsList="/bin/bash,/bin/ls"
+commandsList="/bin/bash"
 
 # Handle "basic commands access" case
 # if [[ -n "${commandsList}" ]]; then
