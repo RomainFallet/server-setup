@@ -32,9 +32,10 @@ sudo mknod -m 666 "${jailPath}"/dev/null c 1 3
 # Create etc
 sudo mkdir -p "${jailPath}"/etc
 echo "${username}:x:${userId}:${userId}::/home/${username}:/bin/bash
-" | sudo tee "${jailPath}"/etc/passwd
+" | sudo tee "${jailPath}"/etc/passwd > /dev/null
 echo "${username}:x:${userId}:
-" | sudo tee "${jailPath}"/etc/group
+" | sudo tee "${jailPath}"/etc/group > /dev/null
+sudo cp /etc/nsswitch.conf "${jailPath}"/etc/nsswitch.conf
 
 # Commands list to set up in the chroot jail
 commandsList="/bin/bash,/bin/ls,/bin/cp,/bin/mv,/bin/rm,/bin/touch,/bin/mkdir,/bin/rmdir,/usr/bin/vi,/usr/bin/rsync,/usr/bin/scp"
@@ -56,7 +57,7 @@ do
 done
 
 # Copy others deps
-deps=( /lib64/ld-linux-x86-64.so.2 /lib/ld-linux.so.2 /lib/ld-linux-aarch64.so.1 )
+deps=( /lib64/ld-linux-x86-64.so.2 /lib/ld-linux.so.2 /lib/ld-linux-aarch64.so.1)
 for depPath in "${deps[@]}"
 do
   if [[ -f "${depPath}" ]] && [[ ! -f "${jailPath}${depPath}" ]]; then
