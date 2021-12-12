@@ -159,7 +159,7 @@ pattern=$(echo "${sshConfig}" | tr -d '\n')
 content=$(< "${sshConfigPath}" tr -d '\n')
 if [[ "${content}" != *"${pattern}"* ]]
 then
-  echo "${sshConfigPath}" | sudo tee -a "${sshConfigPath}" > /dev/null
+  echo "${sshConfig}" | sudo tee -a "${sshConfigPath}" > /dev/null
 fi
 
 # Set bash as default shell
