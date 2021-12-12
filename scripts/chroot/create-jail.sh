@@ -19,17 +19,11 @@ fi
 jailPath=/jails/${username}
 sudo mkdir -p "${jailPath}"
 
-# Set permissions to jail directory
-sudo chown root:root "${jailPath}" && sudo chmod 0755 "${jailPath}"
-
 # Create home directory if not exising
-if [[ ! -d "${jailPath}/home/${username}" ]]; then
-  sudo mkdir -p "${jailPath}/home/${username}"
-fi
+sudo mkdir -p "${jailPath}/home/${username}"
 
 # Set permissions to home directory
-sudo chown "${username}:root" "${jailPath}/home/${username}"
-sudo chmod 0700 "${jailPath}/home/${username}"
+sudo chown "${username}:${username}" "${jailPath}/home/${username}"
 
 # Ask which type of jail we wants for the user
 # if [[ -z "${commandsList}" ]] && [[ -z "${useBasicCommands}" ]]; then
