@@ -33,7 +33,7 @@ if [[ -z ${userInfos} ]]; then
 fi
 
 # Create jail directory if not existing
-jailPath=/jails/${username}
+jailPath=/home/${username}/jail/
 sudo mkdir -p "${jailPath}"
 
 # Set permissions to jail directory
