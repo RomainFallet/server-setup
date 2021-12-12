@@ -16,7 +16,7 @@ if [[ -z ${username} ]]; then
 fi
 
 # Create jail directory if not existing
-jailPath=/home/${username}/chroot-jail/
+jailPath=/var/jails/${username}
 sudo mkdir -p "${jailPath}"
 
 # Set permissions to jail directory
