@@ -31,17 +31,6 @@ fi
 sudo chown "${username}:${username}" "${jailPath}/home/${username}"
 sudo chmod 0700 "${jailPath}/home/${username}"
 
-# Create dev files
-# sudo mkdir -p "${jailPath}"/dev/
-# ! test -f "${jailPath}"/dev/null || sudo mknod -m 666 "${jailPath}"/dev/null c 1 3
-# ! test -f "${jailPath}"/dev/tty || sudo mknod -m 666 "${jailPath}"/dev/tty c 5 0
-# ! test -f "${jailPath}"/dev/zero  || sudo mknod -m 666 "${jailPath}"/dev/zero c 1 5
-# ! test -f "${jailPath}"/dev/random || sudo mknod -m 666 "${jailPath}"/dev/random c 1 8
-
-# Create etc files
-# sudo mkdir -p /home/test/etc
-# sudo cp /etc/{passwd,group} /home/test/etc/
-
 # Ask which type of jail we wants for the user
 # if [[ -z "${commandsList}" ]] && [[ -z "${useBasicCommands}" ]]; then
 #   read -r -p "Do you want your user to access only basic commands instead of all of them? [N/y]: " useBasicCommands
@@ -58,7 +47,7 @@ sudo chmod 0700 "${jailPath}/home/${username}"
 #     exit 1
 #   fi
 # fi
-commandsList="/bin/bash"
+commandsList="/bin/bash,/bin/ls,/bin/cp,/bin/mv,/bin/rm,/bin/touch,/bin/mkdir,/bin/rmdir,/usr/bin/dircolors,/usr/bin/vi"
 
 # Handle "basic commands access" case
 # if [[ -n "${commandsList}" ]]; then
