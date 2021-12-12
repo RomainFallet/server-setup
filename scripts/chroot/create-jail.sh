@@ -47,7 +47,7 @@ sudo chmod 0700 "${jailPath}/home/${username}"
 #     exit 1
 #   fi
 # fi
-commandsList="/bin/bash,/bin/ls,/bin/cp,/bin/mv/bin/rm,/bin/touch,/bin/mkdir,/bin/rmdir,/usr/bin/dircolors,/usr/bin/vi"
+commandsList="/bin/bash,/bin/ls,/bin/cp,/bin/mv,/bin/rm,/bin/touch,/bin/mkdir,/bin/rmdir,/usr/bin/dircolors,/usr/bin/vi"
 
 # Handle "basic commands access" case
 # if [[ -n "${commandsList}" ]]; then
