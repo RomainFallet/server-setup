@@ -20,6 +20,7 @@ alias ss:nginx-certbot:restore-dump='bash ${directoryRootPath}/nginx-certbot/res
 alias ss:postgresql:daily-dump='bash ${directoryRootPath}/postgresql/daily-dump.sh'
 alias ss:postgresql:restore-dump='bash ${directoryRootPath}/postgresql/restore-dump.sh'
 alias ss:postgresql:create-app-database='bash ${directoryRootPath}/postgresql/create-app-database.sh'
+alias ss:users:create='bash ${directoryRootPath}/users/create-user.sh'
 alias ss:chroot:jail='bash ${directoryRootPath}/chroot/create-jail.sh'
 alias ss:systemd:startup-service='bash ${directoryRootPath}/systemd/create-startup-service.sh'
 alias ss:systemd:startup-service-watcher='bash ${directoryRootPath}/systemd/create-startup-service-with-autorestart-watcher.sh'

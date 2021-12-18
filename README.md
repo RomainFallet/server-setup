@@ -35,6 +35,8 @@ The goal is to provide an opinionated environment that just work for commons sce
   - [PostgreSQL](#postgresql)
     - [Set up daily dump (PostgreSQL)](#set-up-daily-dump-postgresql)
     - [Restore dump (PostgreSQL)](#restore-dump-PostgreSQL)
+  - [Users](#users)
+    - [Create a new user](#create-a-new-user)
   - [Chroot](#chroot)
     - [Create a chroot jail](#create-a-chroot-jail)
   - [Systemd](#systemd)
@@ -344,7 +346,15 @@ ss:postgresql:restore-dump
 ss:postgresql:create-app-database
 ```
 
-### Chroot
+### Users
+
+#### Create a new user
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:users:create
+```
 
 #### Create a chroot jail
 

@@ -30,12 +30,15 @@ then
   createPostgreSQLDatabase=$(echo "${createPostgreSQLDatabase}" | awk '{print tolower($0)}')
 fi
 
+# Create UNIX user
+bash "${directoryPath}"/users/create-user.sh "${appName}"
+
 # Create PostgreSQL database
 if [[ "${createPostgreSQLDatabase}" == 'y' ]]; then
   bash "${directoryPath}"/postgresql/create-app-database.sh "${appName}"
 fi
 
-# Get tls certificate
+# Get TLS certificate
 bash "${directoryPath}"/nginx-certbot/get-tls-certificate.sh "${appName}" "${appDomain}"
 
 # Set up domain name app
