@@ -7,7 +7,7 @@ directoryRootPath=$(dirname "${filePath}")
 # Install aliases in ~/.bash_aliases
 echo "#!/bin/bash
 
-alias ss:update='cd ${directoryRootPath}/../ && git pull && bash ${directoryRootPath}/install.sh && bash'
+alias ss:update='cd ${directoryRootPath}/../ && git pull && bash ${directoryRootPath}/install.sh && exec bash -l'
 alias ss:basic='bash ${directoryRootPath}/basic.sh'
 alias ss:web-server:nginx='bash ${directoryRootPath}/web-server/nginx/install.sh'
 alias ss:file-server:samba='bash ${directoryRootPath}/file-server/samba/install.sh'
@@ -37,4 +37,4 @@ alias ss:recipes:file-machine='bash ${directoryRootPath}/recipes/file-machine.sh
 " | tee ~/.bash_aliases > /dev/null
 
 # Start a new bash
-bash
+exec bash -l
