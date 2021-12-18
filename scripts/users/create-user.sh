@@ -13,4 +13,4 @@ then
 fi
 
 # Create user if not existing
-id -u "${userName}" || sudo useradd --create-home --shell /bin/bash "${userName}"
+id -u "${userName}" > /dev/null || sudo useradd --create-home --shell /bin/bash "${userName}"

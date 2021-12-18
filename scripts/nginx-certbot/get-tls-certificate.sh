@@ -45,12 +45,7 @@ nginxConfig="server {
   }
 }"
 nginxConfigPath="/etc/nginx/sites-available/${appName}-wellknown-${appDomain//\./}.conf"
-pattern=$(echo "${nginxConfig}" | tr -d '\n')
-content=$(< "${nginxConfigPath}" tr -d '\n')
-if [[ "${content}" != *"${pattern}"* ]]
-then
-  echo "${nginxConfig}" | sudo tee "${nginxConfigPath}" > /dev/null
-fi
+echo "${nginxConfig}" | sudo tee "${nginxConfigPath}" > /dev/null
 
 # Enable Nginx config
 if ! test -f /etc/nginx/sites-enabled/"${appName}-wellknown-${appDomain//\./}".conf
