@@ -13,6 +13,11 @@ The goal is to provide an opinionated environment that just work for commons sce
   - [Point your domain names to your machine IP address](#point-your-domain-names-to-your-machine-ip-address)
 - [Installation](#installation)
 - [Update](#update)
+- [Recipes](#recipes)
+  - [Web machine](#web-machine)
+  - [NodeJS app](#nodejs-app)
+  - [File machine](#file-machine)
+  - [Mail machine](#mail-machine)
 - [Server setup](#server-setup)
   - [Basic](#basic)
   - [Web server](#web-server)
@@ -47,10 +52,6 @@ The goal is to provide an opinionated environment that just work for commons sce
     - [Create shared access](#create-shared-access)
 - [Apps](#apps)
   - [Mailinabox](#mailinabox)
-- [Recipes](#recipes)
-  - [Web machine](#web-machine)
-  - [File machine](#file-machine)
-  - [Mail machine](#mail-machine)
 
 ## Prerequisites
 
@@ -202,6 +203,14 @@ ss:update
 
 ```bash
 ss:recipes:web-machine
+```
+
+### NodeJS app
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:recipes:nodejs-app
 ```
 
 ### Mail machine
