@@ -30,6 +30,11 @@ then
   createPostgreSQLDatabase=$(echo "${createPostgreSQLDatabase}" | awk '{print tolower($0)}')
 fi
 
+# Create PostgreSQL database
+if [[ "${createPostgreSQLDatabase}" == 'y' ]]; then
+  bash "${directoryPath}"/postgresql/create-app-database.sh "${appName}"
+fi
+
 # Get tls certificate
 bash "${directoryPath}"/nginx-certbot/get-tls-certificate.sh "${appName}" "${appDomain}"
 
@@ -39,8 +44,5 @@ bash "${directoryPath}"/nginx-certbot/set-up-domain-name-app.sh "${appName}" "${
 # Create a chroot jail to deploy this app
 bash "${directoryPath}"/chroot/create-jail.sh "${appName}"
 
-# Create PostgreSQL database
-if [[ "${createPostgreSQLDatabase}" == 'y' ]]; then
-  bash "${directoryPath}"/postgresql/create-app-database.sh "${appName}"
-fi
-
+# Create a startup service
+bash "${directoryPath}"/systemd/create-startup-service-with-autorestart-watcher.sh "${appName}" "/usr/bin/node /jails/${appName}/home/${appName}/index.js" "/jails/${appName}/home/${appName}/"
