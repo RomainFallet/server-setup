@@ -19,6 +19,13 @@ then
   read -r -p "Enter the full command to execute on system startup: " serviceCommand
 fi
 
+# Ask service username
+serviceUsername=${3}
+if [[ -z "${serviceUsername}" ]]
+then
+  read -r -p "Enter the username that will execute the command: " serviceUsername
+fi
+
 # Create service file
 echo "[Unit]
 Description=${serviceName}
@@ -27,8 +34,8 @@ After=network.target
 [Service]
 Type=simple
 ExecStart=${serviceCommand}
-User=root
-Group=root
+User=${serviceUsername}
+Group=${serviceUsername}
 
 [Install]
 WantedBy=multi-user.target" | sudo tee /etc/systemd/system/"${serviceName}".service > /dev/null

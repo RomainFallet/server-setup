@@ -145,3 +145,6 @@ echo 'y' | sudo ufw enable
 
 # Show Firewall status
 sudo ufw status
+
+### Bindfs
+sudo apt install -y bindfs

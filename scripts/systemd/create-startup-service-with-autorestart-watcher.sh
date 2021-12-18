@@ -26,6 +26,13 @@ then
   read -r -p "Enter the full path if the directory to watch for changes: " serviceWatcherPath
 fi
 
+# Ask service username
+serviceUsername=${4}
+if [[ -z "${serviceUsername}" ]]
+then
+  read -r -p "Enter the username that will execute the command: " serviceUsername
+fi
+
 # Create service file
 echo "[Unit]
 Description=${serviceName}

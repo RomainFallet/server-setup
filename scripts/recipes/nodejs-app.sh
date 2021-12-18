@@ -45,4 +45,4 @@ bash "${directoryPath}"/nginx-certbot/set-up-domain-name-app.sh "${appName}" "${
 bash "${directoryPath}"/chroot/create-jail.sh "${appName}"
 
 # Create a startup service
-bash "${directoryPath}"/systemd/create-startup-service-with-autorestart-watcher.sh "${appName}" "/usr/bin/node /jails/${appName}/home/${appName}/index.js" "/jails/${appName}/home/${appName}/"
+bash "${directoryPath}"/systemd/create-startup-service-with-autorestart-watcher.sh "${appName}" "/usr/bin/node /jails/${appName}/home/${appName}/index.js" "/jails/${appName}/home/${appName}/" "${appName}"

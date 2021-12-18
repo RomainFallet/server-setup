@@ -12,6 +12,7 @@ The goal is to provide an opinionated environment that just work for commons sce
   - [Configure an SSH key](#configure-an-ssh-key)
   - [Point your domain names to your machine IP address](#point-your-domain-names-to-your-machine-ip-address)
 - [Installation](#installation)
+- [Update](#update)
 - [Server setup](#server-setup)
   - [Basic](#basic)
   - [Web server](#web-server)
@@ -34,6 +35,8 @@ The goal is to provide an opinionated environment that just work for commons sce
   - [Systemd](#systemd)
     - [Create a startup service](#create-a-startup-service)
     - [Create a startup service with autorestart watcher](#create-a-startup-service-with-autorestart-watcher)
+  - [Bindfs](#bindfs)
+    - [Create a permanent readonly bind mount](#create-permanent-readonly-bind-mount)
   - [Disks](#disks)
     - [Set up a data disk](#set-up-a-data-disk)
   - [Rsync](#rsync)
@@ -180,9 +183,15 @@ git clone https://github.com/RomainFallet/server-setup ~/.server-setup
 
 # Install commands in ~/.bash_aliases
 bash ~/.server-setup/scripts/install.sh
+```
 
-# Refresh aliases
-unalias -a && . ~/.bashrc
+## Update
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+# Update server-setup itself
+ss:update
 ```
 
 ## Recipes
