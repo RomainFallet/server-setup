@@ -31,6 +31,9 @@ The goal is to provide an opinionated environment that just work for commons sce
     - [Restore dump (PostgreSQL)](#restore-dump-PostgreSQL)
   - [Chroot](#chroot)
     - [Create a chroot jail](#create-a-chroot-jail)
+  - [Systemd](#systemd)
+    - [Create a startup service](#create-a-startup-service)
+    - [Create a startup service with autorestart watcher](#create-a-startup-service-with-autorestart-watcher)
   - [Disks](#disks)
     - [Set up a data disk](#set-up-a-data-disk)
   - [Rsync](#rsync)
@@ -182,6 +185,32 @@ bash ~/.server-setup/scripts/install.sh
 unalias -a && . ~/.bashrc
 ```
 
+## Recipes
+
+### Web machine
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:recipes:web-machine
+```
+
+### Mail machine
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:recipes:mail-machine
+```
+
+### File machine
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:recipes:file-machine
+```
+
 ## Server setup
 
 ### Basic
@@ -289,6 +318,14 @@ ss:postgresql:daily-dump
 ss:postgresql:restore-dump
 ```
 
+#### Create app database
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:postgresql:create-app-database
+```
+
 ### Chroot
 
 #### Create a chroot jail
@@ -297,6 +334,24 @@ ss:postgresql:restore-dump
 
 ```bash
 ss:chroot:jail
+```
+
+### Systemd
+
+#### Create a startup service
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:systemd:startup-service
+```
+
+#### Create a startup service with autorestart watcher
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:systemd:startup-service-watcher
 ```
 
 ### Disks
@@ -353,30 +408,4 @@ ss:samba:shared
 
 ```bash
 ss:apps:mailinabox
-```
-
-## Recipes
-
-### Web machine
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:recipes:web-machine
-```
-
-### Mail machine
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:recipes:mail-machine
-```
-
-### File machine
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:recipes:file-machine
 ```

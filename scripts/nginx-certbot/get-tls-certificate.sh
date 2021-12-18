@@ -12,18 +12,18 @@ then
   read -r -p "Enter the name of your app without hyphens (eg. myawesomeapp): " appName
 fi
 
-# Ask email if not already set
-email=${2}
-if [[ -z "${email}" ]]
-then
-  read -r -p "Enter your email (needed to request TLS certificate): " email
-fi
-
 # Ask app domain if not already set
-appDomain=${3}
+appDomain=${2}
 if [[ -z "${appDomain}" ]]
 then
   read -r -p "Enter the domain name on which you want your app to be served (eg. example.com or test.example.com): " appDomain
+fi
+
+# Ask email if not already set
+email=${3}
+if [[ -z "${email}" ]]
+then
+  read -r -p "Enter your email (needed to request TLS certificate): " email
 fi
 
 # Create HTTP config for ACME challenge

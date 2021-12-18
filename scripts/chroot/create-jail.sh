@@ -14,7 +14,7 @@ if [[ -z ${username} ]]; then
     exit 1
   fi
 fi
-userId=$(id -u "${username}")
+userId=$(id -u "${username}" || (echo "User name does not exist." 1>&2 && exit 1))
 
 # Create jail directory
 jailPath=/jails/${username}
