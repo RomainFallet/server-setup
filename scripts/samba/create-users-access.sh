@@ -34,15 +34,13 @@ ${password}" | sudo smbpasswd -a "${userName}"
 
       # Add User config
       sambaConfig="
-      [${userName}]
-      comment = ${userName} files
-      path = ${sambaFolder}
-      browsable = yes
-      valid users = %S
-      read only = no
-      guest ok = no
-      create mask = 0664
-      directory mask = 0775"
+[${userName}]
+comment = ${userName} files
+path = ${sambaFolder}
+browsable = yes
+valid users = %S
+read only = no
+guest ok = no"
       sambaConfigfile=/etc/samba/smb.conf
       pattern=$(echo "${sambaConfig}" | tr -d '\n')
       content=$(< "${sambaConfigfile}" tr -d '\n')
