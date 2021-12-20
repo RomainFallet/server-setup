@@ -6,7 +6,7 @@ set -e
 ### Nginx web server
 
 # Install
-sudo apt install -y nginx
+dpkg -s nginx > /dev/null || sudo apt install -y nginx
 
 # Backup config file
 nginxConfigPath=/etc/nginx/nginx.conf
@@ -62,7 +62,8 @@ sudo ufw allow 'Nginx Full'
 ### Certbot
 
 # Install
-sudo snap install --classic certbot
+snapPackages=$(snap list)
+echo "${snapPackages}" | grep 'certbot' || sudo snap install --classic certbot
 
 # Show Certbot version
 certbot --version

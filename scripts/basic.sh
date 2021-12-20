@@ -9,7 +9,7 @@ set -e
 hostname=${1}
 if [[ -z "${hostname}" ]]
 then
-  read -r -p "Enter your hostname (it must be a domain name pointing to this machine IP address): " hostname
+  read -r -p "Enter your hostname: " hostname
 fi
 
 ### Timezone
@@ -102,7 +102,7 @@ Unattended-Upgrade::Automatic-Reboot-Time \"05:00\";" | sudo tee "${unattendedUp
 ### Fail2ban
 
 # Install
-sudo apt install -y fail2ban
+dpkg -s fail2ban > /dev/null || sudo apt install -y fail2ban
 
 # Create config file
 fail2banConfigFile=/etc/fail2ban/jail.local
@@ -132,9 +132,6 @@ fi
 # Restart Fail2ban
 sudo service fail2ban restart
 
-# Display Fail2ban version
-fail2ban-client -V
-
 ### Firewall
 
 # Allow SSH connections
@@ -142,9 +139,3 @@ sudo ufw allow ssh
 
 # Enable Firewall
 echo 'y' | sudo ufw enable
-
-# Show Firewall status
-sudo ufw status
-
-### Bindfs
-sudo apt install -y bindfs

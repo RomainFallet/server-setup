@@ -21,7 +21,7 @@ then
 fi
 
 # Download and install Windows Network Discovery
-if ! sudo systemctl is-active --quiet service
+if ! sudo systemctl is-active --quiet wsdd
 then
   wget https://github.com/christgau/wsdd/archive/master.zip -P /tmp
   unzip /tmp/master.zip -d /tmp

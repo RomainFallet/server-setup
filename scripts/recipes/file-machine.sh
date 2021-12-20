@@ -23,3 +23,7 @@ bash "${directoryPath}"/samba/create-shared-access.sh /mnt/sda/shared
 
 # Create a personal Samba folder for each user
 bash "${directoryPath}"/samba/create-users-access.sh
+
+# Set up daily backups
+# shellcheck disable=SC2088
+bash "${directoryPath}"/rsync/set-up-daily-backup.sh "/mnt/sda/" "~/data/"
