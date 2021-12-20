@@ -23,12 +23,10 @@ while read -r line; do
       fi
 
       # Ask for password if not provided
+      read -u 3 -r -p "Create the Samba password for user \"${userName}\": " password
       if [[ -z ${password} ]]; then
-        read -u 3 -r -p "Create the Samba password for user \"${userName}\": " password
-        if [[ -z ${password} ]]; then
-          echo "Password must not be empty." 1>&2
-          exit 1
-        fi
+        echo "Password must not be empty." 1>&2
+        exit 1
       fi
 
       # Create Samba password

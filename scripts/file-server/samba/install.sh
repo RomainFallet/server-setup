@@ -6,8 +6,8 @@ set -e
 ### Samba file server
 
 # Install
-spkg -s samba > /dev/null || sudo apt install -y samba
-spkg -s unzip > /dev/null || sudo apt install -y unzip
+dpkg -s samba > /dev/null || sudo apt install -y samba
+dpkg -s unzip > /dev/null || sudo apt install -y unzip
 
 # Allow Samba connections
 sudo ufw allow samba
