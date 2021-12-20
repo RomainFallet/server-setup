@@ -12,7 +12,7 @@ if [[ -z ${sharedFolderPath} ]]; then
 fi
 
 # Create shared group
-sudo addgroup shared
+sudo grep "shared" /etc/group || sudo addgroup shared
 
 # Create shared folder
 if ! test -d "${sharedFolderPath}"; then
