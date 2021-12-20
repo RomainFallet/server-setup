@@ -9,16 +9,18 @@ set -e
 sharedFolderPath=${1}
 if [[ -z ${sharedFolderPath} ]]; then
   read -r -p "Choose your shared folder path: " sharedFolderPath
-  if [[ -z ${sharedFolderPath} ]]; then
-    echo "Path must not be empty." 1>&2
-    exit 1
-  fi
 fi
 
-# Create Samba folder
+# Create shared group
+sudo addgroup shared
+
+# Create shared folder
 if ! test -d "${sharedFolderPath}"; then
   sudo mkdir -p "${sharedFolderPath}"
 fi
+
+# Set group ownership of shared folder
+sudo chown root:shared
 
 # Add config
 sambaConfig="
@@ -28,6 +30,7 @@ path = ${sharedFolderPath}
 browsable = yes
 read only = no
 guest ok = no
+valid users = @shared
 create mask = 664
 directory mask = 775
 
@@ -38,14 +41,28 @@ browsable = yes
 read only = yes
 guest ok = yes"
 sambaConfigfile=/etc/samba/smb.conf
-
-
 pattern=$(echo "${sambaConfig}" | tr -d '\n')
 content=$(< "${sambaConfigfile}" tr -d '\n')
 if [[ "${content}" != *"${pattern}"* ]]
 then
   echo "${sambaConfig}" | sudo tee -a "${sambaConfigfile}" > /dev/null
 fi
+
+# Loop over each UNIX user
+while read -r line; do
+  userName=$(echo "${line}" | cut -d: -f1)
+  homeDirectory=$(echo "${line}" | cut -d: -f6)
+
+  # Check if it's a valid user
+  if echo "${homeDirectory}" | grep '/home' > /dev/null
+  then
+    if [[ "${userName}" != 'syslog' ]]
+    then
+      # Set user group
+      sudo usermod -g shared "${userName}"
+    fi
+  fi
+done 3<&0 </etc/passwd
 
 # Restart Samba
 sudo service smbd restart
