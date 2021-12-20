@@ -15,14 +15,7 @@ while read -r line; do
   then
     if [[ "${userName}" != 'syslog' ]]
     then
-      # Check if user already exists
-      existingUsers=$(sudo pdbedit -L)
-      if echo "${existingUsers}" | grep "${userName}"; then
-        echo "Samba user already exists."
-        exit 0
-      fi
-
-      # Ask for password if not provided
+      # Ask for password
       read -u 3 -r -p "Create the Samba password for user \"${userName}\": " password
       if [[ -z ${password} ]]; then
         echo "Password must not be empty." 1>&2
