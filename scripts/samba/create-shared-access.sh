@@ -20,7 +20,7 @@ if ! test -d "${sharedFolderPath}"; then
 fi
 
 # Set group ownership of shared folder
-sudo chown root:shared
+sudo chown root:shared "${sharedFolderPath}"
 
 # Add config
 sambaConfig="
