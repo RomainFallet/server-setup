@@ -28,6 +28,8 @@ path = ${sharedFolderPath}
 browsable = yes
 read only = no
 guest ok = no
+create mask = 664
+directory mask = 775
 
 [public]
 comment = Shared files
