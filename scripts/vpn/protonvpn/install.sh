@@ -14,7 +14,7 @@ if ! test -f /etc/apt/sources.list.d/protonvpn-stable.list; then
 fi
 
 # Install
-dpkg -s nginx > /dev/null || sudo apt install protonvpn-cli
+dpkg -s protonvpn-cli > /dev/null || sudo apt install protonvpn-cli
 
 # Login
 protonvpn-cli login
