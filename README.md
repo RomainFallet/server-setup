@@ -22,6 +22,7 @@ The goal is to provide an opinionated environment that just work for commons sce
   - [Basic](#basic)
   - [Web server](#web-server)
   - [File server](#file-server)
+  - [VPN](#vpn)
 - [Environment setup](#environment-setup)
   - [NodeJS](#nodejs)
 - [Database setup](#database-setup)
@@ -263,6 +264,14 @@ ss:file-server:samba
 ```
 
 This will install and configure Samba.
+
+### VPN
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:vpn:proton-vpn
+```
 
 ## Environment setup
 

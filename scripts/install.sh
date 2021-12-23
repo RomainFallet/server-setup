@@ -11,6 +11,7 @@ alias ss:update='cd ${directoryRootPath}/../ && git pull && bash ${directoryRoot
 alias ss:basic='bash ${directoryRootPath}/basic.sh'
 alias ss:web-server:nginx='bash ${directoryRootPath}/web-server/nginx/install.sh'
 alias ss:file-server:samba='bash ${directoryRootPath}/file-server/samba/install.sh'
+alias ss:vpn:proton-vpn='bash ${directoryRootPath}/vpn/protonvpn/install.sh'
 alias ss:environment:nodejs='bash ${directoryRootPath}/environments/nodejs/16/install.sh'
 alias ss:database:postgresql='bash ${directoryRootPath}/databases/postgresql/14/install.sh'
 alias ss:nginx-certbot:tls='bash ${directoryRootPath}/nginx-certbot/get-tls-certificate.sh'
