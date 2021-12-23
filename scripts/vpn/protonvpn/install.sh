@@ -14,10 +14,17 @@ if ! test -f /etc/apt/sources.list.d/protonvpn-stable.list; then
 fi
 
 # Install
-dpkg -s protonvpn-cli > /dev/null || sudo apt install protonvpn-cli
+dpkg -s protonvpn-cli > /dev/null || sudo apt install -y protonvpn-cli
+
+# Ask protonvpn username
+username=${1}
+if [[ -z "${username}" ]]
+then
+  read -r -p "Enter the ProtonVPN username: " username
+fi
 
 # Login
-protonvpn-cli login
+protonvpn-cli login "${username}"
 
 # Connect
 protonvpn-cli connect -f
