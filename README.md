@@ -189,7 +189,7 @@ Login to your machine's sudo user and run the following commands.
 git clone https://github.com/RomainFallet/server-setup ~/.server-setup
 
 # Install commands in ~/.bash_aliases
-bash ~/.server-setup/scripts/install.sh
+bash ~/.server-setup/scripts/install.sh && . ~/.bash_aliases
 ```
 
 ## Update
