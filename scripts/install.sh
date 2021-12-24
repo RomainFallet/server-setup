@@ -10,7 +10,7 @@ cd "${directoryRootPath}"/../ && git pull
 # Install aliases in ~/.bash_aliases
 echo "#!/bin/bash
 
-alias ss:update='bash ${directoryRootPath}/install.sh'
+alias ss:update='bash ${directoryRootPath}/install.sh && exec bash -l'
 alias ss:basic='bash ${directoryRootPath}/basic.sh'
 alias ss:web-server:nginx='bash ${directoryRootPath}/web-server/nginx/install.sh'
 alias ss:file-server:samba='bash ${directoryRootPath}/file-server/samba/install.sh'
@@ -42,6 +42,3 @@ alias ss:recipes:mail-machine='bash ${directoryRootPath}/recipes/mail-machine.sh
 alias ss:recipes:file-machine='bash ${directoryRootPath}/recipes/file-machine.sh'
 alias ss:recipes:backup-machine='bash ${directoryRootPath}/recipes/backup-machine.sh'
 " | tee ~/.bash_aliases > /dev/null
-
-# Start a new bash
-exec bash -l
