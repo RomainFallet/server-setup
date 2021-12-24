@@ -14,7 +14,7 @@ if ! test -f /etc/apt/sources.list.d/protonvpn-stable.list; then
 fi
 
 # Install
-dpkg -s protonvpn-cli > /dev/null || sudo apt install -y protonvpn-cli
+dpkg -s protonvpn-cli &> /dev/null || sudo apt install -y protonvpn-cli
 
 # Ask protonvpn username
 username=${1}

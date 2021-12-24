@@ -102,7 +102,7 @@ Unattended-Upgrade::Automatic-Reboot-Time \"05:00\";" | sudo tee "${unattendedUp
 ### Fail2ban
 
 # Install
-dpkg -s fail2ban > /dev/null || sudo apt install -y fail2ban
+dpkg -s fail2ban &> /dev/null || sudo apt install -y fail2ban
 
 # Create config file
 fail2banConfigFile=/etc/fail2ban/jail.local

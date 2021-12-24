@@ -10,4 +10,4 @@ nodeSetup=$(curl -fsSL https://deb.nodesource.com/setup_16.x)
 test -f /etc/apt/sources.list.d/nodesource.list || echo "${nodeSetup}" | sudo -E bash -
 
 # Install NodeJS
-dpkg -s nodejs > /dev/null || sudo apt install -y nodejs
+dpkg -s nodejs &> /dev/null || sudo apt install -y nodejs

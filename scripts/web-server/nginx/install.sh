@@ -6,7 +6,7 @@ set -e
 ### Nginx web server
 
 # Install
-dpkg -s nginx > /dev/null || sudo apt install -y nginx
+dpkg -s nginx &> /dev/null || sudo apt install -y nginx
 
 # Backup config file
 nginxConfigPath=/etc/nginx/nginx.conf
