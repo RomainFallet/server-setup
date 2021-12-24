@@ -47,6 +47,8 @@ The goal is to provide an opinionated environment that just work for commons sce
     - [Create a permanent readonly bind mount](#create-permanent-readonly-bind-mount)
   - [Disks](#disks)
     - [Set up a data disk](#set-up-a-data-disk)
+    - [Set up daily SMART test](#set-up-daily-smart-test)
+    - [Set up weekly SMART test](#set-up-weekly-smart-test)
   - [Rsync](#rsync)
     - [Set up an daily backup](#set-up-an-daily-backup)
     - [Restore backup](#restore-backup)
@@ -399,6 +401,22 @@ ss:systemd:startup-service-watcher
 
 ```bash
 ss:disks:data
+```
+
+#### Set up daily SMART test
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:disks:daily-smart-test
+```
+
+#### Set up weekly SMART test
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:disks:weekly-smart-test
 ```
 
 ### Rsync

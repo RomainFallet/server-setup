@@ -20,7 +20,7 @@ dpkg -s protonvpn-cli > /dev/null || sudo apt install -y protonvpn-cli
 username=${1}
 if [[ -z "${username}" ]]
 then
-  read -r -p "Enter the ProtonVPN username: " username
+  read -r -p "Enter your ProtonVPN username: " username
 fi
 
 # Login
