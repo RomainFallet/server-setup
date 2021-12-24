@@ -6,7 +6,7 @@ set -e
 ### Set up daily SMART test
 
 # Install smartmontools
-dpkg -s smartmontools || sudo apt install -y smartmontools
+dpkg -s smartmontools > /dev/null || sudo apt install -y smartmontools
 
 # Create script
 script="#!/bin/bash
