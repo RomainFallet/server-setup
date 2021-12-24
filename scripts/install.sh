@@ -4,10 +4,13 @@
 filePath=$(realpath -s "${0}")
 directoryRootPath=$(dirname "${filePath}")
 
+# Pull latest changes
+cd "${directoryRootPath}"/../ && git pull
+
 # Install aliases in ~/.bash_aliases
 echo "#!/bin/bash
 
-alias ss:update='cd ${directoryRootPath}/../ && git pull && bash ${directoryRootPath}/install.sh && exec bash -l'
+alias ss:update='bash ${directoryRootPath}/install.sh'
 alias ss:basic='bash ${directoryRootPath}/basic.sh'
 alias ss:web-server:nginx='bash ${directoryRootPath}/web-server/nginx/install.sh'
 alias ss:file-server:samba='bash ${directoryRootPath}/file-server/samba/install.sh'
