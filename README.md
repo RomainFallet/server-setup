@@ -18,6 +18,7 @@ The goal is to provide an opinionated environment that just work for commons sce
   - [NodeJS app](#nodejs-app)
   - [File machine](#file-machine)
   - [Mail machine](#mail-machine)
+  - [Backup machine](#backup-machine)
 - [Server setup](#server-setup)
   - [Basic](#basic)
   - [Web server](#web-server)
@@ -232,6 +233,14 @@ ss:recipes:mail-machine
 
 ```bash
 ss:recipes:file-machine
+```
+
+### Backup machine
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:recipes:backup-machine
 ```
 
 ## Server setup

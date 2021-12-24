@@ -37,6 +37,7 @@ alias ss:recipes:web-machine='bash ${directoryRootPath}/recipes/web-machine.sh'
 alias ss:recipes:nodejs-app='bash ${directoryRootPath}/recipes/nodejs-app.sh'
 alias ss:recipes:mail-machine='bash ${directoryRootPath}/recipes/mail-machine.sh'
 alias ss:recipes:file-machine='bash ${directoryRootPath}/recipes/file-machine.sh'
+alias ss:recipes:backup-machine='bash ${directoryRootPath}/recipes/backup-machine.sh'
 " | tee ~/.bash_aliases > /dev/null
 
 # Start a new bash
