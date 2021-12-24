@@ -18,6 +18,12 @@ bash "${directoryPath}"/file-server/samba/install.sh
 # Set up a data disk (to isolate system from user files)
 bash "${directoryPath}"/disks/set-up-data-disk.sh
 
+# Set up daily SMART test
+bash "${directoryPath}"/disks/set-up-daily-smart-test.sh
+
+# Set up weekly SMART test
+bash "${directoryPath}"/disks/set-up-weekly-smart-test.sh
+
 # Create a shared Samba folder
 bash "${directoryPath}"/samba/create-shared-access.sh /mnt/sda/shared
 
