@@ -24,7 +24,8 @@ set -e
 
 inotifywait --monitor ${directoryPathToWatch} --recursive --event create --event moved_to --event delete |
 while read -r row; do
-  if [[ \"\${row}\" =~ .torrent$ ]]; then
+  echo \"\${row}\"
+  if [[ \"row: \${row}\" =~ .torrent$ ]]; then
     if echo \"\${row}\" | grep ' CREATE ' > /dev/null; then
       delimiter=' CREATE '
     elif echo \"\${row}\" | grep ' MOVED_TO ' > /dev/null; then
@@ -33,15 +34,22 @@ while read -r row; do
       delimiter=' DELETE '
     fi
     directoryPath=\$(echo \"\${row}\" | sed -E \"s/^(.+?)\${delimiter}(.+?)$/\1/\" | sed -E \"s/(\s)/\\\\\1/g\")
+    echo \"directoryPath: \${directoryPath}\"
     action=\$(echo \"\${delimiter}\" | sed -E \"s/\s//g\")
+    echo \"action: \${action}\"
     fileName=\$(echo \"\${row}\" | sed -E \"s/^(.+?)\${delimiter}(.+?)$/\2/\" | sed -E \"s/(\s)/\\\\\1/g\")
+    echo \"fileName: \${fileName}\"
     fileNameWithoutExtension=\$(echo \"\${fileName}\" | sed -E \"s/^(.+?)\.torrent$/\1/\")
+    echo \"fileNameWithoutExtension: \${fileNameWithoutExtension}\"
 
     if [[ \"\${action}\" == 'DELETE' ]]; then
       activeTorrents=\$(deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"info; exit\")
+      echo \"activeTorrents: \${activeTorrents}\"
       torrentRowToRemove=\$(echo \"\${activeTorrents}\" | grep \"\${fileNameWithoutExtension}\")
+      echo \"torrentRowToRemove: \${torrentRowToRemove}\"
       torrentIdToRemove=\$(echo \"\${torrentRowToRemove}\" | sed -E \"s/^.+?\${fileNameWithoutExtension}\s(.+?)$/\1/\")
-      deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"add \${directoryPath}\${file} --path=\${directoryPath}; exit\"
+      echo \"torrentIdToRemove: \${torrentIdToRemove}\"
+      deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"rm \${torrentIdToRemove}; exit\"
       echo \"[\${action}] Removed from deluged: \${directoryPath}\${file}\"
     else
       deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"add \${directoryPath}\${file} --path=\${directoryPath}; exit\"
