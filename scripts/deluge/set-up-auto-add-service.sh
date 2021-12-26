@@ -22,7 +22,7 @@ autoAddServiceScript="#!/bin/bash
 # Exit script on error
 set -e
 
-command=$(inotifywait --monitor "${directoryPathToWatch}" --recursive --event create --event moved_to)
+command=\$(inotifywait --monitor ${directoryPathToWatch} --recursive --event create --event moved_to)
 echo \"\${command}\" |
 while read -r directoryPath action file; do
   if [[ \"\${file}\" =~ .torrent$ ]]; then
