@@ -33,11 +33,11 @@ while read -r row; do
     elif echo \"\${row}\" | grep ' DELETE ' > /dev/null; then
       delimiter=' DELETE '
     fi
-    directoryPath=\$(echo \"\${row}\" | sed -E \"s/^(.+?)\${delimiter}(.+?)\$/\1/\" | sed -E \"s/(\s)/\\\\\\\1/g\")
+    directoryPath=\$(echo \"\${row}\" | sed -E \"s/^(.+?)\${delimiter}(.+?)\$/\1/\" | sed -E \"s/(\s)/\\\\\\\\1/g\")
     echo \"directoryPath: \${directoryPath}\"
     action=\$(echo \"\${delimiter}\" | sed -E \"s/\s//g\")
     echo \"action: \${action}\"
-    fileName=\$(echo \"\${row}\" | sed -E \"s/^(.+?)\${delimiter}(.+?)\$/\2/\" | sed -E \"s/(\s)/\\\\\\\\1/g\")
+    fileName=\$(echo \"\${row}\" | sed -E \"s/^(.+?)\${delimiter}(.+?)\$/\2/\" | sed -E \"s/(\s)/\\\\\\\\\1/g\")
     echo \"fileName: \${fileName}\"
     fileNameWithoutExtension=\$(echo \"\${fileName}\" | sed -E \"s/^(.+?)\.torrent\$/\1/\")
     echo \"fileNameWithoutExtension: \${fileNameWithoutExtension}\"
