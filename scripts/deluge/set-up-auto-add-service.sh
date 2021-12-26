@@ -9,7 +9,7 @@ set -e
 directoryPathToWatch=${1}
 if [[ -z "${directoryPathToWatch}" ]]
 then
-  read -r -p "Enter your the directory path to watch: " directoryPathToWatch
+  read -r -p "Enter the directory path to watch: " directoryPathToWatch
 fi
 
 # Install inotify-tools
