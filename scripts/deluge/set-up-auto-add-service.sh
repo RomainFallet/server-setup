@@ -16,7 +16,7 @@ fi
 dpkg -s inotify-tools &> /dev/null || sudo apt install -y inotify-tools
 
 # Create script
-autoAddServiceScriptPath=/usr/local/deluged-auto-add.sh
+autoAddServiceScriptPath=/usr/bin/deluged-auto-add.sh
 autoAddServiceScript="#!/bin/bash
 
 # Exit script on error
