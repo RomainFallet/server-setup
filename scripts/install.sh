@@ -21,6 +21,7 @@ alias ss:database:postgresql='bash ${directoryRootPath}/databases/postgresql/14/
 alias ss:deluge:list='bash ${directoryRootPath}/deluge/list-torrents.sh'
 alias ss:deluge:add='bash ${directoryRootPath}/deluge/add-torrent.sh'
 alias ss:deluge:remove='bash ${directoryRootPath}/deluge/remove-torrent.sh'
+alias ss:deluge:auto-add='bash ${directoryRootPath}/deluge/set-auto-add-service.sh'
 alias ss:nginx-certbot:tls='bash ${directoryRootPath}/nginx-certbot/get-tls-certificate.sh'
 alias ss:nginx-certbot:domain-name-app='bash ${directoryRootPath}/nginx-certbot/set-up-domain-name-app.sh'
 alias ss:nginx-certbot:daily-dump='bash ${directoryRootPath}/nginx-certbot/daily-dump.sh'
