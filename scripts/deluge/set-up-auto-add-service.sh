@@ -16,13 +16,13 @@ fi
 dpkg -s inotify-tools &> /dev/null || sudo apt install -y inotify-tools
 
 # Create script
-autoAddServiceScriptPath=/usr/bin/deluged-auto-add.sh
+autoAddServiceScriptPath=/usr/local/bin/deluged-auto-add.sh
 autoAddServiceScript="#!/bin/bash
 
 # Exit script on error
 set -e
 
-(inotifywait -m ${directoryPathToWatch} -e create -e moved_to || true) |
+(inotifywait --monitor ${directoryPathToWatch} --recursive --event create --event moved_to || true) |
 while read -r directoryPath action file; do
   if [[ \"\${file}\" =~ .torrent$ ]]; then
     deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"add \${directoryPath}\${file} --path=\${directoryPath}; exit\"
