@@ -15,6 +15,9 @@ bash "${directoryPath}"/basic.sh
 # Install Samba
 bash "${directoryPath}"/file-server/samba/install.sh
 
+# Install Deluge
+bash "${directoryPath}"/torrent/deluge/install.sh
+
 # Set up a data disk (to isolate system from user files)
 bash "${directoryPath}"/disks/set-up-data-disk.sh
 
@@ -29,6 +32,9 @@ bash "${directoryPath}"/samba/create-shared-access.sh /mnt/sda/shared
 
 # Create a personal Samba folder for each user
 bash "${directoryPath}"/samba/create-users-access.sh
+
+# Set up auto-add deluge torrents service
+bash "${directoryPath}"/deluge/set-up-auto-add-service.sh /mnt/sda/shared
 
 # Set up daily backups
 # shellcheck disable=SC2088

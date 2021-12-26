@@ -24,6 +24,7 @@ The goal is to provide an opinionated environment that just work for commons sce
   - [Web server](#web-server)
   - [File server](#file-server)
   - [VPN](#vpn)
+  - [Torrent client](#torrent-client)
 - [Environment setup](#environment-setup)
   - [NodeJS](#nodejs)
 - [Database setup](#database-setup)
@@ -284,6 +285,14 @@ This will install and configure Samba.
 ss:vpn:proton-vpn
 ```
 
+### Torrent client
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:torrent:deluge
+```
+
 ## Environment setup
 
 ### NodeJS
@@ -462,6 +471,40 @@ ss:samba:users
 
 ```bash
 ss:samba:shared
+```
+
+### Deluge
+
+#### List torrents
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:deluge:list
+```
+
+#### Add torrent
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:deluge:add
+```
+
+#### Remove torrent
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:deluge:remove
+```
+
+#### Set-up auto-add service
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:deluge:auto-add
 ```
 
 ## Apps
