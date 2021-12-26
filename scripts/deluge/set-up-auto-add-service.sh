@@ -33,7 +33,7 @@ while read -r row; do
     elif echo \"\${row}\" | grep ' DELETE ' > /dev/null; then
       delimiter=' DELETE '
     fi
-    directoryPath=\$(echo \"\${row}\" | sed -E \"s/^(.+?)\${delimiter}(.+?)\$/\1/\" | sed -E \"s/(\s)/\\\\\\\\1/g\")
+    directoryPath=\$(echo \"\${row}\" | sed -E \"s/^(.+?)\${delimiter}(.+?)\$/\1/\" | sed -E \"s/(\s)/\\\\\\\\\1/g\")
     echo \"directoryPath: \${directoryPath}\"
     action=\$(echo \"\${delimiter}\" | sed -E \"s/\s//g\")
     echo \"action: \${action}\"
