@@ -22,7 +22,8 @@ autoAddServiceScript="#!/bin/bash
 # Exit script on error
 set -e
 
-(inotifywait --monitor ${directoryPathToWatch} --recursive --event create --event moved_to || true) |
+command=$(inotifywait --monitor "${directoryPathToWatch}" --recursive --event create --event moved_to)
+echo \"\${command}\" |
 while read -r directoryPath action file; do
   if [[ \"\${file}\" =~ .torrent$ ]]; then
     deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"add \${directoryPath}\${file} --path=\${directoryPath}; exit\"
