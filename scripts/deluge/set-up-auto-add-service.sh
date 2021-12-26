@@ -50,10 +50,10 @@ while read -r row; do
       torrentIdToRemove=\$(echo \"\${torrentRowToRemove}\" | sed -E \"s/^.+?\${fileNameWithoutExtension}\s(.+?)\s+\$/\1/\")
       echo \"torrentIdToRemove: \${torrentIdToRemove}\"
       deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"rm \${torrentIdToRemove}; exit\"
-      echo \"[\${action}] Removed from deluged: \${directoryPath}\${file}\"
+      echo \"[\${action}] Removed from deluged: \${directoryPath}\${fileName}\"
     else
-      deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"add \${directoryPath}\${file} --path=\${directoryPath}; exit\"
-      echo \"[\${action}] Added to deluged: \${directoryPath}\${file}\"
+      deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"add \${directoryPath}\${fileName} --path=\${directoryPath}; exit\"
+      echo \"[\${action}] Added to deluged: \${directoryPath}\${fileame}\"
     fi
   fi
 done
