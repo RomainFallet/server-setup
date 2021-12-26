@@ -13,4 +13,4 @@ then
 fi
 
 # Remove torrent
-deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge "rm ${torrentId}; exit"
+deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge "rm ${torrentId} -c; exit"
