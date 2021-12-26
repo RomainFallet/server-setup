@@ -43,14 +43,14 @@ while read -r row; do
     echo \"fileNameWithoutExtension: \${fileNameWithoutExtension}\"
 
     if [[ \"\${action}\" == 'DELETE' ]]; then
-      torrentRowToRemove=\$(deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"info -v; exit\" | grep \"\${fileNameWithoutExtension}\")
+      torrentRowToRemove=\$(deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"info -v\" | grep \"\${fileNameWithoutExtension}\")
       echo \"torrentRowToRemove: \${torrentRowToRemove}\"
       torrentIdToRemove=\$(echo \"\${torrentRowToRemove}\" | sed -E \"s/^.+?\${fileNameWithoutExtension}\s(.+?)\s+\$/\1/\")
       echo \"torrentIdToRemove: \${torrentIdToRemove}\"
-      deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"rm \${torrentIdToRemove}; exit\"
+      deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"rm \${torrentIdToRemove}\"
       echo \"[\${action}] Removed from deluged: \${directoryPath}\${fileName}\"
     else
-      deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"add \${directoryPath}\${fileName} --path=\${directoryPath}; exit\"
+      deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"add \${directoryPath}\${fileName} --path=\${directoryPath}\"
       echo \"[\${action}] Added to deluged: \${directoryPath}\${fileName}\"
     fi
   fi
