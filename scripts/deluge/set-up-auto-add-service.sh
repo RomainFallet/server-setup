@@ -43,9 +43,7 @@ while read -r row; do
     echo \"fileNameWithoutExtension: \${fileNameWithoutExtension}\"
 
     if [[ \"\${action}\" == 'DELETE' ]]; then
-      activeTorrents=\$(deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"info; exit\")
-      echo \"activeTorrents: \${activeTorrents}\"
-      torrentRowToRemove=\$(echo \"\${activeTorrents}\" | grep \"\${fileNameWithoutExtension}\")
+      torrentRowToRemove=\$(deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"info; exit\" | grep \"\${fileNameWithoutExtension}\")
       echo \"torrentRowToRemove: \${torrentRowToRemove}\"
       torrentIdToRemove=\$(echo \"\${torrentRowToRemove}\" | sed -E \"s/^.+?\${fileNameWithoutExtension}\s(.+?)\s+\$/\1/\")
       echo \"torrentIdToRemove: \${torrentIdToRemove}\"
