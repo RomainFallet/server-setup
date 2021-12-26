@@ -23,9 +23,13 @@ autoAddServiceScript="#!/bin/bash
 set -e
 
 inotifywait --monitor ${directoryPathToWatch} --recursive --event create --event moved_to |
-while read -r directoryPath action file; do
-  if [[ \"\${file}\" =~ .torrent$ ]]; then
-    deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"add \${directoryPath}\${file} --path=\${directoryPath}; exit\"
+while read -r row; do
+  if [[ \"\${row}\" =~ .torrent$ ]]; then
+    delimiter=\$((echo \"\${row}\" | grep ' CREATE ' && echo ' CREATE ') || echo ' MOVED_TO ')
+    directoryPath=\$(echo \"\${row}\" | cut -d\"\${delimiter}\" -f1)
+    action=\$(echo \"\${row}\" | cut -d\"\${delimiter}\" -f2)
+    fileName=\$(echo \"\${row}\" | cut -d\"\${delimiter}\" -f3)
+    # deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"add \${directoryPath}\${file} --path=\${directoryPath}; exit\"
     echo \"['\${action}'] Added to deluged: \${directoryPath}'\${file}\"
   fi
 done
