@@ -51,7 +51,7 @@ while read -r row; do
     if [[ \"\${action}\" == 'DELETE' ]]; then
       torrentsList=\$(deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"info\")
       echo \"\${torrentsList}\"
-      torrentRowToRemove=\$(echo \"\${torrentsList}\" | grep 'toto')
+      torrentRowToRemove=\$(echo \"\${torrentsList}\" | grep \"\${fileNameWithoutExtension}\")
       echo \"torrentRowToRemove: \${torrentRowToRemove}\"
       torrentIdToRemove=\$(echo \"\${torrentRowToRemove}\" | sed -E \"s/^.+?\${fileNameWithoutExtension}\s(.+?)\s+\$/\1/\")
       echo \"torrentIdToRemove: \${torrentIdToRemove}\"
