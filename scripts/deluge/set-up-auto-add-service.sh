@@ -22,7 +22,7 @@ autoAddServiceScript="#!/bin/bash
 # Exit script on error
 set -e
 
-inotifywait --monitor ${directoryPathToWatch} --recursive --event create --event moved_to --event delete |
+(inotifywait --monitor ${directoryPathToWatch} --recursive --event create --event moved_to --event delete || true) |
 while read -r row; do
   echo \"\${row}\"
   if [[ \"row: \${row}\" =~ .torrent$ ]]; then
@@ -50,7 +50,8 @@ while read -r row; do
 
     if [[ \"\${action}\" == 'DELETE' ]]; then
       torrentsList=\$(deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"info\")
-      echo \"\${torrentsList}\" | grep \"\${fileNameWithoutExtension}\"
+      echo \"\${torrentsList}\"
+      torrentRowToRemove=\$(echo \"\${torrentsList}\" | grep 'toto')
       echo \"torrentRowToRemove: \${torrentRowToRemove}\"
       torrentIdToRemove=\$(echo \"\${torrentRowToRemove}\" | sed -E \"s/^.+?\${fileNameWithoutExtension}\s(.+?)\s+\$/\1/\")
       echo \"torrentIdToRemove: \${torrentIdToRemove}\"

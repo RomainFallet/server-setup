@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Exit script on error
+set -e
+
+inotifywait --monitor /mnt/sda/shared --recursive --event create --event moved_to --event delete |
+while read -r row; do
+  echo "${row}"
+  if [[ "row: ${row}" =~ .torrent$ ]]; then
+    if echo "${row}" | grep ' CREATE ' > /dev/null; then
+      delimiter=' CREATE '
+    elif echo "${row}" | grep ' MOVED_TO ' > /dev/null; then
+      delimiter=' MOVED_TO '
+    elif echo "${row}" | grep ' DELETE ' > /dev/null; then
+      delimiter=' DELETE '
+    fi
+    directoryPath=$(echo "${row}" | sed -E "s/^(.+?)${delimiter}(.+?)$/\1/")
+    directoryPathEscaped=$(echo "${directoryPath}" | sed -E "s/(\s)/\\\\\1/g")
+    echo "directoryPath: ${directoryPath}"
+    echo "directoryPathEscaped: ${directoryPathEscaped}"
+    action=$(echo "${delimiter}" | sed -E "s/\s//g")
+    echo "action: ${action}"
+    fileName=$(echo "${row}" | sed -E "s/^(.+?)${delimiter}(.+?)$/\2/")
+    fileNameEscaped=$(echo "${fileName}" | sed -E "s/(\s)/\\\\\1/g")
+    echo "fileName: ${fileName}"
+    echo "fileNameEscaped: ${fileNameEscaped}"
+    fileNameWithoutExtension=$(echo "${fileName}" | sed -E "s/^(.+?)\.torrent$/\1/")
+    fileNameWithoutExtensionEscaped=$(echo "${fileNameWithoutExtension}" | sed -E "s/(\s)/\\\\\1/g")
+    echo "fileNameWithoutExtension: ${fileNameWithoutExtension}"
+    echo "fileNameWithoutExtensionEscaped: ${fileNameWithoutExtensionEscaped}"
+
+    if [[ "${action}" == 'DELETE' ]]; then
+      torrentsList=$(deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge "info")
+      echo "${torrentsList}" | grep "${fileNameWithoutExtension}"
+      echo "torrentRowToRemove: ${torrentRowToRemove}"
+      torrentIdToRemove=$(echo "${torrentRowToRemove}" | sed -E "s/^.+?${fileNameWithoutExtension}\s(.+?)\s+$/\1/")
+      echo "torrentIdToRemove: ${torrentIdToRemove}"
+      deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge "rm ${torrentIdToRemove}"
+      echo "[${action}] Removed from deluged: ${directoryPath}${fileName}"
+    else
+      deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge "add ${directoryPath}${fileName} --path=${directoryPath}"
+      echo "[${action}] Added to deluged: ${directoryPath}${fileName}"
+    fi
+  fi
+done
