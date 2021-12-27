@@ -12,6 +12,9 @@ directoryPath=$(dirname "${filePath}")/..
 # Basic server setup
 bash "${directoryPath}"/basic.sh
 
+# Install ProtonVPN
+bash "${directoryPath}"/vpn/protonvpn-ikev2/install.sh
+
 # Install Samba
 bash "${directoryPath}"/file-server/samba/install.sh
 

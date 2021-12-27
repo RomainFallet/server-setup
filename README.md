@@ -282,7 +282,11 @@ This will install and configure Samba.
 [Back to top ↑](#table-of-contents)
 
 ```bash
-ss:vpn:proton-vpn
+# Official ProtonVPN CLI
+ss:vpn:protonvpn
+
+# ProtonVPN IKEv2
+ss:vpn:protonvpn-ikev2
 ```
 
 ### Torrent client
