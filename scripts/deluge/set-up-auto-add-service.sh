@@ -53,7 +53,7 @@ while read -r row; do
       echo \"\${torrentsList}\"
       torrentRowToRemove=\$(echo \"\${torrentsList}\" | grep --fixed-strings \"\${fileNameWithoutExtension}\")
       echo \"torrentRowToRemove: \${torrentRowToRemove}\"
-      torrentIdToRemove=\$(echo \"\${torrentRowToRemove}\" | sed -E \"s/^.+?\s(\w+)\s*$/\1/\"
+      torrentIdToRemove=\$(echo \"\${torrentRowToRemove}\" | sed -E \"s/^.+?\s(\w+)\s*$/\1/\")
       echo \"torrentIdToRemove: \${torrentIdToRemove}\"
       deluge-console --daemon 127.0.0.1 --port 58846 --username deluge --password deluge \"rm -c \${torrentIdToRemove}\"
       echo \"[\${action}] Removed from deluged: \${directoryPath}\${fileName}\"
