@@ -60,6 +60,9 @@ echo "# This file holds shared secrets or RSA private keys for authentication.
 ${username} : ${password}
 " | sudo tee /etc/ipsec.secrets > /dev/null
 
+# Restart IPsec
+sudo ipsec restart
+
 # Create service file
 echo "[Unit]
 Description=ProtonVPN IKEv2 service
