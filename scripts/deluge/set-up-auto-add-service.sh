@@ -15,6 +15,10 @@ fi
 # Install inotify-tools
 dpkg -s inotify-tools &> /dev/null || sudo apt install -y inotify-tools
 
+# Increase inotify watch limit
+echo "fs.inotify.max_user_watches=524288" | sudo nano /etc/sysctl.d/90-override.conf > /dev/null
+sudo sysctl -p
+
 # Create script
 autoAddServiceScriptPath=/usr/bin/deluged-auto-add.sh
 autoAddServiceScript="#!/bin/bash
