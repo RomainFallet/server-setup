@@ -16,7 +16,7 @@ fi
 dpkg -s inotify-tools &> /dev/null || sudo apt install -y inotify-tools
 
 # Increase inotify watch limit
-echo "fs.inotify.max_user_watches=524288" | sudo nano /etc/sysctl.d/90-override.conf > /dev/null
+echo "fs.inotify.max_user_watches=524288" | sudo tee /etc/sysctl.d/90-override.conf > /dev/null
 sudo sysctl -p
 
 # Create script
