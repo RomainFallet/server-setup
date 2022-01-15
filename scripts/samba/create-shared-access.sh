@@ -59,8 +59,9 @@ while read -r line; do
   then
     if [[ "${userName}" != 'syslog' ]]
     then
-      # Set user group
-      sudo usermod -G "${userName}",shared "${userName}"
+      # Set user groups
+      sudo usermod --gid "${userName}" "${userName}"
+      sudo usermod --groups shared "${userName}"
     fi
   fi
 done 3<&0 </etc/passwd
