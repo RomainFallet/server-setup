@@ -33,6 +33,7 @@ guest ok = no
 valid users = @shared
 create mask = 664
 directory mask = 775
+force group = shared
 
 [public]
 comment = Shared files
@@ -59,7 +60,7 @@ while read -r line; do
     if [[ "${userName}" != 'syslog' ]]
     then
       # Set user group
-      sudo usermod -g shared "${userName}"
+      sudo usermod -g "${userName}",shared "${userName}"
     fi
   fi
 done 3<&0 </etc/passwd
