@@ -61,7 +61,7 @@ while read -r line; do
     then
       # Set user groups
       sudo usermod --gid "${userName}" "${userName}"
-      sudo usermod --groups shared "${userName}"
+      sudo usermod --append --groups shared "${userName}"
     fi
   fi
 done 3<&0 </etc/passwd
