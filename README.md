@@ -18,7 +18,8 @@ The goal is to provide an opinionated environment that just work for commons sce
   - [NodeJS app](#nodejs-app)
   - [File machine](#file-machine)
   - [Mail machine](#mail-machine)
-  - [Backup machine](#backup-machine)
+  - [Daily backup machine](#daily-backup-machine)
+  - [Weekly backup machine](#weekly-backup-machine)
 - [Server setup](#server-setup)
   - [Basic](#basic)
   - [Web server](#web-server)
@@ -52,7 +53,8 @@ The goal is to provide an opinionated environment that just work for commons sce
     - [Set up daily SMART test](#set-up-daily-smart-test)
     - [Set up weekly SMART test](#set-up-weekly-smart-test)
   - [Rsync](#rsync)
-    - [Set up an daily backup](#set-up-an-daily-backup)
+    - [Set up a daily backup](#set-up-a-daily-backup)
+    - [Set up a weekly backup](#set-up-a-weekly-backup)
     - [Restore backup](#restore-backup)
   - [Samba](#samba)
     - [Create users access](#create-users-access)
@@ -236,12 +238,20 @@ ss:recipes:mail-machine
 ss:recipes:file-machine
 ```
 
-### Backup machine
+### Daily backup machine
 
 [Back to top ↑](#table-of-contents)
 
 ```bash
-ss:recipes:backup-machine
+ss:recipes:daily-backup-machine
+```
+
+### Weekly backup machine
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:recipes:weekly-backup-machine
 ```
 
 ## Server setup
@@ -443,12 +453,20 @@ ss:disks:weekly-smart-test
 
 ### Rsync
 
-#### Set up an daily backup
+#### Set up a daily backup
 
 [Back to top ↑](#table-of-contents)
 
 ```bash
 ss:rsync:daily-backup
+```
+
+#### Set up a weekly backup
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:rsync:weekly-backup
 ```
 
 #### Restore backup

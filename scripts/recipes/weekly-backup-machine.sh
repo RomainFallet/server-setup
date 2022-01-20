@@ -3,7 +3,7 @@
 # Exit script on error
 set -e
 
-### Set up a backup machine
+### Set up a weekly backup machine
 
 # Get current directory path
 filePath=$(realpath -s "${0}")
