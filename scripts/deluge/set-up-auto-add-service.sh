@@ -16,8 +16,16 @@ fi
 dpkg -s inotify-tools &> /dev/null || sudo apt install -y inotify-tools
 
 # Increase inotify watch limit
-echo "fs.inotify.max_user_watches=524288" | sudo tee /etc/sysctl.d/90-override.conf > /dev/null
-sudo sysctl -p
+inofityConfig="
+fs.inotify.max_user_watches=524288"
+systemConfigFile=/etc/sysctl.conf
+pattern=$(echo "${inofityConfig}" | tr -d '\n')
+content=$(< "${systemConfigFile}" tr -d '\n')
+if [[ "${content}" != *"${pattern}"* ]]
+then
+  echo "${inofityConfig}" | sudo tee -a "${systemConfigFile}" > /dev/null
+  sudo sysctl -p
+fi
 
 # Create script
 autoAddServiceScriptPath=/usr/bin/deluged-auto-add.sh
@@ -26,7 +34,7 @@ autoAddServiceScript="#!/bin/bash
 # Exit script on error
 set -e
 
-(inotifywait --monitor ${directoryPathToWatch} --recursive --event create --event moved_to --event delete || true) |
+inotifywait --excludei '[^t][^o][^r][^r][^e][^n][^t]$' --monitor ${directoryPathToWatch} --recursive --event create --event moved_to --event delete |
 while read -r row; do
   echo \"\${row}\"
   if [[ \"row: \${row}\" =~ .torrent$ ]]; then
