@@ -30,7 +30,7 @@ sudo chmod 0700 ~/.ssh
 
 # Create auhorized keys
 echo "
-${sshPublicKey}" | sudo tee ~/.ssh/authorized_keys > /dev/null
+${sshPublicKey}" | sudo tee /home/"${userName}"/.ssh/authorized_keys > /dev/null
 sudo chown "${userName}":"${userName}" /home/"${userName}"/.ssh/authorized_keys
 sudo chmod 0600 /home/"${userName}"/.ssh/authorized_keys
 
