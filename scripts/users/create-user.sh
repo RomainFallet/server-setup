@@ -25,10 +25,12 @@ id -u "${userName}" &> /dev/null || sudo useradd --create-home --shell /bin/bash
 
 # Create .ssh directory
 sudo mkdir -p /home/"${userName}"/.ssh
+sudo chown "${userName}":"${userName}" /home/"${userName}"/.ssh
 sudo chmod 0700 ~/.ssh
 
 # Create auhorized keys
 echo "
 ${sshPublicKey}" | sudo tee ~/.ssh/authorized_keys > /dev/null
-sudo chmod 0600 ~/.ssh/authorized_keys
+sudo chown "${userName}":"${userName}" /home/"${userName}"/.ssh/authorized_keys
+sudo chmod 0600 /home/"${userName}"/.ssh/authorized_keys
 
