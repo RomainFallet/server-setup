@@ -44,25 +44,34 @@ fi
 healthChecksMonitorCommand=""
 if [[ -n "${healthChecksUuid}" ]]
 then
-  healthChecksMonitorCommand="curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
+  healthChecksMonitorCommand="
+  ExecStartPost=curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
 fi
 
 # Create backup script
 backupScript="#!/bin/bash
 set -e
-rsync -av --delete ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath}
-${healthChecksMonitorCommand}"
+systemctl start rsync-backup.service"
 backupScriptPath=/etc/cron.daily/rsync-backup
-if ! test -f "${backupScriptPath}"
-then
-  sudo touch "${backupScriptPath}"
-fi
-pattern=$(echo "${backupScript}" | tr -d '\n')
-content=$(< "${backupScriptPath}" tr -d '\n')
-if [[ "${content}" != *"${pattern}"* ]]
-then
-  echo "${backupScript}" | sudo tee "${backupScriptPath}" > /dev/null
-fi
+echo "${backupScript}" | sudo tee "${backupScriptPath}" > /dev/null
 
 # Make backup script executable
 sudo chmod +x "${backupScriptPath}"
+
+# Create service file
+echo "[Unit]
+Description=Rsync backup
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=rsync -av --delete --progress ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath}${healthChecksMonitorCommand}
+Restart=on-failure
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target" | sudo tee /etc/systemd/system/rsync-backup.service > /dev/null
+
+# Reload service files
+sudo systemctl daemon-reload
