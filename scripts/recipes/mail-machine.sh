@@ -27,11 +27,13 @@ fi
 if [[ "${restorebackup}" == 'y' ]]
 then
   # Restore backup
-  bash "${directoryPath}"/rsync/restore-backup.sh /home/user-data/ ~/data/
+  # shellcheck disable=SC2088
+  bash "${directoryPath}"/rsync/restore-backup.sh "/home/user-data/" "~/data/"
 
   # Restart Mailinabox install
   bash "${directoryPath}"/apps/mailinabox/0.55/install.sh
 fi
 
 # Set up daily backups
-bash "${directoryPath}"/rsync/set-up-daily-backup.sh /home/user-data/ ~/data/
+# shellcheck disable=SC2088
+bash "${directoryPath}"/rsync/set-up-daily-backup.sh "/home/user-data/" "~/data/"
