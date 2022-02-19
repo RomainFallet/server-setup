@@ -31,7 +31,7 @@ then
   bash "${directoryPath}"/rsync/restore-backup.sh "/home/user-data/" "~/data/"
 
   # Restart Mailinabox install
-  bash "${directoryPath}"/apps/mailinabox/0.55/install.sh
+  sudo mailinabox
 fi
 
 # Set up daily backups
