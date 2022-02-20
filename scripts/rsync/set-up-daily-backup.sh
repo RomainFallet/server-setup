@@ -45,7 +45,7 @@ healthChecksMonitorCommand=""
 if [[ -n "${healthChecksUuid}" ]]
 then
   healthChecksMonitorCommand="
-  ExecStartPost=curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
+ExecStartPost=/usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
 fi
 
 # Create backup script
@@ -65,7 +65,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=rsync -av --delete --progress ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath}${healthChecksMonitorCommand}
+ExecStart=/usr/bin/rsync -av --delete --progress ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath}${healthChecksMonitorCommand}
 Restart=on-failure
 User=root
 Group=root
