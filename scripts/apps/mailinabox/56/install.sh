@@ -13,7 +13,7 @@ fi
 
 # Select version
 cd ~/mailinabox
-git pull && git checkout v55
+git fetch && git checkout v56
 
 # Install
 sudo ./setup/start.sh
@@ -34,3 +34,6 @@ if ! sudo grep "^${postfixInetConfig}" "${postfixConfigPath}" > /dev/null
 then
   echo "${postfixInetConfig}" | sudo tee -a "${postfixConfigPath}" > /dev/null
 fi
+
+# Restart Postfix
+sudo systemctl restart postfix
