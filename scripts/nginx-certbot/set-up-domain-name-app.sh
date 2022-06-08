@@ -69,7 +69,8 @@ nginxConfig="server {
   add_header X-Frame-Options \"deny\";
   add_header X-Content-Type-Options \"nosniff\";
   add_header Referrer-Policy \"same-origin\";
-  add_header Permissions-Policy \"microphone=(); geolocation=(); camera=();\";
+  add_header Cache-Control \"private, max-age=604800, must-revalidate\";
+  add_header Permissions-Policy \"fullscreen=(self); microphone=(); geolocation=(); camera=(); midi=(); sync-xhr=(); magnetometer=(); gyroscope=(); payment=();\";
 }"
 nginxConfigPath="/etc/nginx/sites-available/${appName}-public-${appDomain//\./}.conf"
 echo "${nginxConfig}" | sudo tee "${nginxConfigPath}" > /dev/null
