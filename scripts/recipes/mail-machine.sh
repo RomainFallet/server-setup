@@ -13,7 +13,7 @@ directoryPath=$(dirname "${filePath}")/..
 bash "${directoryPath}"/basic.sh
 
 # Install Mailinabox
-bash "${directoryPath}"/apps/mailinabox/56/install.sh
+bash "${directoryPath}"/apps/mailinabox/57a/install.sh
 
 # Ask to restore backup if not already set
 restoreBackup=$1
