@@ -13,7 +13,7 @@ fi
 
 # Select version
 cd ~/mailinabox
-git fetch && git checkout v57a
+git fetch && git checkout v60.1
 
 # Install
 sudo ./setup/start.sh
