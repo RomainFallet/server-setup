@@ -13,7 +13,7 @@ directoryPath=$(dirname "${filePath}")/..
 bash "${directoryPath}"/basic.sh
 
 # Install Mailinabox
-bash "${directoryPath}"/apps/mailinabox/57a/install.sh
+bash "${directoryPath}"/apps/mailinabox/60.1/install.sh
 
 # Ask to restore backup if not already set
 restoreBackup=$1
@@ -34,6 +34,6 @@ then
   sudo mailinabox
 fi
 
-# Set up daily backups
+# Set up weekly backups
 # shellcheck disable=SC2088
-bash "${directoryPath}"/rsync/set-up-daily-backup.sh "/home/user-data/" "~/data"
+bash "${directoryPath}"/rsync/set-up-weekly-backup.sh "/home/user-data/" "~/data"
