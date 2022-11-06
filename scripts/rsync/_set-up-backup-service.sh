@@ -5,10 +5,6 @@ set -e
 
 ### Set up daily backup with Rsync
 
-# Get current directory path
-filePath=$(realpath -s "${0}")
-directoryPath=$(dirname "${filePath}")
-
 # Ask source path if not already set
 sourcePath=${1}
 if [[ -z "${sourcePath}" ]]
@@ -44,15 +40,28 @@ then
   read -r -p "Enter your healthchecks.io uuid to monitor your backup job (optional): " healthChecksUuid
 fi
 
-# Setup backup service
-bash "${directoryPath}"/_set-up-backup-service.sh "${sourcePath}" "${destinationPath}" "${sshUser}" "${sshHostname}" "${healthChecksUuid}"
-
-# Create cron backup script
-cronBackupScript="#!/bin/bash
+# Create backup script
+backupScript="#!/bin/bash
 set -e
-systemctl start rsync-backup.service"
-cronBackupScriptPath=/etc/cron.daily/rsync-backup
-echo "${cronBackupScript}" | sudo tee "${cronBackupScriptPath}" > /dev/null
+/usr/bin/rsync -av --delete --progress ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath}
+/usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
+backupScriptPath=/opt/rsync-backup.sh
+echo "${backupScript}" | sudo tee "${backupScriptPath}" > /dev/null
 
-# Make backup script executable
-sudo chmod +x "${cronBackupScriptPath}"
+# Create service file
+echo "[Unit]
+Description=Rsync backup
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash ${backupScriptPath}
+Restart=on-failure
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target" | sudo tee /etc/systemd/system/rsync-backup.service > /dev/null
+
+# Reload service files
+sudo systemctl daemon-reload
