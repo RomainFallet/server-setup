@@ -5,9 +5,11 @@ set -e
 
 ### Proxy config
 
-# Get app name & port
+# Get app name, port & IP
 appname=${1}
-port=${2}
+ip=${2}
+port=${3}
+
 
 # Return config
 echo "root /var/www/${appname};
@@ -17,6 +19,6 @@ echo "root /var/www/${appname};
     proxy_set_header X-Real-IP \$remote_addr;
     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto \$scheme;
-    proxy_pass http://127.0.0.1:${port};
+    proxy_pass http://${ip}:${port};
   }
 "

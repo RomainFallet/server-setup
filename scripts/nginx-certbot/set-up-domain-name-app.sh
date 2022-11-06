@@ -28,7 +28,7 @@ appType=${3}
 if [[ -z "${appType}" ]]
 then
   read -r -p "Which type of app do you want to deploy?
-    - Proxy to a local port:           [1]
+    - Proxy to a local IP/port:        [1]
     - HTML/Static:                     [2]
   Your choice: " appType
 fi
@@ -37,11 +37,17 @@ fi
 if [[ "${appType}" == '1' ]]
 then
   appPort=${4}
+  if [[ -z "${appIp}" ]]
+  then
+    read -r -p "Enter your local IP address: " appIp
+  fi
+
+  appPort=${5}
   if [[ -z "${appPort}" ]]
   then
     read -r -p "Enter your local app port: " appPort
   fi
-  nginxConfigFromAppType=$(bash "${directoryPath}"/_proxy-config.sh "${appName}" "${appPort}")
+  nginxConfigFromAppType=$(bash "${directoryPath}"/_proxy-config.sh "${appName}" "${appIp}" "${appPort}")
 
 # Get HTML/static
 elif [[ "${appType}" == '2' ]]
