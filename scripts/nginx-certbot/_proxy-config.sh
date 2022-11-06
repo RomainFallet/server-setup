@@ -10,7 +10,6 @@ appname=${1}
 ip=${2}
 port=${3}
 
-
 # Return config
 echo "root /var/www/${appname};
 
