@@ -9,6 +9,11 @@ set -e
 appname=${1}
 ip=${2}
 port=${3}
+if [[ "${port}" == '443' ]]; then
+  proxyUrl=https://${ip}:${port};
+else
+  proxyUrl=http://${ip}:${port};
+fi
 
 # Return config
 echo "root /var/www/${appname};
@@ -18,6 +23,6 @@ echo "root /var/www/${appname};
     proxy_set_header X-Real-IP \$remote_addr;
     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto \$scheme;
-    proxy_pass http://${ip}:${port};
+    proxy_pass ${proxyUrl};
   }
 "
