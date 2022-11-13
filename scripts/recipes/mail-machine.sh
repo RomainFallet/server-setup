@@ -34,6 +34,6 @@ then
   sudo mailinabox
 fi
 
-# Set up weekly backups
+# Set up daily backups
 # shellcheck disable=SC2088
-bash "${directoryPath}"/rsync/set-up-weekly-backup.sh "/home/user-data/" "~/data"
+bash "${directoryPath}"/rsync/set-up-daily-backup.sh "/home/user-data/" "~/data"
