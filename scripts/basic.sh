@@ -1,5 +1,78 @@
 #!/bin/bash
 
+function SetTimeZone () {
+  sudo timedatectl set-timezone Europe/Paris
+}
+
+function SetHostName () {
+  hostname="${1}"
+  sudo hostnamectl set-hostname "${hostname}"
+}
+
+function CopyFileIfNotExisting () {
+  filePath="${1}"
+  destinationPath="${2}"
+  if ! test -f "${destinationPath}"
+  then
+    sudo cp "${filePath}" "${destinationPath}"
+  fi
+}
+
+function AppendTextInFileIfNotFound () {
+  text="${1}"
+  filePath="${2}"
+  pattern=$(echo "${text}" | tr -d '\n')
+  fileContent=$(< "${filePath}" tr -d '\n')
+  if [[ "${fileContent}" != *"${pattern}"* ]]
+  then
+    echo "${text}" | sudo tee -a "${filePath}" > /dev/null
+  fi
+}
+
+function ReplaceTextInFile () {
+  regexPattern="${1}"
+  replacementText="${2}"
+  filePath="${3}"
+  sudo sed -i'.tmp' -E "s|${regexPattern}|${replacementText}|g" "${filePath}"
+  sudo rm -f "${filePath}".tmp
+}
+
+function DisableSshPasswordAuthentication () {
+  passwordConfiguration='PasswordAuthentication no'
+  ReplaceTextInFile '#*PasswordAuthentication\s+\w+' "${passwordConfiguration}"
+  AppendTextInFileIfNotFound "${passwordConfiguration}" /etc/ssh/sshd_config
+}
+
+function ConfigureSshKeepAlive () {
+  clientAliveIntervalConfiguration='ClientAliveInterval 60'
+  ReplaceTextInFile '#*ClientAliveInterval\s+[0-9]+' "${clientAliveIntervalConfiguration}"
+  AppendTextInFileIfNotFound "${clientAliveIntervalConfiguration}"
+
+  clientAliveCountConfiguration='ClientAliveCountMax 10'
+  ReplaceTextInFile '#*ClientAliveCountMax\s+[0-9]+' "${clientAliveCountConfiguration}"
+  AppendTextInFileIfNotFound "${clientAliveCountConfiguration}"
+}
+
+function RestartSsh () {
+  sudo service ssh restart
+}
+
+function WhiteListSshInFirewall () {
+  sudo ufw allow ssh
+}
+
+function BackupSshConfigFile () {
+  CopyFileIfNotExisting /etc/ssh/sshd_config /etc/ssh/.sshd_config.backup
+}
+
+function ConfigureSsh () {
+  BackupSshConfigFile
+  DisableSshPasswordAuthentication
+  ConfigureSshKeepAlive
+  WhiteListSshInFirewall
+  RestartSsh
+}
+
 # Exit script on error
 set -e
 
@@ -12,54 +85,10 @@ then
   read -r -p "Enter your hostname: " hostname
 fi
 
-### Timezone
+SetTimeZone
+SetHostName "${hostname}"
+ConfigureSsh
 
-# Change timezone
-sudo timedatectl set-timezone Europe/Paris
-
-### Hostname
-
-# Change hostname
-sudo hostnamectl set-hostname "${hostname}"
-
-### SSH
-
-# Backup config file
-sshConfigPath=/etc/ssh/sshd_config
-sshConfigBackupPath=/etc/ssh/.sshd_config.backup
-if ! test -f "${sshConfigBackupPath}"
-then
-  sudo cp "${sshConfigPath}" "${sshConfigBackupPath}"
-fi
-
-# Disable password authentication
-sshPasswordConfig='PasswordAuthentication no'
-sudo sed -i'.tmp' -E "s/#*PasswordAuthentication\s+(\w+)/PasswordAuthentication no/g" "${sshConfigPath}"
-if ! sudo grep "^${sshPasswordConfig}" "${sshConfigPath}" > /dev/null
-then
-  echo "${sshPasswordConfig}" | sudo tee -a "${sshConfigPath}" > /dev/null
-fi
-
-# Keep alive client connections
-sshClientIntervalconfig='ClientAliveInterval 60'
-sudo sed -i'.tmp' -E "s/#*ClientAliveInterval\s+([0-9]+)/ClientAliveInterval 60/g" "${sshConfigPath}"
-if ! sudo grep "^${sshClientIntervalconfig}" "${sshConfigPath}" > /dev/null
-then
-  echo "${sshClientIntervalconfig}" | sudo tee -a "${sshConfigPath}" > /dev/null
-fi
-
-sshClientCountConfig='ClientAliveCountMax 10'
-sudo sed -i'.tmp' -E "s/#*ClientAliveCountMax\s+([0-9]+)/ClientAliveCountMax 10/g" "${sshConfigPath}"
-if ! sudo grep "^${sshClientCountConfig}" "${sshConfigPath}" > /dev/null
-then
-  echo "${sshClientCountConfig}" | sudo tee -a "${sshConfigPath}" > /dev/null
-fi
-
-# Remove tmp file
-sudo rm -f "${sshConfigPath}".tmp
-
-# Restart SSH
-sudo service ssh restart
 
 ### Updates
 
