@@ -1,10 +1,5 @@
 # Server setup instructions
 
-The purpose of this repository is to provide instructions
-to set up a machine with file sharing and web hosting capabilities.
-
-The goal is to provide an opinionated environment that just work for commons scenarios.
-
 ## Table of contents
 
 - [Prerequisites](#prerequisites)
@@ -14,50 +9,7 @@ The goal is to provide an opinionated environment that just work for commons sce
 - [Installation](#installation)
 - [Update](#update)
 - [Recipes](#recipes)
-  - [Web machine](#web-machine)
-  - [NodeJS app](#nodejs-app)
-  - [File machine](#file-machine)
   - [Mail machine](#mail-machine)
-  - [Daily backup machine](#daily-backup-machine)
-  - [Weekly backup machine](#weekly-backup-machine)
-- [Server setup](#server-setup)
-  - [Basic](#basic)
-  - [Web server](#web-server)
-  - [File server](#file-server)
-  - [VPN](#vpn)
-  - [Torrent client](#torrent-client)
-- [Environment setup](#environment-setup)
-  - [NodeJS](#nodejs)
-- [Database setup](#database-setup)
-  - [PostgreSQL setup](#postgresql-setup)
-- [Management](#management)
-  - [Nginx - Cerbot](#nginx---cerbot)
-    - [Get TLS certificate](#get-tls-certificate)
-    - [Set up an app with a domain name](#set-up-an-app-with-a-domain-name)
-    - [Set up daily dump (Nginx and Letsencrypt)](#set-up-daily-dump-nginx-and-letsencrypt)
-    - [Restore dump (Nginx and Letsencrypt)](#restore-dump-nginx-and-letsencrypt)
-  - [PostgreSQL](#postgresql)
-    - [Set up daily dump (PostgreSQL)](#set-up-daily-dump-postgresql)
-    - [Restore dump (PostgreSQL)](#restore-dump-postgresql)
-  - [Users](#users)
-    - [Create a new user](#create-a-new-user)
-    - [Create a chroot jail](#create-a-chroot-jail)
-  - [Systemd](#systemd)
-    - [Create a startup service](#create-a-startup-service)
-    - [Create a startup service with autorestart watcher](#create-a-startup-service-with-autorestart-watcher)
-  - [Disks](#disks)
-    - [Set up a data disk](#set-up-a-data-disk)
-    - [Set up daily SMART test](#set-up-daily-smart-test)
-    - [Set up weekly SMART test](#set-up-weekly-smart-test)
-  - [Rsync](#rsync)
-    - [Set up a daily backup](#set-up-a-daily-backup)
-    - [Set up a weekly backup](#set-up-a-weekly-backup)
-    - [Restore backup](#restore-backup)
-  - [Samba](#samba)
-    - [Create users access](#create-users-access)
-    - [Create shared access](#create-shared-access)
-- [Apps](#apps)
-  - [Mailinabox](#mailinabox)
 
 ## Prerequisites
 
@@ -78,8 +30,10 @@ enabling temporary access to the "root" account
 
 <!-- markdownlint-disable MD013 -->
 ```bash
+ipAddress=50.70.150.30
+
 # Login to your machine's "ubuntu" account
-ssh ubuntu@<ipAddress>
+ssh ubuntu@"${ipAddress}"
 
 # Define a password for the root account
 sudo passwd root
@@ -94,19 +48,21 @@ sudo service ssh restart
 exit
 
 # Login to your machine's root account
-ssh root@<ipAddress>
+ssh root@"${ipAddress}"
+
+userName="johndoe"
 
 # Rename user
-usermod -l <newUserName> ubuntu
+usermod -l "${userName}" ubuntu
 
 # Rename user group
-groupmod -n <newUserName> ubuntu
+groupmod -n "${userName}" ubuntu
 
 # Rename home directory
-usermod -d /home/<newUserName> -m <newUserName>
+usermod -d /home/"${userName}" -m "${userName}"
 
 # Change password
-passwd <newUserName>
+passwd "${userName}"
 
 # Disable root password
 passwd -l root
@@ -122,9 +78,6 @@ exit
 ```
 <!-- markdownlint-enable MD013 -->
 
-_SSH client is enabled by default on Windows since the 2018 April update (1804).
-Download the update if you have an error when using SSH command in PowerShell._
-
 ### Configure an SSH key
 
 [Back to top ↑](#table-of-contents)
@@ -132,14 +85,16 @@ Download the update if you have an error when using SSH command in PowerShell._
 Before going any further, you need to generate an SSH key.
 
 ```bash
-ssh-keygen -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa
+ssh-keygen -t ed25519 -N '' -f ~/.ssh/id_ed25519
 ```
 
 Then add it to your server by using:
 
 <!-- markdownlint-disable MD013 -->
 ```bash
-ssh <yourUserName>@<yourIpAddress> "echo '$(cat ~/.ssh/id_rsa.pub)' | tee -a ~/.ssh/authorized_keys > /dev/null"
+ipAddress=50.70.150.30
+userName="johndoe"
+ssh "${userName}"@"${ipAddress}" "echo '$(cat ~/.ssh/id_ed25519.pub)' | tee -a ~/.ssh/authorized_keys > /dev/null"
 ```
 <!-- markdownlint-enable MD013 -->
 
@@ -147,7 +102,7 @@ You can also add it to the root account:
 
 <!-- markdownlint-disable MD013 -->
 ```bash
-ssh -t <yourUserName>@<yourIpAddress> "echo '$(cat ~/.ssh/id_rsa.pub)' | sudo tee -a /root/.ssh/authorized_keys > /dev/null"
+ssh -t "${userName}"@"${ipAddress}" "echo '$(cat ~/.ssh/id_ed25519.pub)' | sudo tee -a /root/.ssh/authorized_keys > /dev/null"
 ```
 <!-- markdownlint-enable MD013 -->
 
@@ -169,27 +124,35 @@ A minimal DNS zone typically looks like this:
 For example, after that, you will be able to login with:
 
 ```bash
-ssh <username>@mymachine.example.com
+ssh johndoe@mymachine.example.com
 ```
 
 Instead of:
 
 ```bash
-ssh <username>@50.70.150.30
+ssh johndoe@50.70.150.30
 ```
 
 ## Installation
 
 [Back to top ↑](#table-of-contents)
 
-Login to your machine's sudo user and run the following commands.
+Define the `SERVER_SETUP_HOME_PATH` environment variable in your `~/.bashrc` file:
 
 ```bash
-# Clone server-setup scripts in home directory
-git clone https://github.com/RomainFallet/server-setup ~/.server-setup
+echo "export SERVER_SETUP_HOME_PATH=${HOME}/.server-setup" | tee -a ~/.bashrc > /dev/null
+```
 
-# Install commands in ~/.bash_aliases
-bash ~/.server-setup/scripts/install.sh && . ~/.bash_aliases
+Make it available in the current shell:
+
+```bash
+. ~/.bashrc
+```
+
+Clone this repository:
+
+```bash
+git clone https://github.com/RomainFallet/server-setup "${SERVER_SETUP_HOME_PATH}"
 ```
 
 ## Update
@@ -197,341 +160,15 @@ bash ~/.server-setup/scripts/install.sh && . ~/.bash_aliases
 [Back to top ↑](#table-of-contents)
 
 ```bash
-# Update server-setup itself
-ss:update
+cd ~/.server-setup && git pull
 ```
 
 ## Recipes
-
-### Web machine
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:recipes:web-machine
-```
-
-### NodeJS app
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:recipes:nodejs-app
-```
 
 ### Mail machine
 
 [Back to top ↑](#table-of-contents)
 
 ```bash
-ss:recipes:mail-machine
-```
-
-### File machine
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:recipes:file-machine
-```
-
-### Daily backup machine
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:recipes:daily-backup-machine
-```
-
-### Weekly backup machine
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:recipes:weekly-backup-machine
-```
-
-## Server setup
-
-### Basic
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:basic
-```
-
-This will configure the timezone, the hostname, SSH, automatic updates,
-Fail2Ban and the firewall.
-
-### Web server
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:web-server:nginx
-```
-
-This will install and configure Nginx and Certbot.
-
-### File server
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:file-server:samba
-```
-
-This will install and configure Samba.
-
-### VPN
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-# Official ProtonVPN CLI
-ss:vpn:protonvpn
-
-# ProtonVPN IKEv2
-ss:vpn:protonvpn-ikev2
-```
-
-### Torrent client
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:torrent:deluge
-```
-
-## Environment setup
-
-### NodeJS
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:environment:nodejs
-```
-
-## Database setup
-
-### PostgreSQL setup
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:database:postgresql
-```
-
-## Management
-
-### Nginx - Cerbot
-
-#### Get TLS certificate
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:nginx-certbot:tls
-```
-
-#### Set up an app with a domain name
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:nginx-certbot:domain-name-app
-```
-
-#### Set up daily dump (Nginx and Letsencrypt)
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:nginx-certbot:daily-dump
-```
-
-#### Restore dump (Nginx and Letsencrypt)
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:nginx-certbot:restore-dump
-```
-
-### PostgreSQL
-
-#### Set up daily dump (PostgreSQL)
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:postgresql:daily-dump
-```
-
-#### Restore dump (PostgreSQL)
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:postgresql:restore-dump
-```
-
-#### Create app database
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:postgresql:create-app-database
-```
-
-### Users
-
-#### Create a new user
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:users:create
-```
-
-#### Create a chroot jail
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:chroot:jail
-```
-
-### Systemd
-
-#### Create a startup service
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:systemd:startup-service
-```
-
-#### Create a startup service with autorestart watcher
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:systemd:startup-service-watcher
-```
-
-### Disks
-
-#### Set up a data disk
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:disks:data
-```
-
-#### Set up daily SMART test
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:disks:daily-smart-test
-```
-
-#### Set up weekly SMART test
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:disks:weekly-smart-test
-```
-
-### Rsync
-
-#### Set up a daily backup
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:rsync:daily-backup
-```
-
-#### Set up a weekly backup
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:rsync:weekly-backup
-```
-
-#### Restore backup
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:rsync:restore-backup
-```
-
-### Samba
-
-#### Create users access
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:samba:users
-```
-
-#### Create shared access
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:samba:shared
-```
-
-### Deluge
-
-#### List torrents
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:deluge:list
-```
-
-#### Add torrent
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:deluge:add
-```
-
-#### Remove torrent
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:deluge:remove
-```
-
-#### Set-up auto-add service
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:deluge:auto-add
-```
-
-## Apps
-
-### Mailinabox
-
-[Back to top ↑](#table-of-contents)
-
-```bash
-ss:apps:mailinabox
+bash "${SERVER_SETUP_HOME_PATH}"/scripts/recipes/mail-machine/index.sh
 ```
