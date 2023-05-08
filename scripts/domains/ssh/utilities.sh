@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# shellcheck source=../../shared/index.sh
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/index.sh"
+# shellcheck source=../../shared/files/index.sh
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
 
 function DisableSshPasswordAuthentication () {
   passwordConfiguration='PasswordAuthentication no'
@@ -28,11 +28,5 @@ function WhiteListSshInFirewall () {
 }
 
 function BackupSshConfigFile () {
-  CopyFileIfNotExisting /etc/ssh/sshd_config /etc/ssh/.sshd_config.backup
+  BackupFile /etc/ssh/sshd_config
 }
-
-export -f BackupSshConfigFile
-export -f WhiteListSshInFirewall
-export -f RestartSsh
-export -f ConfigureSshKeepAlive
-export -f DisableSshPasswordAuthentication

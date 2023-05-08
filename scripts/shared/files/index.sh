@@ -9,6 +9,14 @@ function CopyFileIfNotExisting () {
   fi
 }
 
+function BackupFile () {
+  filePath="${1}"
+  fileName=$(basename "${filePath}")
+  directoryPath=$(dirname "${filePath}")
+  destinationPath="${directoryPath}/.${fileName}.backup"
+  CopyFileIfNotExisting "${filePath}" "${destinationPath}"
+}
+
 function AppendTextInFileIfNotFound () {
   text="${1}"
   filePath="${2}"
@@ -36,7 +44,8 @@ function LinesToArray () {
   echo "${array[@]}"
 }
 
-export -f ReplaceTextInFile
-export -f CopyFileIfNotExisting
-export -f AppendTextInFileIfNotFound
-export -f LinesToArray
+function SetFileContent () {
+  fileContent="${1}"
+  filePath="${2}"
+  echo "${fileContent}" | sudo tee "${filePath}" > /dev/null
+}

@@ -9,4 +9,3 @@ function SetUpFail2Ban () {
   RestartFail2Ban
 }
 
-export -f SetUpFail2Ban

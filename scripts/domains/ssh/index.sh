@@ -11,4 +11,3 @@ function SetUpSsh () {
   RestartSsh
 }
 
-export -f SetUpSsh

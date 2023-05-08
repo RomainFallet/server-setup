@@ -23,7 +23,3 @@ maxretry = 3"
 function RestartFail2Ban () {
   sudo service fail2ban restart
 }
-
-export -f InstallFail2BanIfNotExisting
-export -f CreateDefaultConfiguration
-export -f RestartFail2Ban
