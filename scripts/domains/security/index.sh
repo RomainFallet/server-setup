@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # shellcheck source=./utilities.sh
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/ssh/utilities.sh"
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/security/utilities.sh"
 
 function SetUpSsh () {
   BackupSshConfigFile
@@ -11,3 +11,8 @@ function SetUpSsh () {
   RestartSsh
 }
 
+function SetUpFail2Ban () {
+  InstallFail2BanIfNotExisting
+  CreateFail2BanConfiguration
+  RestartFail2Ban
+}
