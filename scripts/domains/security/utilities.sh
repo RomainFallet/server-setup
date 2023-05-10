@@ -2,15 +2,19 @@
 
 # shellcheck source=../../shared/files/index.sh
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
+# shellcheck source=../../shared/packages/index.sh
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/packages/index.sh"
+# shellcheck source=../../shared/services/index.sh
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/services/index.sh"
+# shellcheck source=../../shared/firewall/index.sh
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/firewall/index.sh"
 
-function InstallFail2BanIfNotExisting () {
-  if ! dpkg --status fail2ban &> /dev/null; then
-    sudo apt install -y fail2ban
-  fi
+function InstallFail2Ban () {
+  InstallAptPackageIfNotExisting 'fail2ban'
 }
 
 function CreateFail2BanConfiguration () {
-  configuration="[DEFAULT]
+  fileContent="[DEFAULT]
 findtime = 3600
 bantime = 86400
 
@@ -20,11 +24,12 @@ port = ssh
 filter = sshd
 logpath = /var/log/auth.log
 maxretry = 3"
-  echo "${configuration}" | sudo tee /etc/fail2ban/jail.local > /dev/null
+  filePath=/etc/fail2ban/jail.local
+  SetFileContent "${fileContent}" "${filePath}"
 }
 
 function RestartFail2Ban () {
-  sudo service fail2ban restart
+  RestartService 'fail2ban'
 }
 
 function DisableSshPasswordAuthentication () {
@@ -44,11 +49,11 @@ function ConfigureSshKeepAlive () {
 }
 
 function RestartSsh () {
-  sudo service ssh restart
+  RestartService 'ssh'
 }
 
 function WhiteListSshInFirewall () {
-  sudo ufw allow ssh
+  OpenFireWallPort '22'
 }
 
 function BackupSshConfigFile () {

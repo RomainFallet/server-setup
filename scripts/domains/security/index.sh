@@ -12,7 +12,7 @@ function SetUpSsh () {
 }
 
 function SetUpFail2Ban () {
-  InstallFail2BanIfNotExisting
+  InstallFail2Ban
   CreateFail2BanConfiguration
   RestartFail2Ban
 }

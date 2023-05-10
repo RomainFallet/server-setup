@@ -44,7 +44,7 @@ function LinesToArray () {
   echo "${array[@]}"
 }
 
-function CreateDirectoryIfNotExists () {
+function CreateDirectoryIfNotExisting () {
   directoryPath="${1}"
   sudo mkdir -p "${directoryPath}"
 }
@@ -53,7 +53,7 @@ function SetFileContent () {
   fileContent="${1}"
   filePath="${2}"
   directoryPath=$(dirname "${filePath}")
-  CreateDirectoryIfNotExists "${directoryPath}"
+  CreateDirectoryIfNotExisting "${directoryPath}"
   echo "${fileContent}" | sudo tee "${filePath}" > /dev/null
 }
 

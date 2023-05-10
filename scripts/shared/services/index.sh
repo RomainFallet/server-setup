@@ -5,7 +5,7 @@
 # shellcheck source=./utilities.sh
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/services/utilities.sh"
 
-function CreateSystemdService () {
+function CreateService () {
   name="${1}"
   executablePath="${2}"
   userName="${3}"
@@ -26,4 +26,8 @@ WantedBy=multi-user.target"
   SetFileContent "${fileContent}" "${filePath}"
   ReloadSystemdServiceFiles
   EnableSystemdService "${name}"
+}
+
+function RestartService () {
+  RestartSystemdService 'fail2ban'
 }

@@ -6,8 +6,12 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/system/index.sh"
 # shellcheck source=../../domains/backup/index.sh
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/backup/index.sh"
+# shellcheck source=../../domains/application/mailinabox/index.sh
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/mailinabox/index.sh"
 
+set -e
 SetUpSsh
 SetUpBasicSystemConfiguration
 # shellcheck disable=SC2119
 SetUpMailMachineBackups
+SetUpMailInABox

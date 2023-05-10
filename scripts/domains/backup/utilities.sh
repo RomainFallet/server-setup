@@ -18,10 +18,10 @@ set -e
 /usr/bin/rsync -av --delete --progress ${sourcePath} ${sshUser}@${sshHostname}:${destinationPath}
 /usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
   filePath=/opt/server-setup/backup.sh
-  CreateDirectoryIfNotExists "$(dirname "${filePath}")"
+  CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
   SetFileContent "${fileContent}" "${filePath}"
   MakeFileExecutable "${filePath}"
-  CreateSystemdService 'server-setup-backup' '/bin/bash /opt/server-setup/backup.sh' 'root'
+  CreateService 'server-setup-backup' '/bin/bash /opt/server-setup/backup.sh' 'root'
 }
 
 function CreateRestoreBackupScript () {
@@ -35,7 +35,7 @@ set -e
   filePath=/opt/server-setup/restore-backup.sh
   SetFileContent "${fileContent}" "${filePath}"
   MakeFileExecutable "${filePath}"
-  CreateSystemdService 'server-setup-restore-backup' '/bin/bash /opt/server-setup/restore-backup.sh' 'root'
+  CreateService 'server-setup-restore-backup' '/bin/bash /opt/server-setup/restore-backup.sh' 'root'
 }
 
 function CreateDailyBackupCronJob () {
