@@ -9,7 +9,6 @@
 # shellcheck source=../../domains/application/mailinabox/index.sh
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/mailinabox/index.sh"
 
-set -e
 SetUpSsh
 SetUpBasicSystemConfiguration
 SetUpMailInABox

@@ -6,8 +6,6 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/packages/index.sh"
 # shellcheck source=../../shared/services/index.sh
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/services/index.sh"
-# shellcheck source=../../shared/firewall/index.sh
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/firewall/index.sh"
 
 function InstallFail2Ban () {
   InstallAptPackageIfNotExisting 'fail2ban'
@@ -17,13 +15,25 @@ function CreateFail2BanConfiguration () {
   fileContent="[DEFAULT]
 findtime = 3600
 bantime = 86400
+maxretry = 10
 
 [sshd]
 enabled = true
 port = ssh
 filter = sshd
 logpath = /var/log/auth.log
-maxretry = 3"
+
+[nginx-req-limit]
+enabled = true
+filter = nginx-req-limit
+action = iptables-multiport[name=ReqLimit, port=\"http,https\", protocol=tcp]
+logpath = /var/log/nginx/*error.log
+
+[nginx-http-auth]
+enabled  = true
+port     = http,https
+filter   = nginx-http-auth
+logpath  = /var/log/nginx/*error.log"
   filePath=/etc/fail2ban/jail.local
   SetFileContent "${fileContent}" "${filePath}"
 }
@@ -50,10 +60,6 @@ function ConfigureSshKeepAlive () {
 
 function RestartSsh () {
   RestartService 'ssh'
-}
-
-function WhiteListSshInFirewall () {
-  OpenFireWallPort '22'
 }
 
 function BackupSshConfigFile () {

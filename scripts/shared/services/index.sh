@@ -9,16 +9,31 @@ function CreateService () {
   name="${1}"
   executablePath="${2}"
   userName="${3}"
+  workingDirectory="${4}"
+  environmentVariables="${5}"
+
+  workingDirectoryConfiguration=''
+  environmentConfiguration=''
+  if [[ -n "${workingDirectory}" ]]; then
+    workingDirectoryConfiguration="
+WorkingDirectory=${workingDirectory}"
+  fi
+  if [[ -n "${environmentVariables}" ]]; then
+    environmentConfiguration="
+Environment=${environmentVariables}"
+  fi
   fileContent="[Unit]
 Description=${name}
+After=syslog.target
 After=network.target
 
 [Service]
 Type=simple
 ExecStart=${executablePath}
-Restart=on-failure
+Restart=always
+RestartSec=2s
 User=${userName}
-Group=${userName}
+Group=${userName}${workingDirectoryConfiguration}${environmentConfiguration}
 
 [Install]
 WantedBy=multi-user.target"
@@ -29,5 +44,6 @@ WantedBy=multi-user.target"
 }
 
 function RestartService () {
-  RestartSystemdService 'fail2ban'
+  serviceName="${1}"
+  RestartSystemdService "${serviceName}"
 }

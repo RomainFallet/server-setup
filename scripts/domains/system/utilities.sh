@@ -7,7 +7,7 @@
 
 function SetTimeZone () {
   timeZone="${1}"
-  AskIfNotSet timeZone "Enter your time zone (default is \"Europe/Paris\")" 'Europe/Paris'
+  AskIfNotSet timeZone "Enter your time zone" 'Europe/Paris'
   sudo timedatectl set-timezone "${timeZone}"
 }
 

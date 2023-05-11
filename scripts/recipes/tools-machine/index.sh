@@ -4,9 +4,11 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/security/index.sh"
 # shellcheck source=../../domains/system/index.sh
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/system/index.sh"
-
-set -e
+# shellcheck source=../../domains/application/gitea/index.sh
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/gitea/index.sh"
 
 SetUpSsh
-SetUpBasicSystemConfiguration
 SetUpFail2Ban
+SetUpMachineFireWall
+SetUpBasicSystemConfiguration
+SetUpGitea

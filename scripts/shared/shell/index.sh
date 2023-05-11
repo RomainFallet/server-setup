@@ -7,3 +7,10 @@ function ExecShellScriptWithRoot () {
   sudo "${pathToExecute}"
   cd ~/ || exit
 }
+
+function SourceFileIfExisting () {
+  filePath="${1}"
+  if test -f "${filePath}"; then
+    sudo bash -c ". ${filePath}"
+  fi
+}

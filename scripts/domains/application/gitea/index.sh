@@ -4,5 +4,6 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/gitea/utilities.sh"
 
 function SetUpGitea () {
-  InstallPostgreSql
+  InstallGiteaPrerequisites
+  InstallGitea
 }

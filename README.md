@@ -29,6 +29,7 @@ enabling temporary access to the "root" account
 (because you can't rename the user you currently logged in).
 
 <!-- markdownlint-disable MD013 -->
+
 ```bash
 ipAddress=50.70.150.30
 
@@ -76,6 +77,7 @@ service ssh restart
 # Disconnect from your machine
 exit
 ```
+
 <!-- markdownlint-enable MD013 -->
 
 ### Configure an SSH key
@@ -91,19 +93,23 @@ ssh-keygen -t ed25519 -N '' -f ~/.ssh/id_ed25519
 Then add it to your server by using:
 
 <!-- markdownlint-disable MD013 -->
+
 ```bash
 ipAddress=50.70.150.30
 userName="johndoe"
 ssh "${userName}"@"${ipAddress}" "echo '$(cat ~/.ssh/id_ed25519.pub)' | tee -a ~/.ssh/authorized_keys > /dev/null"
 ```
+
 <!-- markdownlint-enable MD013 -->
 
 You can also add it to the root account:
 
 <!-- markdownlint-disable MD013 -->
+
 ```bash
 ssh -t "${userName}"@"${ipAddress}" "echo '$(cat ~/.ssh/id_ed25519.pub)' | sudo tee -a /root/.ssh/authorized_keys > /dev/null"
 ```
+
 <!-- markdownlint-enable MD013 -->
 
 ### Point your domain names to your machine IP address
@@ -137,22 +143,22 @@ ssh johndoe@50.70.150.30
 
 [Back to top ↑](#table-of-contents)
 
-Define the `SERVER_SETUP_HOME_PATH` environment variable in your `~/.bashrc` file:
-
-```bash
-echo "export SERVER_SETUP_HOME_PATH=${HOME}/.server-setup" | tee -a ~/.bashrc > /dev/null
-```
-
-Make it available in the current shell:
-
-```bash
-. ~/.bashrc
-```
-
 Clone this repository:
 
 ```bash
-git clone https://github.com/RomainFallet/server-setup "${SERVER_SETUP_HOME_PATH}"
+git clone https://github.com/RomainFallet/server-setup ~/.server-setup
+```
+
+Run install script:
+
+```bash
+bash ~/.server-setup/scripts/install.sh
+```
+
+Reload your `.bashrc` to make aliases available:
+
+```bash
+. ~/.bashrc
 ```
 
 ## Update
@@ -160,7 +166,7 @@ git clone https://github.com/RomainFallet/server-setup "${SERVER_SETUP_HOME_PATH
 [Back to top ↑](#table-of-contents)
 
 ```bash
-cd ~/.server-setup && git pull
+ss:self-update
 ```
 
 ## Recipes
@@ -170,5 +176,13 @@ cd ~/.server-setup && git pull
 [Back to top ↑](#table-of-contents)
 
 ```bash
-bash "${SERVER_SETUP_HOME_PATH}"/scripts/recipes/mail-machine/index.sh
+ss:recipes:mail-machine
+```
+
+### Tools machine
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:recipes:tools-machine
 ```

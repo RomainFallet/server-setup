@@ -21,8 +21,9 @@ function AppendTextInFileIfNotFound () {
   text="${1}"
   filePath="${2}"
   pattern=$(echo "${text}" | tr -d '\n')
-  fileContent=$(< "${filePath}" tr -d '\n')
-  if [[ "${fileContent}" != *"${pattern}"* ]]
+  fileContent=$(sudo cat "${filePath}")
+  fileContentWithoutNewLines=$(echo "${fileContent}" | tr -d '\n')
+  if [[ "${fileContentWithoutNewLines}" != *"${pattern}"* ]]
   then
     echo "${text}" | sudo tee -a "${filePath}" > /dev/null
   fi
@@ -32,7 +33,7 @@ function ReplaceTextInFile () {
   regexPattern="${1}"
   replacementText="${2}"
   filePath="${3}"
-  sudo sed -i'.tmp' -E "s|${regexPattern}|${replacementText}|g" "${filePath}"
+  sudo sed -i'.tmp' --regexp-extended "s|${regexPattern}|${replacementText}|g" "${filePath}"
   sudo rm -f "${filePath}".tmp
 }
 
@@ -62,3 +63,48 @@ function MakeFileExecutable () {
   sudo chmod u+x "${filePath}"
 }
 
+function RemoveFile () {
+  filePath="${1}"
+  sudo rm --force "${filePath}"
+}
+
+function CopyFile () {
+  filePath="${1}"
+  destinationPath="${2}"
+  sudo cp --force "${filePath}" "${destinationPath}"
+}
+
+function DownloadFile () {
+  url="${1}"
+  destinationPath="${2}"
+  wget "${url}" --output-document "${destinationPath}"
+}
+
+function SetDefaultDirectoryPermissions () {
+  directoryPath="${1}"
+  sudo chmod -R 750 "${directoryPath}"
+}
+
+function GetConfigurationFileValue () {
+  filePath="${1}"
+  key="${2}"
+  if sudo test -f "${filePath}"; then
+    sudo awk "/^${key}/{print \$3}" "${filePath}"
+  fi
+}
+
+function SetConfigurationFileValue () {
+  filePath="${1}"
+  key="${2}"
+  value="${3}"
+  ReplaceTextInFile "${key}\s=\s.*" "${key} = ${value}" "${filePath}"
+  AppendTextInFileIfNotFound "${key} = ${value}" "${filePath}"
+}
+
+function CreateFileSymbolicLinkIfNotExisting () {
+  symbolicLinkPath="${1}"
+  targetedFilePath="${2}"
+  if ! test -f "${symbolicLinkPath}"; then
+    sudo ln -s "${targetedFilePath}" "${symbolicLinkPath}"
+  fi
+}
