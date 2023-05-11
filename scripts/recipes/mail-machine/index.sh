@@ -12,6 +12,6 @@
 set -e
 SetUpSsh
 SetUpBasicSystemConfiguration
+SetUpMailInABox
 # shellcheck disable=SC2119
 SetUpMailMachineBackups
-SetUpMailInABox
