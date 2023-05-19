@@ -14,8 +14,9 @@ function SetUpMailMachineBackups () {
   AskIfNotSet sshHostName 'Enter SSH hostname of backup machine'
   AskIfNotSet healthCheckId 'Enter your HealthChecks.io monitoring ID'
   # shellcheck disable=SC2088
-  CreateBackupScript "/home/user-data/" "${sshUserName}" "${sshHostName}" "~/data" "${healthCheckId}"
+  CreateMailMachineBackupScript "${sshUserName}" "${sshHostName}" "${healthCheckId}"
   # shellcheck disable=SC2088
-  CreateRestoreBackupScript  "~/data" "${sshUserName}" "${sshHostName}" "/home/user-data"
+  CreateMailMachineRestoreBackupScript "${sshUserName}" "${sshHostName}"
   CreateWeeklyBackupCronJob
+  RestoreMailMachineBackupScript
 }

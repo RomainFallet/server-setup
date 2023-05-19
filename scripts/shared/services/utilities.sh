@@ -14,3 +14,12 @@ function RestartSystemdService () {
   sudo systemctl restart "${serviceName}.service"
 }
 
+function StartSystemdService () {
+  serviceName="${1}"
+  sudo systemctl restart "${serviceName}.service"
+}
+
+function FollowSystemdServiceLogs () {
+  serviceName="${1}"
+  sudo journalctl --follow --unit "${serviceName}.service"
+}

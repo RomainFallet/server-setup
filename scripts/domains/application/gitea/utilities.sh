@@ -23,11 +23,11 @@ function DownloadGiteaBinaryIfOutdated () {
 }
 
 function InstallGiteaPrerequisites () {
-  InstallAptPackageIfNotExisting 'git'
-  InstallAptPackageIfNotExisting 'postgresql'
-  InstallAptPackageIfNotExisting 'jq'
-  InstallAptPackageIfNotExisting 'nginx'
-  InstallAptPackageIfNotExisting 'certbot'
+  InstallPackageIfNotExisting 'git'
+  InstallPackageIfNotExisting 'postgresql'
+  InstallPackageIfNotExisting 'jq'
+  InstallPackageIfNotExisting 'nginx'
+  InstallPackageIfNotExisting 'certbot'
 }
 
 function GetLatestGiteaVersion () {

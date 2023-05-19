@@ -47,3 +47,13 @@ function RestartService () {
   serviceName="${1}"
   RestartSystemdService "${serviceName}"
 }
+
+function StartService () {
+  serviceName="${1}"
+  StartSystemdService "${serviceName}"
+}
+
+function FollowServiceLogs () {
+  serviceName="${1}"
+  FollowSystemdServiceLogs "${serviceName}"
+}

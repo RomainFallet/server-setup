@@ -8,7 +8,7 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/services/index.sh"
 
 function InstallFail2Ban () {
-  InstallAptPackageIfNotExisting 'fail2ban'
+  InstallPackageIfNotExisting 'fail2ban'
 }
 
 function CreateFail2BanConfiguration () {

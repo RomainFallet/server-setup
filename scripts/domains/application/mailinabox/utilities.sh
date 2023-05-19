@@ -8,7 +8,7 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/shell/index.sh"
 
 function InstallGit () {
-  InstallAptPackageIfNotExisting 'git'
+  InstallPackageIfNotExisting 'git'
 }
 
 function InstallMailInABox () {
