@@ -13,6 +13,6 @@ function InstallGit () {
 
 function InstallMailInABox () {
   CloneRepositoryIfNotExisting https://github.com/mail-in-a-box/mailinabox ~/mailinabox
-  CheckoutRepository ~/mailinabox 'v61.1'
+  CheckoutRepository ~/mailinabox 'v62'
   ExecShellScriptWithRoot ~/mailinabox/ ./setup/start.sh
 }
