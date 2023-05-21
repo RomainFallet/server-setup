@@ -179,10 +179,10 @@ ss:self-update
 ss:recipes:mail-machine
 ```
 
-### Tools machine
+### Daily backup machine
 
 [Back to top ↑](#table-of-contents)
 
 ```bash
-ss:recipes:tools-machine
+ss:recipes:daily-backup-machine
 ```

@@ -17,6 +17,6 @@ function SetUpMailMachineBackups () {
   CreateMailMachineBackupScript "${sshUserName}" "${sshHostName}" "${healthCheckId}"
   # shellcheck disable=SC2088
   CreateMailMachineRestoreBackupScript "${sshUserName}" "${sshHostName}"
-  CreateWeeklyBackupCronJob
+  CreateDailyBackupCronJob
   RestoreMailMachineBackupScript
 }
