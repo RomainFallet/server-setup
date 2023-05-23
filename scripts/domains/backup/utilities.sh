@@ -44,9 +44,9 @@ cp --archive /home/user-data/server-setup /etc/"
 function RestoreMailMachineBackupScript () {
   AskIfNotSet restoreBackup 'Restore backup (y/n)' 'n'
   if [[ "${restoreBackup?:}" == 'y' ]]; then
-      InstallPackageIfNotExisting 'rsync'
-      StartService 'server-setup-restore-backup'
-      FollowServiceLogs 'server-setup-restore-backup'
+    InstallPackageIfNotExisting 'rsync'
+    StartService 'server-setup-restore-backup'
+    FollowServiceLogs 'server-setup-restore-backup'
   fi
 }
 
@@ -67,9 +67,6 @@ cp --archive /var/log /root/data/
 cp --archive /var/lib /root/data/
 cp --archive /var/opt /root/data/
 cp --archive /home /root/data/
-awk -F: '($3>=1000) && ($3<=29999)' /etc/passwd | tee /root/data/passwd.bak > /dev/null
-awk -F: '($3>=1000) && ($3<=29999)' /etc/group | tee /root/data/group.bak > /dev/null
-awk -F: '($3>=1000) && ($3<=29999) {print $1}' /etc/passwd | tee - |egrep -f - /etc/shadow | tee /root/data/shadow.back > /dev/null
 /usr/bin/rsync -av --delete --progress /root/data/ ${sshUser}@${sshHostname}:~/data
 /usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
   filePath=/var/opt/server-setup/backup.sh
@@ -80,21 +77,32 @@ awk -F: '($3>=1000) && ($3<=29999) {print $1}' /etc/passwd | tee - |egrep -f - /
 }
 
 function CreateHostingMachineRestoreBackupScript () {
-  sourcePath="${1}"
-  sshUser="${2}"
-  sshHostname="${3}"
-  destinationPath="${4}"
+  sshUser="${1}"
+  sshHostname="${2}"
   fileContent="#!/bin/bash
 set -e
 sudo ufw disallow 443/tcp
 sudo ufw disallow 80/tcp
-/usr/bin/rsync -av --delete ${sshUser}@${sshHostname}:${sourcePath} ${destinationPath}
-
+/usr/bin/rsync -av --delete ${sshUser}@${sshHostname}:~/data /root/data
+cp --archive /root/data/nginx /etc/
+cp --archive /root/data/letsencrypt /etc/
+cp --archive /root/data/systemd /etc/
+cp --archive /root/data/server-setup /etc/
+cp --archive /root/data/www /var/
+cp --archive /root/data/log /var/
+cp --archive /root/data/lib /var/
+cp --archive /root/data/opt /var/
+cp --archive /root/data/home /
+for dir in /var/opt/*/
+do
+    dir=\${dir%*/}
+    echo \${dir##*/}
+done
+su --command \"psql --file /root/data/pg_dump.sql\" - postgres
 sudo systemctl daemon-reload
 sudo systemctl restart nginx
 sudo ufw allow 443/tcp
-sudo ufw allow 80/tcp
-"
+sudo ufw allow 80/tcp"
   filePath=/var/opt/server-setup/restore-backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
   SetFileContent "${fileContent}" "${filePath}"
