@@ -6,6 +6,7 @@ serverSetupUserConfigurationPath="${HOME}/.server-setup-configuration"
 serverSetupUserConfiguration="export SERVER_SETUP_HOME_PATH=${serverSetupHomePath}
 alias ss:self-update='cd ${serverSetupHomePath} && git pull origin master && cd ${HOME} && bash ${serverSetupHomePath}/scripts/install.sh'
 alias ss:recipes:mail-machine='bash ${serverSetupHomePath}/scripts/recipes/mail-machine/index.sh'
+alias ss:recipes:hosting-machine='bash ${serverSetupHomePath}/scripts/recipes/hosting-machine/index.sh'
 alias ss:recipes:daily-backup-machine='bash ${serverSetupHomePath}/scripts/recipes/daily-backup-machine/index.sh'"
 serverSetupConfigurationSourcingCommand=". ${serverSetupUserConfigurationPath}"
 serverSetupConfigurationPath=/etc/server-setup

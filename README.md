@@ -179,6 +179,14 @@ ss:self-update
 ss:recipes:mail-machine
 ```
 
+### Hosting machine
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:recipes:hosting-machine
+```
+
 ### Daily backup machine
 
 [Back to top ↑](#table-of-contents)

@@ -24,10 +24,6 @@ function DownloadGiteaBinaryIfOutdated () {
 
 function InstallGiteaPrerequisites () {
   InstallPackageIfNotExisting 'git'
-  InstallPackageIfNotExisting 'postgresql'
-  InstallPackageIfNotExisting 'jq'
-  InstallPackageIfNotExisting 'nginx'
-  InstallPackageIfNotExisting 'certbot'
 }
 
 function GetLatestGiteaVersion () {
