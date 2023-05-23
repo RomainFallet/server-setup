@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# shellcheck source=./utilities.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/security/utilities.sh"
-# shellcheck source=../../shared/firewall/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/firewall/index.sh"
 
 function SetUpSsh () {

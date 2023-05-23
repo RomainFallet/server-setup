@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# shellcheck source=../../shared/files/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
-# shellcheck source=../../shared/services/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/services/index.sh"
-# shellcheck source=../../shared/cron/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/cron/index.sh"
-# shellcheck source=../../shared/firewall/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/firewall/index.sh"
-# shellcheck source=../../shared/packages/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/packages/index.sh"
 
 function CreateMailMachineBackupScript () {
@@ -43,7 +43,7 @@ cp --archive /home/user-data/server-setup /etc/"
 
 function RestoreMailMachineBackupScript () {
   AskIfNotSet restoreBackup 'Restore backup (y/n)' 'n'
-  if [[ "${restoreBackup}" == 'y' ]]; then
+  if [[ "${restoreBackup?:}" == 'y' ]]; then
       InstallPackageIfNotExisting 'rsync'
       StartService 'server-setup-restore-backup'
       FollowServiceLogs 'server-setup-restore-backup'

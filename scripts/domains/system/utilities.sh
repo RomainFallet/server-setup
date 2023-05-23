@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# shellcheck source=../../shared/files/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
-# shellcheck source=../../shared/variables/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/variables/index.sh"
 
 function SetTimeZone () {

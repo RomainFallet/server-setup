@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# shellcheck source=../files/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
-# shellcheck source=../users/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/users/index.sh"
-# shellcheck source=../services/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/services/index.sh"
-# shellcheck source=./utilities.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/web-server/utilities.sh"
 
 function CreateProxyDomainName () {

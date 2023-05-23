@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# shellcheck source=./utilities.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/firewall/utilities.sh"
 
 function OpenFireWallPort () {

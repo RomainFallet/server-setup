@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# shellcheck source=../files/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
 
 function GenerateTlsCertificateWithCertbot () {

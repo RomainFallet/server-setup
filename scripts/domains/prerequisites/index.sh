@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# shellcheck source=../../shared/packages/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/packages/index.sh"
 
 function SetUpHostingMachinePrerequisites () {

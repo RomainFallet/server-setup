@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# shellcheck source=../../shared/files/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
-# shellcheck source=../../shared/packages/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/packages/index.sh"
-# shellcheck source=../../shared/services/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/services/index.sh"
 
 function InstallFail2Ban () {

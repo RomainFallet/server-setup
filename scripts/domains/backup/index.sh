@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# shellcheck source=./utilities.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/backup/utilities.sh"
-# shellcheck source=../../shared/variables/index.sh
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/variables/index.sh"
 
 

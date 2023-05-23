@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# shellcheck source=../../../shared/packages/index.sh
+# shellcheck source-path=../../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/packages/index.sh"
-# shellcheck source=../../../shared/git/index.sh
+# shellcheck source-path=../../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/git/index.sh"
-# shellcheck source=../../../shared/shell/index.sh
+# shellcheck source-path=../../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/shell/index.sh"
 
 function InstallGit () {
