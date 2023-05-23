@@ -10,6 +10,7 @@
 - [Update](#update)
 - [Recipes](#recipes)
   - [Mail machine](#mail-machine)
+- [Contributing](#contributing)
 
 ## Prerequisites
 
@@ -193,4 +194,50 @@ ss:recipes:hosting-machine
 
 ```bash
 ss:recipes:daily-backup-machine
+```
+
+## Contributing
+
+### Development installation
+
+[Back to top ↑](#table-of-contents)
+
+Clone this repository:
+
+```bash
+git clone https://github.com/RomainFallet/server-setup
+```
+
+Install dependencies:
+
+```bash
+npm ci
+```
+
+### Project commands
+
+[Back to top ↑](#table-of-contents)
+
+Lint markdown and bash files:
+
+```bash
+npm run lint
+```
+
+Format markdown files!
+
+```bash
+npm run format
+```
+
+Check dependencies vulnerabilities:
+
+```bash
+npm audit
+```
+
+Install latest dependencies patches:
+
+```bash
+npm update
 ```
