@@ -9,8 +9,9 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/mailinabox/index.sh"
 
+SetUpMailMachineRestoreBackupScript
+AskBackupRestore
 SetUpSsh
 SetUpBasicSystemConfiguration
 SetUpMailInABox
-# shellcheck disable=SC2119
-SetUpMailMachineBackups
+SetUpMailMachineBackupScript

@@ -18,7 +18,7 @@ function CreateMailMachineBackupScript () {
   fileContent="#!/bin/bash
 set -e
 cp --archive /etc/server-setup /home/user-data/
-/usr/bin/rsync -av --delete --progress /home/user-data/ ${sshUser}@${sshHostname}:~/data
+/usr/bin/rsync --archive --verbose --delete --progress /home/user-data/ ${sshUser}@${sshHostname}:~/data
 /usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
   filePath=/var/opt/server-setup/backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
@@ -32,22 +32,13 @@ function CreateMailMachineRestoreBackupScript () {
   sshHostname="${2}"
   fileContent="#!/bin/bash
 set -e
-/usr/bin/rsync -av --delete ${sshUser}@${sshHostname}:~/data /home/user-data
+/usr/bin/rsync --archive --verbose --delete ${sshUser}@${sshHostname}:~/data/ /home/user-data
 cp --archive /home/user-data/server-setup /etc/"
   filePath=/var/opt/server-setup/restore-backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
   SetFileContent "${fileContent}" "${filePath}"
   MakeFileExecutable "${filePath}"
   CreateService 'server-setup-restore-backup' "/bin/bash ${filePath}" 'root'
-}
-
-function RestoreMailMachineBackupScript () {
-  AskIfNotSet restoreBackup 'Restore backup (y/n)' 'n'
-  if [[ "${restoreBackup?:}" == 'y' ]]; then
-    InstallPackageIfNotExisting 'rsync'
-    StartService 'server-setup-restore-backup'
-    FollowServiceLogs 'server-setup-restore-backup'
-  fi
 }
 
 function CreateHostingMachineBackupScript () {
@@ -67,7 +58,7 @@ cp --archive /var/log /root/data/
 cp --archive /var/lib /root/data/
 cp --archive /var/opt /root/data/
 cp --archive /home /root/data/
-/usr/bin/rsync -av --delete --progress /root/data/ ${sshUser}@${sshHostname}:~/data
+/usr/bin/rsync --archive --verbose --delete --progress /root/data/ ${sshUser}@${sshHostname}:~/data
 /usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
   filePath=/var/opt/server-setup/backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
@@ -83,7 +74,7 @@ function CreateHostingMachineRestoreBackupScript () {
 set -e
 sudo ufw disallow 443/tcp
 sudo ufw disallow 80/tcp
-/usr/bin/rsync -av --delete ${sshUser}@${sshHostname}:~/data /root/data
+/usr/bin/rsync --archive --verbose --delete ${sshUser}@${sshHostname}:~/data /root/data
 cp --archive /root/data/nginx /etc/
 cp --archive /root/data/letsencrypt /etc/
 cp --archive /root/data/systemd /etc/

@@ -43,8 +43,14 @@ function AskIfNotSet() {
 function Ask() {
   variableName="${1}"
   askText="${2}"
+  defaultValue="${3}"
 
-  read -r -p "${askText}: " "${variableName?}"
+  if [[ -z "${!variableName}" ]] && [[ -z "${defaultValue}" ]]; then
+    read -r -p "${askText}: " "${variableName?}"
+  fi
+  if [[ -z "${!variableName}" ]] && [[ -n "${defaultValue}" ]]; then
+    read -r -p "${askText} [${defaultValue}]: " "${variableName?}"
+  fi
   if [[ -z "${!variableName}" ]]; then
     Ask "${variableName}" "${askText}"
   fi
