@@ -30,7 +30,7 @@ After=network.target
 [Service]
 Type=simple
 ExecStart=${executablePath}
-Restart=always
+Restart=on-failure
 RestartSec=2s
 User=${userName}
 Group=${userName}${workingDirectoryConfiguration}${environmentConfiguration}
