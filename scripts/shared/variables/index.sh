@@ -40,3 +40,12 @@ function AskIfNotSet() {
   fi
 }
 
+function Ask() {
+  variableName="${1}"
+  askText="${2}"
+
+  read -r -p "${askText}: " "${variableName?}"
+  if [[ -z "${!variableName}" ]]; then
+    Ask "${variableName}" "${askText}"
+  fi
+}
