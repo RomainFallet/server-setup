@@ -75,6 +75,7 @@ set -e
 sudo ufw disallow 443/tcp
 sudo ufw disallow 80/tcp
 /usr/bin/rsync --archive --verbose --delete ${sshUser}@${sshHostname}:~/data /root/data
+su --command \"psql --file /root/data/pg_dump.sql\" - postgres
 cp --archive /root/data/nginx /etc/
 cp --archive /root/data/letsencrypt /etc/
 cp --archive /root/data/systemd /etc/
@@ -84,14 +85,18 @@ cp --archive /root/data/log /var/
 cp --archive /root/data/lib /var/
 cp --archive /root/data/opt /var/
 cp --archive /root/data/home /
-for dir in /var/opt/*/
+for directoryName in /var/opt/*/
+systemctl daemon-reload
+systemctl restart nginx
 do
-    dir=\${dir%*/}
-    echo \${dir##*/}
+  directoryName=\${directoryName%*/}
+  applicationUsername=\${directoryName##*/}
+  if ! id \"\${applicationUsername}\" > /dev/null; then
+    adduser --system --shell /bin/bash --group --disabled-password --home /home/\"\${applicationUsername}\" \"\${applicationUsername}\"
+  fi
+  chown -R \"\${applicationUsername}\":\"\${applicationUsername}\" /var/{lib,opt}/\"\${applicationUsername}\"
+  systemctl restart \"\${applicationUsername}\".service
 done
-su --command \"psql --file /root/data/pg_dump.sql\" - postgres
-sudo systemctl daemon-reload
-sudo systemctl restart nginx
 sudo ufw allow 443/tcp
 sudo ufw allow 80/tcp"
   filePath=/var/opt/server-setup/restore-backup.sh

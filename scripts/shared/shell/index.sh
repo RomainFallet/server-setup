@@ -14,3 +14,8 @@ function SourceFileIfExisting () {
     sudo bash -c ". ${filePath}"
   fi
 }
+
+function DisplayMessage () {
+  message="${1}"
+  echo "${message}"
+}

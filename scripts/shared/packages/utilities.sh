@@ -6,3 +6,8 @@ function InstallAptPackageIfNotExisting() {
     sudo apt install -y "${aptPackageName}"
   fi
 }
+
+function UpgradeAllAptPackages () {
+  sudo apt update
+  sudo apt dist-upgrade -y
+}

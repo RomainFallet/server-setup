@@ -7,3 +7,7 @@ function InstallPackageIfNotExisting() {
   packageName="${1}"
   InstallAptPackageIfNotExisting "${packageName}"
 }
+
+function UpgradeAllPackages () {
+  UpgradeAllAptPackages
+}
