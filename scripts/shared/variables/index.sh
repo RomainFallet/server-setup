@@ -51,6 +51,9 @@ function Ask() {
   if [[ -z "${!variableName}" ]] && [[ -n "${defaultValue}" ]]; then
     read -r -p "${askText} [${defaultValue}]: " "${variableName?}"
   fi
+  if [[ -z "${!variableName}" ]] && [[ -n "${defaultValue}" ]]; then
+    declare -g "${variableName}"="${defaultValue}"
+  fi
   if [[ -z "${!variableName}" ]]; then
     Ask "${variableName}" "${askText}"
   fi

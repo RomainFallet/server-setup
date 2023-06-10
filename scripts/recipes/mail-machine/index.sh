@@ -12,6 +12,6 @@
 SetUpMailMachineRestoreBackupScript
 AskBackupRestore
 SetUpSsh
-SetUpBasicSystemConfiguration
+SetUpAutomaticUpdates
 SetUpMailInABox
 SetUpMailMachineBackupScript

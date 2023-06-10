@@ -8,5 +8,9 @@ function SetUpBasicSystemConfiguration () {
   SetTimeZone
   # shellcheck disable=SC2119
   SetHostName
-  ConfigureAutomaticUpdates
+  SetUpUnattentedUpgrade
+}
+
+function SetUpAutomaticUpdates () {
+  SetUpUnattentedUpgrade
 }

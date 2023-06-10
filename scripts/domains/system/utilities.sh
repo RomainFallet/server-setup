@@ -17,7 +17,7 @@ function SetHostName () {
   sudo hostnamectl set-hostname "${hostName}"
 }
 
-function ConfigureAutomaticUpdates () {
+function SetUpUnattentedUpgrade () {
   periocConfigPath=/etc/apt/apt.conf.d/10periodic
   unattendedUpgradeConfigPath=/etc/apt/apt.conf.d/50unattended-upgrades
   periodicConfig="APT::Periodic::Update-Package-Lists \"1\";

@@ -10,3 +10,7 @@ function SetUpHostingMachinePrerequisites () {
   InstallPackageIfNotExisting 'nginx'
   InstallPackageIfNotExisting 'certbot'
 }
+
+function SetUpBackupMachinePrerequisites () {
+  UpgradeAllPackages
+}
