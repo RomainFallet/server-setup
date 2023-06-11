@@ -108,3 +108,13 @@ function CreateFileSymbolicLinkIfNotExisting () {
     sudo ln -s "${targetedFilePath}" "${symbolicLinkPath}"
   fi
 }
+
+function MakeFileProtected () {
+  filePath="${1}"
+  sudo chattr +i "${filePath}"
+}
+
+function MakeFileUnprotected () {
+  filePath="${1}"
+  sudo chattr -i "${filePath}"
+}

@@ -2,6 +2,8 @@
 
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/packages/index.sh"
+# shellcheck source-path=../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
 
 function SetUpHostingMachinePrerequisites () {
   UpgradeAllPackages
@@ -13,4 +15,8 @@ function SetUpHostingMachinePrerequisites () {
 
 function SetUpBackupMachinePrerequisites () {
   UpgradeAllPackages
+}
+
+function SetUpMailMachinePrerequisites () {
+  MakeFileUnprotected /etc/resolv.conf
 }
