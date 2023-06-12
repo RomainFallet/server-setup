@@ -85,6 +85,33 @@ function SetDefaultDirectoryPermissions () {
   sudo chmod -R 750 "${directoryPath}"
 }
 
+function SetDirectoryPermissions () {
+  directoryPath="${1}"
+  permissions="${2}"
+  sudo chmod -R "${permissions}" "${directoryPath}"
+}
+
+function SetDirectoryOwnership () {
+  directoryPath="${1}"
+  userName="${2}"
+  groupName="${3}"
+  if [[ -z "${groupName}" ]]; then
+    groupName="${userName}"
+  fi
+  sudo chown -R "${userName}":"${groupName}" "${directoryPath}"
+}
+
+
+function SetFileOwnership () {
+  filePath="${1}"
+  userName="${2}"
+  groupName="${3}"
+  if [[ -z "${groupName}" ]]; then
+    groupName="${userName}"
+  fi
+  sudo chown "${userName}":"${groupName}" "${filePath}"
+}
+
 function GetConfigurationFileValue () {
   filePath="${1}"
   key="${2}"

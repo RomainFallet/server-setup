@@ -19,6 +19,7 @@ function CreateMailMachineBackupScript () {
 set -e
 cp --archive /etc/server-setup /home/user-data/
 /usr/bin/rsync --archive --verbose --delete --progress /home/user-data/ ${sshUser}@${sshHostname}:~/data
+systemctl start fix-mailinabox-permissions
 /usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
   filePath=/var/opt/server-setup/backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
@@ -33,6 +34,7 @@ function CreateMailMachineRestoreBackupScript () {
   fileContent="#!/bin/bash
 set -e
 /usr/bin/rsync --archive --verbose --delete ${sshUser}@${sshHostname}:~/data/ /home/user-data
+systemctl start fix-mailinabox-permissions
 cp --archive /home/user-data/server-setup /etc/"
   filePath=/var/opt/server-setup/restore-backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"

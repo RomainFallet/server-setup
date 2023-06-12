@@ -7,23 +7,3 @@ function CreateUserIfNotExisting () {
   fi
 }
 
-function SetDirectoryOwnership () {
-  directoryPath="${1}"
-  userName="${2}"
-  groupName="${3}"
-  if [[ -z "${groupName}" ]]; then
-    groupName="${userName}"
-  fi
-  sudo chown -R "${userName}":"${groupName}" "${directoryPath}"
-}
-
-
-function SetFileOwnership () {
-  filePath="${1}"
-  userName="${2}"
-  groupName="${3}"
-  if [[ -z "${groupName}" ]]; then
-    groupName="${userName}"
-  fi
-  sudo chown "${userName}":"${groupName}" "${filePath}"
-}

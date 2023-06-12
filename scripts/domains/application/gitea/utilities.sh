@@ -191,7 +191,7 @@ INSTALL_LOCK       = true
 INTERNAL_TOKEN     = ${giteaInternalToken}
 PASSWORD_HASH_ALGO = pbkdf2"
   SetFileContent "${fileContent}" "${giteaConfigurationFilePath}"
-  CreateService "${giteaApplicationName}" "${giteaBinaryPath} web --config ${giteaConfigurationFilePath}" "${giteaApplicationName}" "${giteaDataPath}" "${giteaEnvironmentVariables}"
+  CreateStartupService "${giteaApplicationName}" "${giteaBinaryPath} web --config ${giteaConfigurationFilePath}" "${giteaApplicationName}" "${giteaDataPath}" "${giteaEnvironmentVariables}"
   RestartService "${giteaApplicationName}"
   CreateProxyDomainName "${giteaApplicationName}" "${giteaDomainName}" "${giteaInternalPort}" "${letsEncryptEmail:?}"
   giteaContentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${giteaApplicationName}"/"${giteaDomainName}"/content-security-policy.conf

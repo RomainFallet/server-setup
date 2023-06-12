@@ -17,6 +17,3 @@ function SetUpBackupMachinePrerequisites () {
   UpgradeAllPackages
 }
 
-function SetUpMailMachinePrerequisites () {
-  MakeFileUnprotected /etc/resolv.conf
-}

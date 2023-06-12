@@ -40,6 +40,16 @@ WantedBy=multi-user.target"
   filePath=/etc/systemd/system/"${name}".service
   SetFileContent "${fileContent}" "${filePath}"
   ReloadSystemdServiceFiles
+}
+
+function CreateStartupService () {
+  name="${1}"
+  executablePath="${2}"
+  userName="${3}"
+  workingDirectory="${4}"
+  environmentVariables="${5}"
+
+  CreateService "${name}" "${executablePath}" "${userName}" "${workingDirectory}" "${environmentVariables}"
   EnableSystemdService "${name}"
 }
 
