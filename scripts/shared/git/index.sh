@@ -13,7 +13,7 @@ function CheckoutRepository () {
   path="${1}"
   gitRreference="${2}"
   cd "${path}" || exit
-  git fetch origin main
+  git fetch origin
   git checkout "${gitRreference}"
   cd ~/ || exit
 }
