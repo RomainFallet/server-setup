@@ -11,9 +11,10 @@
 
 SetUpHostingMachinePrerequisites
 SetUpHostingMachineRestoreBackupScript
+SetUpHostingMachineBackupScript
 AskBackupRestore
 SetUpSsh
 SetUpFail2Ban
 SetUpMachineFireWall
 SetUpBasicSystemConfiguration
-SetUpHostingMachineBackupScript
+

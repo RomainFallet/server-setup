@@ -22,10 +22,6 @@ function DownloadGiteaBinaryIfOutdated () {
   fi
 }
 
-function InstallGiteaPrerequisites () {
-  InstallPackageIfNotExisting 'git'
-}
-
 function GetLatestGiteaVersion () {
   filePath=/tmp/gitea-version.json
   DownloadFile 'https://dl.gitea.com/gitea/version.json' "${filePath}"
@@ -70,7 +66,8 @@ function CreateOrUpdateGiteaAdminstratorAccount () {
   fi
 }
 
-function InstallGitea () {
+function InstallOrUpgradeGitea () {
+  InstallPackageIfNotExisting 'git'
   giteaApplicationName='gitea'
   giteaDatabaseName="${giteaApplicationName}db"
   giteaDataPath=/var/lib/gitea
