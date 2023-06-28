@@ -65,3 +65,7 @@ function RestartSsh () {
 function BackupSshConfigFile () {
   BackupFile /etc/ssh/sshd_config
 }
+
+function RemoveOtherSshConfigFiles () {
+  RemoveFile /etc/ssh/sshd_config.d/50-cloud-init.conf
+}

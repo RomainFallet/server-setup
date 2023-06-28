@@ -7,6 +7,7 @@
 
 function SetUpSsh () {
   BackupSshConfigFile
+  RemoveOtherSshConfigFiles
   DisableSshPasswordAuthentication
   ConfigureSshKeepAlive
   RestartSsh
