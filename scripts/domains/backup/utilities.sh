@@ -43,7 +43,7 @@ cp --archive /home/user-data/server-setup /etc/"
   CreateService 'server-setup-restore-backup' "/bin/bash ${filePath}" 'root'
 }
 
-function CreateHostingMachineBackupScript () {
+function CreateApplicationMachineBackupScript () {
   sshUser="${1}"
   sshHostname="${2}"
   healthChecksUuid="${3}"
@@ -51,11 +51,8 @@ function CreateHostingMachineBackupScript () {
 set -e
 mkdir -p /root/data
 su --command \"pg_dumpall --clean --if-exists\" - postgres | sudo tee /root/data/pg_dump.sql > /dev/null
-cp --archive /etc/nginx /root/data/
-cp --archive /etc/letsencrypt /root/data/
 cp --archive /etc/systemd /root/data/
 cp --archive /etc/server-setup /root/data/
-cp --archive /var/www /root/data/
 cp --archive /var/log /root/data/
 cp --archive /var/lib /root/data/
 cp --archive /var/opt /root/data/
@@ -69,7 +66,7 @@ cp --archive /home /root/data/
   CreateService 'server-setup-backup' "/bin/bash ${filePath}" 'root'
 }
 
-function CreateHostingMachineRestoreBackupScript () {
+function CreateApplicationMachineRestoreBackupScript () {
   sshUser="${1}"
   sshHostname="${2}"
   fileContent="#!/bin/bash
@@ -78,18 +75,13 @@ sudo ufw disallow 443/tcp
 sudo ufw disallow 80/tcp
 /usr/bin/rsync --archive --verbose --delete ${sshUser}@${sshHostname}:~/data /root/data
 su --command \"psql --file /root/data/pg_dump.sql\" - postgres
-cp --archive /root/data/nginx /etc/
-cp --archive /root/data/letsencrypt /etc/
 cp --archive /root/data/systemd /etc/
 cp --archive /root/data/server-setup /etc/
-cp --archive /root/data/www /var/
 cp --archive /root/data/log /var/
 cp --archive /root/data/lib /var/
 cp --archive /root/data/opt /var/
 cp --archive /root/data/home /
-for directoryName in /var/opt/*/
 systemctl daemon-reload
-systemctl restart nginx
 do
   directoryName=\${directoryName%*/}
   applicationUsername=\${directoryName##*/}
@@ -99,6 +91,54 @@ do
   chown -R \"\${applicationUsername}\":\"\${applicationUsername}\" /var/{lib,opt}/\"\${applicationUsername}\"
   systemctl restart \"\${applicationUsername}\".service
 done
+sudo ufw allow 443/tcp
+sudo ufw allow 80/tcp"
+  filePath=/var/opt/server-setup/restore-backup.sh
+  CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
+  SetFileContent "${fileContent}" "${filePath}"
+  MakeFileExecutable "${filePath}"
+  CreateService 'server-setup-restore-backup' "/bin/bash ${filePath}" 'root'
+}
+
+
+function CreateHttpMachineBackupScript () {
+  sshUser="${1}"
+  sshHostname="${2}"
+  healthChecksUuid="${3}"
+  fileContent="#!/bin/bash
+set -e
+mkdir -p /root/data
+cp --archive /etc/nginx /root/data/
+cp --archive /etc/letsencrypt /root/data/
+cp --archive /etc/server-setup /root/data/
+cp --archive /var/www /root/data/
+cp --archive /var/log /root/data/
+cp --archive /home /root/data/
+/usr/bin/rsync --archive --verbose --delete --progress /root/data/ ${sshUser}@${sshHostname}:~/data
+/usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
+  filePath=/var/opt/server-setup/backup.sh
+  CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
+  SetFileContent "${fileContent}" "${filePath}"
+  MakeFileExecutable "${filePath}"
+  CreateService 'server-setup-backup' "/bin/bash ${filePath}" 'root'
+}
+
+function CreateHttpMachineRestoreBackupScript () {
+  sshUser="${1}"
+  sshHostname="${2}"
+  fileContent="#!/bin/bash
+set -e
+sudo ufw disallow 443/tcp
+sudo ufw disallow 80/tcp
+/usr/bin/rsync --archive --verbose --delete ${sshUser}@${sshHostname}:~/data /root/data
+cp --archive /root/data/nginx /etc/
+cp --archive /root/data/letsencrypt /etc/
+cp --archive /root/data/server-setup /etc/
+cp --archive /root/data/www /var/
+cp --archive /root/data/log /var/
+cp --archive /root/data/home /
+systemctl daemon-reload
+systemctl restart nginx
 sudo ufw allow 443/tcp
 sudo ufw allow 80/tcp"
   filePath=/var/opt/server-setup/restore-backup.sh

@@ -20,18 +20,18 @@ function SetUpMailMachineRestoreBackupScript () {
   CreateMailMachineRestoreBackupScript "${sshUserName:?}" "${sshHostName:?}"
 }
 
-function SetUpHostingMachineBackupScript () {
+function SetUpApplicationMachineBackupScript () {
   AskIfNotSet sshUserName 'Enter SSH username of backup machine'
   AskIfNotSet sshHostName 'Enter SSH hostname of backup machine'
   AskIfNotSet healthCheckId 'Enter your HealthChecks.io monitoring ID'
-  CreateHostingMachineBackupScript "${sshUserName:?}" "${sshHostName:?}" "${healthCheckId:?}"
+  CreateApplicationMachineBackupScript "${sshUserName:?}" "${sshHostName:?}" "${healthCheckId:?}"
   CreateDailyBackupCronJob
 }
 
-function SetUpHostingMachineRestoreBackupScript () {
+function SetUpApplicationMachineRestoreBackupScript () {
   AskIfNotSet sshUserName 'Enter SSH username of backup machine'
   AskIfNotSet sshHostName 'Enter SSH hostname of backup machine'
-  CreateHostingMachineRestoreBackupScript "${sshUserName:?}" "${sshHostName:?}"
+  CreateApplicationMachineRestoreBackupScript "${sshUserName:?}" "${sshHostName:?}"
 }
 
 function AskBackupRestore () {

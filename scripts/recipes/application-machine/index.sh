@@ -9,12 +9,12 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/prerequisites/index.sh"
 
-SetUpHostingMachinePrerequisites
-SetUpHostingMachineRestoreBackupScript
-SetUpHostingMachineBackupScript
+SetUpApplicationMachinePrerequisites
+SetUpApplicationMachineRestoreBackupScript
+SetUpApplicationMachineBackupScript
 AskBackupRestore
 SetUpSsh
 SetUpFail2Ban
 SetUpMachineFireWall
 SetUpBasicSystemConfiguration
-
+AskApplicationMachineActions

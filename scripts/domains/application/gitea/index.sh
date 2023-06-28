@@ -6,3 +6,7 @@
 function SetupGitea () {
   InstallOrUpgradeGitea
 }
+
+function SetupGiteaHttpProxy () {
+  InstallGiteaHttpProxy
+}

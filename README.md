@@ -180,12 +180,12 @@ ss:self-update
 ss:recipes:mail-machine
 ```
 
-### Hosting machine
+### Application machine
 
 [Back to top ↑](#table-of-contents)
 
 ```bash
-ss:recipes:hosting-machine
+ss:recipes:application-machine
 ```
 
 ### Daily backup machine

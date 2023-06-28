@@ -78,7 +78,6 @@ function InstallOrUpgradeGitea () {
   giteaEnvironmentVariables="USER=${giteaApplicationName} HOME=/home/${giteaApplicationName} GITEA_WORK_DIR=${giteaDataPath}"
 
   AskIfNotSet giteaDomainName "Enter your Gitea domain name"
-  AskIfNotSet letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
   AskIfNotSet giteaInternalPort "Enter your Gitea internal port"
   AskIfNotSet giteaDatabasePassword "Enter your Gitea database password"
   AskIfNotSet giteaAdministratorUserName "Enter your Gitea administrator username"
@@ -190,10 +189,17 @@ PASSWORD_HASH_ALGO = pbkdf2"
   SetFileContent "${fileContent}" "${giteaConfigurationFilePath}"
   CreateStartupService "${giteaApplicationName}" "${giteaBinaryPath} web --config ${giteaConfigurationFilePath}" "${giteaApplicationName}" "${giteaDataPath}" "${giteaEnvironmentVariables}"
   RestartService "${giteaApplicationName}"
+  CreateOrUpdateGiteaAdminstratorAccount "${giteaAdministratorUserName:?}" "${giteaAdministratorEmail:?}" "${giteaAdministratorPassword:?}"
+}
+
+function InstallGiteaHttpProxy () {
+  giteaApplicationName='gitea'
+  AskIfNotSet giteaDomainName "Enter your Gitea domain name"
+  AskIfNotSet letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
+  AskIfNotSet giteaInternalPort "Enter your Gitea internal port"
   CreateProxyDomainName "${giteaApplicationName}" "${giteaDomainName}" "${giteaInternalPort}" "${letsEncryptEmail:?}"
   giteaContentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${giteaApplicationName}"/"${giteaDomainName}"/content-security-policy.conf
   giteaContentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self' 'unsafe-inline' 'unsafe-eval' data:;\";"
   SetFileContent "${giteaContentSecurityPolicyConfiguration}" "${giteaContentSecurityPolicyConfigurationPath}"
   RestartService 'nginx'
-  CreateOrUpdateGiteaAdminstratorAccount "${giteaAdministratorUserName:?}" "${giteaAdministratorEmail:?}" "${giteaAdministratorPassword:?}"
 }
