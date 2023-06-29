@@ -43,7 +43,7 @@ function GetLatestGiteaVersion () {
 }
 
 function GetCurrentGiteaVersion () {
-  if ! test -f "${giteaBinaryPath}"; then
+  if ! sudotest -f "${giteaBinaryPath}"; then
     echo 'uninstalled'
   else
     versionString=$(sudo "${giteaBinaryPath}" --version)

@@ -17,7 +17,7 @@ function CreateMailMachineBackupScript () {
   healthChecksUuid="${3}"
   fileContent="#!/bin/bash
 set -e
-/usr/bin/rsync --archive --verbose --delete /etc/server-setup /home/user-data/server-setup
+/usr/bin/rsync --archive --verbose --delete /etc/server-setup/ /home/user-data/server-setup
 /usr/bin/rsync --archive --verbose --delete --progress /home/user-data/ ${sshUser}@${sshHostname}:~/data
 systemctl start fix-mailinabox-permissions
 /usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
@@ -35,7 +35,7 @@ function CreateMailMachineRestoreBackupScript () {
 set -e
 /usr/bin/rsync --archive --verbose --delete ${sshUser}@${sshHostname}:~/data/ /home/user-data
 systemctl start fix-mailinabox-permissions
-/usr/bin/rsync --archive --verbose --delete /home/user-data/server-setup /etc/server-setup"
+/usr/bin/rsync --archive --verbose --delete /home/user-data/server-setup/ /etc/server-setup"
   filePath=/var/opt/server-setup/restore-backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
   SetFileContent "${fileContent}" "${filePath}"
@@ -51,12 +51,12 @@ function CreateApplicationMachineBackupScript () {
 set -e
 mkdir -p /root/data
 su --command \"pg_dumpall --clean --if-exists\" - postgres | sudo tee /root/data/pg_dump.sql > /dev/null
-/usr/bin/rsync --archive --verbose --delete /etc/systemd /root/data/systemd
-/usr/bin/rsync --archive --verbose --delete /etc/server-setup /root/data/server-setup
-/usr/bin/rsync --archive --verbose --delete /var/log /root/data/log
-/usr/bin/rsync --archive --verbose --delete /var/lib /root/data/lib
-/usr/bin/rsync --archive --verbose --delete /var/opt /root/data/opt
-/usr/bin/rsync --archive --verbose --delete /home /root/data/home
+/usr/bin/rsync --archive --verbose --delete /etc/systemd/ /root/data/systemd
+/usr/bin/rsync --archive --verbose --delete /etc/server-setup/ /root/data/server-setup
+/usr/bin/rsync --archive --verbose --delete /var/log/ /root/data/log
+/usr/bin/rsync --archive --verbose --delete /var/lib/ /root/data/lib
+/usr/bin/rsync --archive --verbose --delete /var/opt/ /root/data/opt
+/usr/bin/rsync --archive --verbose --delete /home/ /root/data/home
 /usr/bin/rsync --archive --verbose --delete /root/data/ ${sshUser}@${sshHostname}:~/data
 /usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
   filePath=/var/opt/server-setup/backup.sh
@@ -75,12 +75,12 @@ sudo ufw disallow 443/tcp
 sudo ufw disallow 80/tcp
 /usr/bin/rsync --archive --verbose --delete ${sshUser}@${sshHostname}:~/data /root/data
 su --command \"psql --file /root/data/pg_dump.sql\" - postgres
-/usr/bin/rsync --archive --verbose --delete /root/data/systemd /etc/systemd
-/usr/bin/rsync --archive --verbose --delete /root/data/server-setup /etc/server-setup
-/usr/bin/rsync --archive --verbose --delete /root/data/log /var/log
-/usr/bin/rsync --archive --verbose --delete /root/data/lib /var/lib
-/usr/bin/rsync --archive --verbose --delete /root/data/opt /var/opt
-/usr/bin/rsync --archive --verbose --delete /root/data/home /home
+/usr/bin/rsync --archive --verbose --delete /root/data/systemd/ /etc/systemd
+/usr/bin/rsync --archive --verbose --delete /root/data/server-setup/ /etc/server-setup
+/usr/bin/rsync --archive --verbose --delete /root/data/log/ /var/log
+/usr/bin/rsync --archive --verbose --delete /root/data/lib/ /var/lib
+/usr/bin/rsync --archive --verbose --delete /root/data/opt/ /var/opt
+/usr/bin/rsync --archive --verbose --delete /root/data/home/ /home
 systemctl daemon-reload
 do
   directoryName=\${directoryName%*/}
@@ -108,12 +108,12 @@ function CreateHttpMachineBackupScript () {
   fileContent="#!/bin/bash
 set -e
 mkdir -p /root/data
-/usr/bin/rsync --archive --verbose --delete /etc/nginx /root/data/nginx
-/usr/bin/rsync --archive --verbose --delete /etc/letsencrypt /root/data/letsencrypt
-/usr/bin/rsync --archive --verbose --delete /etc/server-setup /root/data/server-setup
-/usr/bin/rsync --archive --verbose --delete /var/www /root/data/www
-/usr/bin/rsync --archive --verbose --delete /var/log /root/data/log
-/usr/bin/rsync --archive --verbose --delete /home /root/data/home
+/usr/bin/rsync --archive --verbose --delete /etc/nginx/ /root/data/nginx
+/usr/bin/rsync --archive --verbose --delete /etc/letsencrypt/ /root/data/letsencrypt
+/usr/bin/rsync --archive --verbose --delete /etc/server-setup/ /root/data/server-setup
+/usr/bin/rsync --archive --verbose --delete /var/www/ /root/data/www
+/usr/bin/rsync --archive --verbose --delete /var/log/ /root/data/log
+/usr/bin/rsync --archive --verbose --delete /home/ /root/data/home
 /usr/bin/rsync --archive --verbose --delete --progress /root/data/ ${sshUser}@${sshHostname}:~/data
 /usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
   filePath=/var/opt/server-setup/backup.sh
@@ -131,12 +131,12 @@ set -e
 sudo ufw disallow 443/tcp
 sudo ufw disallow 80/tcp
 /usr/bin/rsync --archive --verbose --delete ${sshUser}@${sshHostname}:~/data /root/data
-/usr/bin/rsync --archive --verbose --delete /root/data/nginx /etc/nginx
-/usr/bin/rsync --archive --verbose --delete /root/data/letsencrypt /etc/letsencrypt
-/usr/bin/rsync --archive --verbose --delete /root/data/server-setup /etc/letsencrypt
-/usr/bin/rsync --archive --verbose --delete /root/data/www /var/www
-/usr/bin/rsync --archive --verbose --delete /root/data/log /var/log
-/usr/bin/rsync --archive --verbose --delete /root/data/home /home
+/usr/bin/rsync --archive --verbose --delete /root/data/nginx/ /etc/nginx
+/usr/bin/rsync --archive --verbose --delete /root/data/letsencrypt/ /etc/letsencrypt
+/usr/bin/rsync --archive --verbose --delete /root/data/server-setup/ /etc/letsencrypt
+/usr/bin/rsync --archive --verbose --delete /root/data/www/ /var/www
+/usr/bin/rsync --archive --verbose --delete /root/data/log/ /var/log
+/usr/bin/rsync --archive --verbose --delete /root/data/home/ /home
 systemctl daemon-reload
 systemctl restart nginx
 sudo ufw allow 443/tcp
