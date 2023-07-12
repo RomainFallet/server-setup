@@ -11,7 +11,7 @@
 
 SetUpMailInABoxFixPermissionsScript
 SetUpMailMachineRestoreBackupScript
-AskBackupRestore
+AskMailMachineBackupRestore
 SetUpSsh
 SetUpAutomaticUpdates
 SetUpMailInABox

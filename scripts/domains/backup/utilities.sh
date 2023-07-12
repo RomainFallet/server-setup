@@ -5,8 +5,6 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/services/index.sh"
 # shellcheck source-path=../../../
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/cron/index.sh"
-# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/firewall/index.sh"
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/packages/index.sh"
@@ -21,11 +19,11 @@ set -e
 /usr/bin/rsync --archive --verbose --delete --progress /home/user-data/ ${sshUser}@${sshHostname}:~/data
 systemctl start fix-mailinabox-permissions
 /usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
-  filePath=/var/opt/server-setup/backup.sh
+  filePath=/var/opt/server-setup/mail-backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
   SetFileContent "${fileContent}" "${filePath}"
   MakeFileExecutable "${filePath}"
-  CreateService 'server-setup-backup' "/bin/bash ${filePath}" 'root'
+  CreateService 'mail-backup' "/bin/bash ${filePath}" 'root'
 }
 
 function CreateMailMachineRestoreBackupScript () {
@@ -36,11 +34,11 @@ set -e
 /usr/bin/rsync --archive --verbose --delete ${sshUser}@${sshHostname}:~/data/ /home/user-data
 systemctl start fix-mailinabox-permissions
 /usr/bin/rsync --archive --verbose --delete /home/user-data/server-setup/ /etc/server-setup"
-  filePath=/var/opt/server-setup/restore-backup.sh
+  filePath=/var/opt/server-setup/mail-restore-backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
   SetFileContent "${fileContent}" "${filePath}"
   MakeFileExecutable "${filePath}"
-  CreateService 'server-setup-restore-backup' "/bin/bash ${filePath}" 'root'
+  CreateService 'mail-restore-backup' "/bin/bash ${filePath}" 'root'
 }
 
 function CreateApplicationMachineBackupScript () {
@@ -59,11 +57,11 @@ su --command \"pg_dumpall --clean --if-exists\" - postgres | sudo tee /root/data
 /usr/bin/rsync --archive --verbose --delete /home/ /root/data/home
 /usr/bin/rsync --archive --verbose --delete /root/data/ ${sshUser}@${sshHostname}:~/data
 /usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
-  filePath=/var/opt/server-setup/backup.sh
+  filePath=/var/opt/server-setup/application-backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
   SetFileContent "${fileContent}" "${filePath}"
   MakeFileExecutable "${filePath}"
-  CreateService 'server-setup-backup' "/bin/bash ${filePath}" 'root'
+  CreateService 'application-backup' "/bin/bash ${filePath}" 'root'
 }
 
 function CreateApplicationMachineRestoreBackupScript () {
@@ -93,11 +91,11 @@ do
 done
 sudo ufw allow 443/tcp
 sudo ufw allow 80/tcp"
-  filePath=/var/opt/server-setup/restore-backup.sh
+  filePath=/var/opt/server-setup/application-restore-backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
   SetFileContent "${fileContent}" "${filePath}"
   MakeFileExecutable "${filePath}"
-  CreateService 'server-setup-restore-backup' "/bin/bash ${filePath}" 'root'
+  CreateService 'application-restore-backup' "/bin/bash ${filePath}" 'root'
 }
 
 
@@ -113,14 +111,13 @@ mkdir -p /root/data
 /usr/bin/rsync --archive --verbose --delete /etc/server-setup/ /root/data/server-setup
 /usr/bin/rsync --archive --verbose --delete /var/www/ /root/data/www
 /usr/bin/rsync --archive --verbose --delete /var/log/ /root/data/log
-/usr/bin/rsync --archive --verbose --delete /home/ /root/data/home
 /usr/bin/rsync --archive --verbose --delete --progress /root/data/ ${sshUser}@${sshHostname}:~/data
 /usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
-  filePath=/var/opt/server-setup/backup.sh
+  filePath=/var/opt/server-setup/http-backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
   SetFileContent "${fileContent}" "${filePath}"
   MakeFileExecutable "${filePath}"
-  CreateService 'server-setup-backup' "/bin/bash ${filePath}" 'root'
+  CreateService 'http-backup' "/bin/bash ${filePath}" 'root'
 }
 
 function CreateHttpMachineRestoreBackupScript () {
@@ -136,22 +133,12 @@ sudo ufw disallow 80/tcp
 /usr/bin/rsync --archive --verbose --delete /root/data/server-setup/ /etc/letsencrypt
 /usr/bin/rsync --archive --verbose --delete /root/data/www/ /var/www
 /usr/bin/rsync --archive --verbose --delete /root/data/log/ /var/log
-/usr/bin/rsync --archive --verbose --delete /root/data/home/ /home
-systemctl daemon-reload
 systemctl restart nginx
 sudo ufw allow 443/tcp
 sudo ufw allow 80/tcp"
-  filePath=/var/opt/server-setup/restore-backup.sh
+  filePath=/var/opt/server-setup/http-restore-backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
   SetFileContent "${fileContent}" "${filePath}"
   MakeFileExecutable "${filePath}"
-  CreateService 'server-setup-restore-backup' "/bin/bash ${filePath}" 'root'
-}
-
-function CreateDailyBackupCronJob () {
-  CreateDailyCronJob 'server-setup-backup' 'systemctl start server-setup-backup.service'
-}
-
-function CreateWeeklyBackupCronJob () {
-  CreateWeeklyCronJob 'server-setup-backup' 'systemctl start server-setup-backup.service'
+  CreateService 'http-restore-backup' "/bin/bash ${filePath}" 'root'
 }
