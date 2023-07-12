@@ -43,7 +43,7 @@ function GetLatestGiteaVersion () {
 }
 
 function GetCurrentGiteaVersion () {
-  if ! sudotest -f "${giteaBinaryPath}"; then
+  if ! sudo test -f "${giteaBinaryPath}"; then
     echo 'uninstalled'
   else
     versionString=$(sudo "${giteaBinaryPath}" --version)
@@ -69,9 +69,9 @@ function CreateOrUpdateGiteaAdminstratorAccount () {
   existingUsers=$(sudo su --command "${giteaBinaryPath} admin user list --config ${giteaConfigurationFilePath} --work-path ${giteaDataPath}" - gitea)
   existingUsernames=$(echo "${existingUsers}" | awk '{print $2}')
   if echo "${existingUsernames}" | grep "${userName}" > /dev/null; then
-    sudo su --command "${giteaBinaryPath} admin user change-password --username ${userName} --password ${userPassword} --config ${giteaConfigurationFilePath} --work-path ${giteaDataPath}" - gitea
+    sudo su --command "${giteaBinaryPath} admin user change-password --username '${userName}' --password '${userPassword}' --config ${giteaConfigurationFilePath} --work-path ${giteaDataPath}" - gitea
   else
-    sudo su --command "${giteaBinaryPath} admin user create --username ${userName} --password '${userPassword}' --email ${userEmail} --admin --config ${giteaConfigurationFilePath} --work-path ${giteaDataPath}" - gitea
+    sudo su --command "${giteaBinaryPath} admin user create --username '${userName}' --password '${userPassword}' --email '${userEmail}' --admin --config ${giteaConfigurationFilePath} --work-path ${giteaDataPath}" - gitea
   fi
 }
 
@@ -195,9 +195,9 @@ INSTALL_LOCK       = true
 INTERNAL_TOKEN     = ${giteaInternalToken}
 PASSWORD_HASH_ALGO = pbkdf2"
   SetFileContent "${fileContent}" "${giteaConfigurationFilePath}"
+  CreateOrUpdateGiteaAdminstratorAccount "${giteaAdministratorUserName:?}" "${giteaAdministratorEmail:?}" "${giteaAdministratorPassword:?}"
   CreateStartupService "${giteaApplicationName}" "${giteaBinaryPath} web --config ${giteaConfigurationFilePath}" "${giteaApplicationName}" "${giteaDataPath}" "${giteaEnvironmentVariables}"
   RestartService "${giteaApplicationName}"
-  CreateOrUpdateGiteaAdminstratorAccount "${giteaAdministratorUserName:?}" "${giteaAdministratorEmail:?}" "${giteaAdministratorPassword:?}"
 }
 
 function InstallGiteaHttpProxy () {
