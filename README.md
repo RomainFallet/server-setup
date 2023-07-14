@@ -10,6 +10,10 @@
 - [Update](#update)
 - [Recipes](#recipes)
   - [Mail machine](#mail-machine)
+  - [Application machine](#application-machine)
+  - [Http machine](#http-machine)
+  - [File machine](#file-machine)
+  - [Daily backup machine](#daily-backup-machine)
 - [Contributing](#contributing)
 
 ## Prerequisites
@@ -186,6 +190,22 @@ ss:recipes:mail-machine
 
 ```bash
 ss:recipes:application-machine
+```
+
+### Http machine
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:recipes:http-machine
+```
+
+### File machine
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:recipes:file-machine
 ```
 
 ### Daily backup machine

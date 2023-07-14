@@ -25,3 +25,10 @@ function SetUpMachineFireWall () {
   OpenFireWallPort '80'
   EnableFireWall
 }
+
+function SetUpFileMachineFireWall () {
+  OpenFireWallPort '22'
+  OpenFireWallPort '2049'
+  OpenFireWallPort '111'
+  EnableFireWall
+}

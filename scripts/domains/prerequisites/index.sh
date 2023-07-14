@@ -21,3 +21,8 @@ function SetUpBackupMachinePrerequisites () {
   UpgradeAllPackages
 }
 
+function SetUpFileMachinePrerequisites () {
+  UpgradeAllPackages
+  InstallPackageIfNotExisting 'nfs-kernel-server'
+}
+
