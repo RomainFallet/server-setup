@@ -15,3 +15,4 @@ SetUpFail2Ban
 SetUpMachineFireWall
 SetUpBasicSystemConfiguration
 AskDailyBackupMachineActions
+LinkHomeFolderToExternalDisk

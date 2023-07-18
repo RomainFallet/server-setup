@@ -5,12 +5,6 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/services/index.sh"
 
-function ConfigureFileSharingHardDriveMountOnStartup () {
-  mountConfiguration="/dev/sda    /mnt/sda    ext4    defaults    0    1"
-  configurationPath=/etc/fstab
-  AppendTextInFileIfNotFound "${mountConfiguration}" "${configurationPath}"
-}
-
 function ConfigureNfs () {
   configuration="#
 # This is a general configuration for the

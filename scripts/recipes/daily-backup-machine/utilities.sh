@@ -3,6 +3,8 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/users/index.sh"
 # shellcheck source-path=../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/variables/index.sh"
 
 function AskDailyBackupMachineActions () {
@@ -13,4 +15,21 @@ function AskDailyBackupMachineActions () {
     Ask usernameToCreate "Enter the username"
     CreateUserIfNotExisting "${usernameToCreate:?}"
   fi
+}
+
+function LinkHomeFolderToExternalDisk () {
+  for directoryPath in /home/*/
+  do
+    directoryPath=${directoryPath%*/}
+    username=${directoryPath##*/}
+    sourcePath=/mnt/sda/"${username}"
+    targetPath=/home/"${username}"/data
+    # shellcheck disable=SC2065
+    if ! test -d /mnt/sda/"${username}" > /dev/null; then
+      CreateDirectoryIfNotExisting "${sourcePath}"
+      SetDirectoryOwnership "${sourcePath}" "${username}"
+    fi
+    CreateSymbolicLinkIfNotExisting "${targetPath}" "${sourcePath}"
+    SetFileOwnership "${targetPath}" "${username}"
+  done
 }

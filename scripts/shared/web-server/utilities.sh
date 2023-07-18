@@ -59,7 +59,7 @@ function GenerateTlsCertificate () {
   CreateDirectoryIfNotExisting "${webRootPath}"
   SetDirectoryOwnership "${webRootPath}" "www-data"
   SetDefaultDirectoryPermissions "${webRootPath}"
-  CreateFileSymbolicLinkIfNotExisting "${applicationEnabledConfigurationPath}" "${applicationConfigurationPath}"
+  CreateSymbolicLinkIfNotExisting "${applicationEnabledConfigurationPath}" "${applicationConfigurationPath}"
   ConfigureRequestLimits
   RestartService 'nginx'
   GenerateTlsCertificateWithCertbot "${applicationName}" "${domainName}" "${email}"

@@ -128,7 +128,7 @@ function SetConfigurationFileValue () {
   AppendTextInFileIfNotFound "${key} = ${value}" "${filePath}"
 }
 
-function CreateFileSymbolicLinkIfNotExisting () {
+function CreateSymbolicLinkIfNotExisting () {
   symbolicLinkPath="${1}"
   targetedFilePath="${2}"
   if ! test -f "${symbolicLinkPath}"; then
