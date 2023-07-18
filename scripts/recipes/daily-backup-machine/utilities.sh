@@ -24,12 +24,16 @@ function LinkHomeFolderToExternalDisk () {
     username=${directoryPath##*/}
     sourcePath=/mnt/sda/"${username}"
     targetPath=/home/"${username}"/data
+    echo "Linking folder to external disk"
+    echo "username: ${username}"
+    echo "sourcePath: ${sourcePath}"
+    echo "targetPath: ${targetPath}"
     # shellcheck disable=SC2065
     if ! test -d /mnt/sda/"${username}" > /dev/null; then
       CreateDirectoryIfNotExisting "${sourcePath}"
       SetDirectoryOwnership "${sourcePath}" "${username}"
     fi
-    CreateSymbolicLinkIfNotExisting "${targetPath}" "${sourcePath}"
-    SetFileOwnership "${targetPath}" "${username}"
+    CreateDirectorySymbolicLinkIfNotExisting "${targetPath}" "${sourcePath}"
+    SetSymbolicLinkOwnership "${targetPath}" "${username}"
   done
 }

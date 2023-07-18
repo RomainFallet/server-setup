@@ -12,4 +12,6 @@ function MountDeviceAutomaticallyIfConnected () {
     configurationPath=/etc/fstab
     AppendTextInFileIfNotFound "${mountConfiguration}" "${configurationPath}"
   fi
+  SetDirectoryOwnership /mnt/"${deviceName}" 'nobody' 'nogroup'
+  SetDirectoryPermissions /mnt/"${deviceName}" 777
 }

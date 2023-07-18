@@ -98,7 +98,6 @@ sudo ufw allow 80/tcp"
   CreateService 'application-restore-backup' "/bin/bash ${filePath}" 'root'
 }
 
-
 function CreateHttpMachineBackupScript () {
   sshUser="${1}"
   sshHostname="${2}"
@@ -141,4 +140,32 @@ sudo ufw allow 80/tcp"
   SetFileContent "${fileContent}" "${filePath}"
   MakeFileExecutable "${filePath}"
   CreateService 'http-restore-backup' "/bin/bash ${filePath}" 'root'
+}
+
+function CreateFileMachineBackupScript () {
+  sshUser="${1}"
+  sshHostname="${2}"
+  healthChecksUuid="${3}"
+  fileContent="#!/bin/bash
+set -e
+/usr/bin/rsync --archive --verbose --delete --progress /mnt/sda/ ${sshUser}@${sshHostname}:~/data
+/usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
+  filePath=/var/opt/server-setup/file-backup.sh
+  CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
+  SetFileContent "${fileContent}" "${filePath}"
+  MakeFileExecutable "${filePath}"
+  CreateService 'file-backup' "/bin/bash ${filePath}" 'root'
+}
+
+function CreateFileMachineRestoreBackupScript () {
+  sshUser="${1}"
+  sshHostname="${2}"
+  fileContent="#!/bin/bash
+set -e
+/usr/bin/rsync --archive --verbose --delete ${sshUser}@${sshHostname}:~/data /mnt/sda"
+  filePath=/var/opt/server-setup/file-restore-backup.sh
+  CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
+  SetFileContent "${fileContent}" "${filePath}"
+  MakeFileExecutable "${filePath}"
+  CreateService 'file-restore-backup' "/bin/bash ${filePath}" 'root'
 }

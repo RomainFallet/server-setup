@@ -50,6 +50,20 @@ function SetUpHttpMachineRestoreBackupScript () {
   CreateHttpMachineRestoreBackupScript "${sshHttpMachineUserName:?}" "${sshHttpMachineHostName:?}"
 }
 
+function SetUpFileMachineBackupScript () {
+  AskIfNotSet sshFileMachineUserName 'Enter SSH username of backup machine'
+  AskIfNotSet sshFileMachineHostName 'Enter SSH hostname of backup machine'
+  AskIfNotSet fileMachineHealthCheckId 'Enter your HealthChecks.io monitoring ID'
+  CreateFileMachineBackupScript "${sshFileMachineUserName:?}" "${sshFileMachineHostName:?}" "${fileMachineHealthCheckId:?}"
+  CreateDailyCronJob 'file-backup' 'systemctl start file-backup.service'
+}
+
+function SetUpFileMachineRestoreBackupScript () {
+  AskIfNotSet sshFileMachineUserName 'Enter SSH username of backup machine'
+  AskIfNotSet sshFileMachineHostName 'Enter SSH hostname of backup machine'
+  CreateFileMachineRestoreBackupScript "${sshFileMachineUserName:?}" "${sshFileMachineHostName:?}"
+}
+
 function AskMailMachineBackupRestore () {
   Ask restoreMailBackup 'Restore mail data (y/n)' 'n'
   if [[ "${restoreMailBackup?:}" == 'y' ]]; then
@@ -79,6 +93,17 @@ function AskHttpMachineBackupRestore () {
     DisplayMessage 'Restoring http data...'
     DisplayMessage '(use "sudo journalctl --follow --unit http-restore-backup.service" to see progress)'
     StartService 'http-restore-backup'
+    DisplayMessage 'Datas were successfully restored!'
+  fi
+}
+
+function AskFileMachineBackupRestore () {
+  Ask restoreFileBackup 'Restore file data (y/n)' 'n'
+  if [[ "${restoreFileBackup?:}" == 'y' ]]; then
+    InstallPackageIfNotExisting 'rsync'
+    DisplayMessage 'Restoring file data...'
+    DisplayMessage '(use "sudo journalctl --follow --unit file-restore-backup.service" to see progress)'
+    StartService 'file-restore-backup'
     DisplayMessage 'Datas were successfully restored!'
   fi
 }

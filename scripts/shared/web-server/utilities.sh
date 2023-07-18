@@ -57,9 +57,9 @@ function GenerateTlsCertificate () {
 }"
   SetFileContent "${httpConfiguration}" "${httpConfigurationPath}"
   CreateDirectoryIfNotExisting "${webRootPath}"
-  SetDirectoryOwnership "${webRootPath}" "www-data"
+  SetDirectoryOwnershipRecursively "${webRootPath}" "www-data"
   SetDefaultDirectoryPermissions "${webRootPath}"
-  CreateSymbolicLinkIfNotExisting "${applicationEnabledConfigurationPath}" "${applicationConfigurationPath}"
+  CreateFileSymbolicLinkIfNotExisting "${applicationEnabledConfigurationPath}" "${applicationConfigurationPath}"
   ConfigureRequestLimits
   RestartService 'nginx'
   GenerateTlsCertificateWithCertbot "${applicationName}" "${domainName}" "${email}"

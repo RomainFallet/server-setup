@@ -103,11 +103,11 @@ function InstallOrUpgradeGitea () {
   CreateDirectoryIfNotExisting "${giteaDataPath}"/data
   CreateDirectoryIfNotExisting "${giteaDataPath}"/log
   CreateDirectoryIfNotExisting "$(dirname "${giteaBinaryPath}")"
-  SetDirectoryOwnership "${giteaDataPath}" "${giteaApplicationName}"
-  SetDirectoryOwnership "$(dirname "${giteaBinaryPath}")" "${giteaApplicationName}"
+  SetDirectoryOwnershipRecursively "${giteaDataPath}" "${giteaApplicationName}"
+  SetDirectoryOwnershipRecursively "$(dirname "${giteaBinaryPath}")" "${giteaApplicationName}"
   SetDefaultDirectoryPermissions "$(dirname "${giteaBinaryPath}")"
   CreateDirectoryIfNotExisting "${giteaConfigurationPath}"
-  SetDirectoryOwnership "${giteaConfigurationPath}" 'root' "${giteaApplicationName}"
+  SetDirectoryOwnershipRecursively "${giteaConfigurationPath}" 'root' "${giteaApplicationName}"
   giteaLatestVersion=$(GetLatestGiteaVersion)
   giteaCurrentVersion=$(GetCurrentGiteaVersion)
   DownloadGiteaBinaryIfOutdated "${giteaLatestVersion}" "${giteaCurrentVersion}"

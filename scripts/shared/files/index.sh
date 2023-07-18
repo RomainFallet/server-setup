@@ -88,10 +88,16 @@ function SetDefaultDirectoryPermissions () {
 function SetDirectoryPermissions () {
   directoryPath="${1}"
   permissions="${2}"
+  sudo chmod "${permissions}" "${directoryPath}"
+}
+
+function SetDirectoryPermissionsRecursively () {
+  directoryPath="${1}"
+  permissions="${2}"
   sudo chmod -R "${permissions}" "${directoryPath}"
 }
 
-function SetDirectoryOwnership () {
+function SetDirectoryOwnershipRecursively () {
   directoryPath="${1}"
   userName="${2}"
   groupName="${3}"
@@ -101,6 +107,15 @@ function SetDirectoryOwnership () {
   sudo chown -R "${userName}":"${groupName}" "${directoryPath}"
 }
 
+function SetDirectoryOwnership () {
+  directoryPath="${1}"
+  userName="${2}"
+  groupName="${3}"
+  if [[ -z "${groupName}" ]]; then
+    groupName="${userName}"
+  fi
+  sudo chown "${userName}":"${groupName}" "${directoryPath}"
+}
 
 function SetFileOwnership () {
   filePath="${1}"
@@ -110,6 +125,16 @@ function SetFileOwnership () {
     groupName="${userName}"
   fi
   sudo chown "${userName}":"${groupName}" "${filePath}"
+}
+
+function SetSymbolicLinkOwnership () {
+  symlinkPath="${1}"
+  userName="${2}"
+  groupName="${3}"
+  if [[ -z "${groupName}" ]]; then
+    groupName="${userName}"
+  fi
+  sudo chown --no-dereference "${userName}":"${groupName}" "${symlinkPath}"
 }
 
 function GetConfigurationFileValue () {
@@ -128,10 +153,18 @@ function SetConfigurationFileValue () {
   AppendTextInFileIfNotFound "${key} = ${value}" "${filePath}"
 }
 
-function CreateSymbolicLinkIfNotExisting () {
+function CreateFileSymbolicLinkIfNotExisting () {
   symbolicLinkPath="${1}"
   targetedFilePath="${2}"
   if ! test -f "${symbolicLinkPath}"; then
+    sudo ln -s "${targetedFilePath}" "${symbolicLinkPath}"
+  fi
+}
+
+function CreateDirectorySymbolicLinkIfNotExisting () {
+  symbolicLinkPath="${1}"
+  targetedFilePath="${2}"
+  if ! test -d "${symbolicLinkPath}"; then
     sudo ln -s "${targetedFilePath}" "${symbolicLinkPath}"
   fi
 }
