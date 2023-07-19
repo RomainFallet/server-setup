@@ -50,6 +50,11 @@ function CreateDirectoryIfNotExisting () {
   sudo mkdir -p "${directoryPath}"
 }
 
+function CreateFileIfNotExisting () {
+  filePath="${1}"
+  sudo touch "${filePath}"
+}
+
 function SetFileContent () {
   fileContent="${1}"
   filePath="${2}"
@@ -164,7 +169,7 @@ function CreateFileSymbolicLinkIfNotExisting () {
 function CreateDirectorySymbolicLinkIfNotExisting () {
   symbolicLinkPath="${1}"
   targetedFilePath="${2}"
-  if ! test -d "${symbolicLinkPath}"; then
+  if [[ -L "${symbolicLinkPath}" ]]; then
     sudo ln -s "${targetedFilePath}" "${symbolicLinkPath}"
   fi
 }

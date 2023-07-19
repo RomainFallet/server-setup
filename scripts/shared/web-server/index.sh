@@ -53,3 +53,83 @@ function CreateProxyDomainName () {
   SetFileContent "${contentSecurityPolicyConfiguration}" "${contentSecurityPolicyConfigurationPath}"
   RestartService 'nginx'
 }
+
+function CreateStaticDomainName () {
+  applicationName="${1}"
+  domainName="${2}"
+  letsencryptEmail="${3}"
+  GenerateTlsCertificate "${applicationName}" "${domainName}" "${letsencryptEmail}"
+  httpsConfigurationPath=/etc/nginx/sites-configuration/"${applicationName}"/"${domainName}"/https.conf
+  httpsConfiguration="server {
+  listen 443      ssl http2;
+  listen [::]:443 ssl http2;
+  server_name ${domainName};
+
+  root /var/www/${applicationName};
+
+  location / {
+    limit_req zone=ip burst=20 nodelay;
+    try_files \$uri \$uri/ =404;
+  }
+
+  error_log  /var/log/nginx/${applicationName}.error.log error;
+  access_log /var/log/nginx/${applicationName}.access.log;
+
+  ssl_certificate     /etc/letsencrypt/live/${domainName}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/${domainName}/privkey.pem;
+
+  add_header Strict-Transport-Security \"max-age=15552000; preload;\";
+  add_header Expect-CT \"max-age=86400, enforce\";
+  add_header X-Frame-Options \"deny\";
+  add_header X-Content-Type-Options \"nosniff\";
+  add_header Referrer-Policy \"same-origin\";
+  add_header Cache-Control \"private, max-age=604800, must-revalidate\";
+  add_header Permissions-Policy \"fullscreen=(); microphone=(); geolocation=(); camera=(); midi=(); sync-xhr=(); magnetometer=(); gyroscope=(); payment=();\";
+  include /etc/nginx/sites-configuration/${applicationName}/${domainName}/content-security-policy.conf;
+}"
+  SetFileContent "${httpsConfiguration}" "${httpsConfigurationPath}"
+  contentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${applicationName}"/"${domainName}"/content-security-policy.conf
+  contentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self';\";"
+  SetFileContent "${contentSecurityPolicyConfiguration}" "${contentSecurityPolicyConfigurationPath}"
+  RestartService 'nginx'
+}
+
+function CreateSpaDomainName () {
+  applicationName="${1}"
+  domainName="${2}"
+  letsencryptEmail="${3}"
+  GenerateTlsCertificate "${applicationName}" "${domainName}" "${letsencryptEmail}"
+  httpsConfigurationPath=/etc/nginx/sites-configuration/"${applicationName}"/"${domainName}"/https.conf
+  httpsConfiguration="server {
+  listen 443      ssl http2;
+  listen [::]:443 ssl http2;
+  server_name ${domainName};
+
+  root /var/www/${applicationName};
+
+  location / {
+    limit_req zone=ip burst=20 nodelay;
+    try_files \$uri \$uri/ /index.html;
+  }
+
+  error_log  /var/log/nginx/${applicationName}.error.log error;
+  access_log /var/log/nginx/${applicationName}.access.log;
+
+  ssl_certificate     /etc/letsencrypt/live/${domainName}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/${domainName}/privkey.pem;
+
+  add_header Strict-Transport-Security \"max-age=15552000; preload;\";
+  add_header Expect-CT \"max-age=86400, enforce\";
+  add_header X-Frame-Options \"deny\";
+  add_header X-Content-Type-Options \"nosniff\";
+  add_header Referrer-Policy \"same-origin\";
+  add_header Cache-Control \"private, max-age=604800, must-revalidate\";
+  add_header Permissions-Policy \"fullscreen=(); microphone=(); geolocation=(); camera=(); midi=(); sync-xhr=(); magnetometer=(); gyroscope=(); payment=();\";
+  include /etc/nginx/sites-configuration/${applicationName}/${domainName}/content-security-policy.conf;
+}"
+  SetFileContent "${httpsConfiguration}" "${httpsConfigurationPath}"
+  contentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${applicationName}"/"${domainName}"/content-security-policy.conf
+  contentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self';\";"
+  SetFileContent "${contentSecurityPolicyConfiguration}" "${contentSecurityPolicyConfigurationPath}"
+  RestartService 'nginx'
+}

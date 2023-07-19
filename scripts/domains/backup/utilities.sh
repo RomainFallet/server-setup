@@ -64,6 +64,12 @@ do
   /usr/bin/rsync --archive --verbose --delete /etc/\${applicationName}/ /root/data/applications/\${applicationName}/etc
   /usr/bin/rsync --archive --verbose --delete /home/\${applicationName}/ /root/data/applications/\${applicationName}/home
   /usr/bin/rsync --archive --verbose --delete /etc/systemd/system/\${applicationName}.service /root/data/applications/\${applicationName}/systemd.service
+  if test -f /etc/systemd/system/\${applicationName}-watcher.service > /dev/null; then
+    /usr/bin/rsync --archive --verbose --delete /etc/systemd/system/\${applicationName}-watcher.service /root/data/applications/\${applicationName}/systemd-watcher.service
+  fi
+  if test -f /etc/systemd/system/\${applicationName}-watcher.path > /dev/null; then
+    /usr/bin/rsync --archive --verbose --delete /etc/systemd/system/\${applicationName}-watcher.path /root/data/applications/\${applicationName}/systemd-watcher.path
+  fi
 done
 /usr/bin/rsync --archive --verbose --delete /root/data/ ${sshUser}@${sshHostname}:~/data
 rm -rf /root/data
@@ -95,12 +101,24 @@ do
   /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/etc/ /etc/\${applicationName}
   /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/home/ /home/\${applicationName}
   /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/systemd.service /etc/systemd/system/\${applicationName}.service
+  if test -f /root/data/applications/\${applicationName}/systemd-watcher.service > /dev/null; then
+    /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/systemd-watcher.service /etc/systemd/system/\${applicationName}-watcher.service
+  fi
+  if test -f /root/data/applications/\${applicationName}/systemd-watcher.path > /dev/null; then
+    /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/systemd-watcher.path /etc/systemd/system/\${applicationName}-watcher.path
+  fi
   if ! id \"\${applicationName}\" > /dev/null; then
     adduser --system --shell /bin/bash --group --disabled-password --home /home/\"\${applicationName}\" \"\${applicationName}\"
   fi
   chown -R \"\${applicationName}\":\"\${applicationName}\" /var/{lib,opt}/\"\${applicationName}\"
   systemctl daemon-reload
   systemctl restart \"\${applicationName}\".service
+  if test -f /etc/systemd/system/\${applicationName}-watcher.path > /dev/null; then
+    systemctl restart \"\${applicationName}\"-watcher.path
+  fi
+  if test -f /etc/systemd/system/\${applicationName}-watcher.service > /dev/null; then
+    systemctl restart \"\${applicationName}\"-watcher.service
+  fi
 done
 rm -rf /root/data"
   filePath=/var/opt/server-setup/application-restore-backup.sh

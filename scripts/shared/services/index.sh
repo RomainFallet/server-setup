@@ -42,6 +42,38 @@ WantedBy=multi-user.target"
   ReloadSystemdServiceFiles
 }
 
+function CreateStartupServiceWatcher () {
+  serviceName="${1}"
+  serviceWatcherName="${serviceName}-watcher"
+  servicePath="${2}"
+  watcherConfiguration="[Unit]
+Description=${serviceName} restarter
+After=network.target
+StartLimitIntervalSec=5
+StartLimitBurst=1
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl restart ${serviceName}.service
+
+[Install]
+WantedBy=multi-user.target"
+  watcherConfigurationPath=/etc/systemd/system/"${serviceWatcherName}".service
+  SetFileContent "${watcherConfiguration}" "${watcherConfigurationPath}"
+  directoryConfiguration="[Path]
+Unit=${serviceWatcherName}.service
+PathChanged=${servicePath}
+TriggerLimitBurst=1
+TriggerLimitIntervalSec=5
+
+[Install]
+WantedBy=multi-user.target"
+  directoryConfigurationPath=/etc/systemd/system/"${serviceWatcherName}".path
+  SetFileContent "${directoryConfiguration}" "${directoryConfigurationPath}"
+  EnableSystemdService "${serviceWatcherName}"
+  EnableSystemdPath "${serviceWatcherName}"
+}
+
 function CreateStartupService () {
   name="${1}"
   executablePath="${2}"
@@ -56,6 +88,11 @@ function CreateStartupService () {
 function RestartService () {
   serviceName="${1}"
   RestartSystemdService "${serviceName}"
+}
+
+function RestartServicePath () {
+  serviceName="${1}"
+  RestartSystemdPath "${serviceName}"
 }
 
 function StartService () {

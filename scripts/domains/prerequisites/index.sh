@@ -11,6 +11,7 @@ function SetUpApplicationMachinePrerequisites () {
   UpgradeAllPackages
   InstallPackageIfNotExisting 'rsync'
   InstallPackageIfNotExisting 'postgresql'
+  InstallPackageIfNotExisting 'openjdk-17-jre'
   InstallPackageIfNotExisting 'jq'
 }
 
