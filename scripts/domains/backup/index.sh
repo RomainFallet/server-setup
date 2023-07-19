@@ -6,7 +6,8 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/variables/index.sh"
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/cron/index.sh"
-
+# shellcheck source-path=../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/shell/index.sh"
 
 function SetUpMailMachineBackupScript () {
   AskIfNotSet sshMailMachineUserName 'Enter SSH username of backup machine'
@@ -67,10 +68,8 @@ function SetUpFileMachineRestoreBackupScript () {
 function AskMailMachineBackupRestore () {
   Ask restoreMailBackup 'Restore mail data (y/n)' 'n'
   if [[ "${restoreMailBackup?:}" == 'y' ]]; then
-    InstallPackageIfNotExisting 'rsync'
     DisplayMessage 'Restoring mailsdata...'
-    DisplayMessage '(use "sudo journalctl --follow --unit mail-restore-backup.service" to see progress)'
-    StartService 'mail-restore-backup'
+    ExecShellScriptWithRoot /var/opt/server-setup ./mail-restore-backup.sh
     DisplayMessage 'Datas were successfully restored!'
   fi
 }
@@ -78,10 +77,8 @@ function AskMailMachineBackupRestore () {
 function AskApplicationMachineBackupRestore () {
   Ask restoreApplicationBackup 'Restore application data (y/n)' 'n'
   if [[ "${restoreApplicationBackup?:}" == 'y' ]]; then
-    InstallPackageIfNotExisting 'rsync'
     DisplayMessage 'Restoring applications data...'
-    DisplayMessage '(use "sudo journalctl --follow --unit application-restore-backup.service" to see progress)'
-    StartService 'application-restore-backup'
+    ExecShellScriptWithRoot /var/opt/server-setup ./application-restore-backup.sh
     DisplayMessage 'Datas were successfully restored!'
   fi
 }
@@ -89,10 +86,8 @@ function AskApplicationMachineBackupRestore () {
 function AskHttpMachineBackupRestore () {
   Ask restoreHttpBackup 'Restore http data (y/n)' 'n'
   if [[ "${restoreHttpBackup?:}" == 'y' ]]; then
-    InstallPackageIfNotExisting 'rsync'
     DisplayMessage 'Restoring http data...'
-    DisplayMessage '(use "sudo journalctl --follow --unit http-restore-backup.service" to see progress)'
-    StartService 'http-restore-backup'
+    ExecShellScriptWithRoot /var/opt/server-setup ./http-restore-backup.sh
     DisplayMessage 'Datas were successfully restored!'
   fi
 }
@@ -100,10 +95,8 @@ function AskHttpMachineBackupRestore () {
 function AskFileMachineBackupRestore () {
   Ask restoreFileBackup 'Restore file data (y/n)' 'n'
   if [[ "${restoreFileBackup?:}" == 'y' ]]; then
-    InstallPackageIfNotExisting 'rsync'
     DisplayMessage 'Restoring file data...'
-    DisplayMessage '(use "sudo journalctl --follow --unit file-restore-backup.service" to see progress)'
-    StartService 'file-restore-backup'
+    ExecShellScriptWithRoot /var/opt/server-setup ./file-restore-backup.sh
     DisplayMessage 'Datas were successfully restored!'
   fi
 }

@@ -107,7 +107,7 @@ function InstallOrUpgradeGitea () {
   SetDirectoryOwnershipRecursively "$(dirname "${giteaBinaryPath}")" "${giteaApplicationName}"
   SetDefaultDirectoryPermissions "$(dirname "${giteaBinaryPath}")"
   CreateDirectoryIfNotExisting "${giteaConfigurationPath}"
-  SetDirectoryOwnershipRecursively "${giteaConfigurationPath}" 'root' "${giteaApplicationName}"
+  SetDirectoryOwnership "${giteaConfigurationPath}" "${giteaApplicationName}" "${giteaApplicationName}"
   giteaLatestVersion=$(GetLatestGiteaVersion)
   giteaCurrentVersion=$(GetCurrentGiteaVersion)
   DownloadGiteaBinaryIfOutdated "${giteaLatestVersion}" "${giteaCurrentVersion}"
@@ -195,6 +195,7 @@ INSTALL_LOCK       = true
 INTERNAL_TOKEN     = ${giteaInternalToken}
 PASSWORD_HASH_ALGO = pbkdf2"
   SetFileContent "${fileContent}" "${giteaConfigurationFilePath}"
+  SetFileOwnership "${giteaConfigurationFilePath}" "${giteaApplicationName}" "${giteaApplicationName}"
   CreateOrUpdateGiteaAdminstratorAccount "${giteaAdministratorUserName:?}" "${giteaAdministratorEmail:?}" "${giteaAdministratorPassword:?}"
   CreateStartupService "${giteaApplicationName}" "${giteaBinaryPath} web --config ${giteaConfigurationFilePath}" "${giteaApplicationName}" "${giteaDataPath}" "${giteaEnvironmentVariables}"
   RestartService "${giteaApplicationName}"

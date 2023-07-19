@@ -9,23 +9,27 @@
 
 function SetUpApplicationMachinePrerequisites () {
   UpgradeAllPackages
+  InstallPackageIfNotExisting 'rsync'
   InstallPackageIfNotExisting 'postgresql'
   InstallPackageIfNotExisting 'jq'
 }
 
 function SetUpHttpMachinePrerequisites () {
   UpgradeAllPackages
+  InstallPackageIfNotExisting 'rsync'
   InstallPackageIfNotExisting 'nginx'
   InstallPackageIfNotExisting 'certbot'
 }
 
 function SetUpBackupMachinePrerequisites () {
   UpgradeAllPackages
+  InstallPackageIfNotExisting 'rsync'
   MountDeviceAutomaticallyIfConnected 'sda'
 }
 
 function SetUpFileMachinePrerequisites () {
   UpgradeAllPackages
+  InstallPackageIfNotExisting 'rsync'
   InstallPackageIfNotExisting 'nfs-kernel-server'
   MountDeviceAutomaticallyIfConnected 'sda'
 }
