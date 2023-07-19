@@ -161,7 +161,7 @@ function SetConfigurationFileValue () {
 function CreateFileSymbolicLinkIfNotExisting () {
   symbolicLinkPath="${1}"
   targetedFilePath="${2}"
-  if ! test -f "${symbolicLinkPath}"; then
+  if ! sudo test -f "${symbolicLinkPath}"; then
     sudo ln -s "${targetedFilePath}" "${symbolicLinkPath}"
   fi
 }
@@ -169,7 +169,7 @@ function CreateFileSymbolicLinkIfNotExisting () {
 function CreateDirectorySymbolicLinkIfNotExisting () {
   symbolicLinkPath="${1}"
   targetedFilePath="${2}"
-  if [[ -L "${symbolicLinkPath}" ]]; then
+  if ! sudo test -d "${symbolicLinkPath}"; then
     sudo ln -s "${targetedFilePath}" "${symbolicLinkPath}"
   fi
 }

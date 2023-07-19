@@ -1,23 +1,23 @@
 #!/bin/bash
 
 # shellcheck source-path=../../../../
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/gitea/utilities.sh"
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/users/index.sh"
+# shellcheck source-path=../../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/databases/index.sh"
+# shellcheck source-path=../../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/services/index.sh"
+# shellcheck source-path=../../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
+# shellcheck source-path=../../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/variables/index.sh"
 
 function SetupJavaApplication () {
   Ask applicationName "Enter your Java application name (eg. my-awesome-app)"
-  databaseName="${applicationName}db"
+  databaseName="${applicationName:?}db"
   dataPath=/var/lib/"${applicationName}"
   configurationPath=/etc/"${applicationName}"
   applicationPath=/var/opt/"${applicationName}"
-  sshDirectoryPath=/home/"${applicationName}"/.ssh
-  sshAuthorizedKeyPath="${sshDirectoryPath}/authorized_keys"
-  userDataPath=/home/"${applicationName}"/data
-  CreateUserIfNotExisting "${applicationName}"
-  CreateDirectoryIfNotExisting "${sshDirectoryPath}"
-  CreateFileIfNotExisting "${sshAuthorizedKeyPath}"
-  Ask continuousDeploymentPublicKey "Enter your continuous deployment machine SSH public key (ed25519 format)"
-  AppendTextInFileIfNotFound "${continuousDeploymentPublicKey:?}" "${sshAuthorizedKeyPath}"
-  SetDirectoryOwnershipRecursively "${sshDirectoryPath}" "${applicationName}"
+  CreateApplicationDeploymentUserThroughSsh "${applicationName}" "${applicationPath}"
   Ask createPostgreSqlDatabase "Create a PostgreSql database? (y/n)" 'n'
   if [[ "${createPostgreSqlDatabase:?}" == 'y' ]]; then
     Ask databasePassword "Enter your database password"
@@ -34,8 +34,6 @@ function SetupJavaApplication () {
   SetDefaultDirectoryPermissions "${dataPath}"
   SetDefaultDirectoryPermissions "${configurationPath}"
   SetDefaultDirectoryPermissions "${applicationPath}"
-  CreateDirectorySymbolicLinkIfNotExisting "${userDataPath}" "${applicationPath}"
-  SetSymbolicLinkOwnership "${userDataPath}" "${applicationName}"
   CreateStartupService "${applicationName}" "/usr/bin/java -jar /var/opt/${applicationName}/application.jar"
   CreateStartupServiceWatcher "${applicationName}" /var/opt/"${applicationName}"
   RestartService "${applicationName}"
