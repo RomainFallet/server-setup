@@ -12,7 +12,7 @@ function SetupHttpProxyServer () {
   Ask domainName "Enter your domain name"
   Ask letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
   Ask httpInternalPort "Enter your application internal port"
-  CreateProxyDomainName "${httpApplicationName:?}" "${domainName:?}" "${letsEncryptEmail:?}"
+  CreateProxyDomainName "${httpApplicationName:?}" "${domainName:?}" "${httpInternalPort:?}" "${letsEncryptEmail:?}"
   RestartService 'nginx'
 }
 
