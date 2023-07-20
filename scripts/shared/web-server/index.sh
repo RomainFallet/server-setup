@@ -24,7 +24,7 @@ function CreateProxyDomainName () {
   root /var/www/${applicationName};
 
   location / {
-    limit_req zone=ip burst=20 nodelay;
+    limit_req zone=ip burst=100 nodelay;
     proxy_set_header Host \$http_host;
     proxy_set_header X-Real-IP \$remote_addr;
     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
@@ -68,7 +68,7 @@ function CreateStaticDomainName () {
   root /var/www/${applicationName};
 
   location / {
-    limit_req zone=ip burst=20 nodelay;
+    limit_req zone=ip burst=100 nodelay;
     try_files \$uri \$uri/ =404;
   }
 
@@ -108,7 +108,7 @@ function CreateSpaDomainName () {
   root /var/www/${applicationName};
 
   location / {
-    limit_req zone=ip burst=20 nodelay;
+    limit_req zone=ip burst=100 nodelay;
     try_files \$uri \$uri/ /index.html;
   }
 

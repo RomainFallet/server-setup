@@ -8,10 +8,21 @@ function ToLowerCase() {
   echo "${text}" | awk '{print tolower($0)}'
 }
 
+function ToKebabCase() {
+  text="${1}"
+  textInLowerCase=$(ToLowerCase "${text}")
+  echo "${textInLowerCase}" | sed -E 's/\s/-/g'
+}
+
 function UpperCaseToCamelCase() {
   text="${1}"
   textInLowerCase=$(ToLowerCase "${text}")
   echo "${textInLowerCase}" | sed -E 's/_(.)/\U\1/g'
+}
+
+function Trim() {
+  text="${1}"
+  echo "${text}" | xargs
 }
 
 function AskIfNotSet() {

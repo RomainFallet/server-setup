@@ -11,7 +11,7 @@ function GenerateTlsCertificateWithCertbot () {
 }
 
 function ConfigureRequestLimits () {
-  fileContent="limit_req_zone \$binary_remote_addr zone=ip:10m rate=15r/s;
+  fileContent="limit_req_zone \$binary_remote_addr zone=ip:10m rate=50r/s;
 limit_req_status 429;"
   filePath=/etc/nginx/conf.d/limit_req.conf
   SetFileContent "${fileContent}" "${filePath}"

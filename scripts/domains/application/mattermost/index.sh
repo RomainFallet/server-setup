@@ -1,0 +1,152 @@
+#!/bin/bash
+
+# shellcheck source-path=../../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/mattermost/utilities.sh"
+# shellcheck source-path=../../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/packages/index.sh"
+# shellcheck source-path=../../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/users/index.sh"
+# shellcheck source-path=../../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/databases/index.sh"
+# shellcheck source-path=../../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/services/index.sh"
+# shellcheck source-path=../../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/web-server/index.sh"
+# shellcheck source-path=../../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
+
+function SetupMattermost () {
+  mattermostApplicationName='mattermost'
+  mattermostPath=/var/opt/mattermost
+  mattermostConfigurationFilePath="${mattermostPath}"/config/config.json
+  mattermostDownloadPath=/tmp/mattermost.tar.gz
+  mattermostDatabaseName="${mattermostApplicationName}db"
+  mattermostDataDirectory=/var/lib/mattermost
+  mattermortFilesDirectory="${mattermostDataDirectory}"/files
+  mattermostPluginsDirectory="${mattermostDataDirectory}"/plugins
+  mattermostClientPluginsDirectory="${mattermostDataDirectory}"/client/plugins
+  mattermostSocketPath=/var/tmp/mattermost_local.socket
+  AskIfNotSet mattermostDatabasePassword "Enter your Mattermost database password"
+  AskIfNotSet mattermostDomainName "Enter your Mattermost domain name"
+  AskIfNotSet mattermostInternalPort "Enter your Mattermost internal port"
+  AskIfNotSet mattermostSmtpHostName "Enter your Mattermost SMTP hostname"
+  AskIfNotSet mattermostSmtpUserName "Enter your Mattermost SMTP username" "${mattermostApplicationName}@${mattermostSmtpHostName:?}"
+  AskIfNotSet mattermostSmtpPassword "Enter your Mattermost SMTP password"
+  AskIfNotSet mattermostSmtpPort "Enter your Mattermost SMTP port" '465'
+  AskIfNotSet mattermostAdministratorUserName "Enter your Mattermost administrator username"
+  AskIfNotSet mattermostAdministratorEmail "Enter your Mattermost administrator email"
+  AskIfNotSet mattermostAdministratorPassword "Enter your Mattermost administrator password"
+  AskIfNotSet mattermostDefaultTeamIdentifier "Enter your Mattermost default team identifier"
+  AskIfNotSet mattermostDefaultTeamName "Enter your Mattermost default team name"
+  CreateUserIfNotExisting "${mattermostApplicationName}"
+  CreatePostgreSqlUserIfNotExisting "${mattermostApplicationName}" "${mattermostDatabasePassword:?}"
+  CreatePostgreSqlDatabaseIfNotExisting "${mattermostDatabaseName}"
+  GrantAllPrivilegesOnPostgreSqlDatabase "${mattermostDatabaseName}" "${mattermostApplicationName}"
+  DownloadMattermostIfOutdated "${mattermostDownloadPath}" "${mattermostPath}"
+  CreateDirectoryIfNotExisting "${mattermortFilesDirectory}"
+  CreateDirectoryIfNotExisting "${mattermostPluginsDirectory}"
+  CreateDirectoryIfNotExisting "${mattermostClientPluginsDirectory}"
+  SetDirectoryOwnershipRecursively "${mattermostDataDirectory}" "${mattermostApplicationName}"
+  ConfigureMattermost "${mattermostApplicationName}" "${mattermostDatabaseName}" "${mattermostDatabasePassword}" "${mattermortFilesDirectory}" "${mattermostPluginsDirectory}" "${mattermostClientPluginsDirectory}"
+  CreateStartupService "${mattermostApplicationName}" "/var/opt/mattermost/bin/mattermost"
+  SetDirectoryOwnershipRecursively "${mattermostPath}" "${mattermostApplicationName}"
+  RestartService "${mattermostApplicationName}"
+  WaitForMattermostSocketToBeCreated "${mattermostSocketPath}"
+  SetFileOwnership "${mattermostSocketPath}" "${mattermostApplicationName}"
+  CreateOrUpdateMattermostAdminstratorAccount "${mattermostAdministratorUserName:?}" "${mattermostAdministratorEmail:?}" "${mattermostAdministratorPassword:?}"
+  CreateOrUpdateMattermostDefaultTeam "${mattermostDefaultTeamIdentifier:?}" "${mattermostDefaultTeamName:?}" "${mattermostAdministratorUserName:?}"
+  ManageMattermostPlugins
+}
+
+function SetupMattermostHttpServer () {
+  mattermostApplicationName='mattermost'
+  AskIfNotSet mattermostDomainName "Enter your Mattermost domain name"
+  AskIfNotSet letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
+  AskIfNotSet mattermostInternalPort "Enter your Mattermost internal port"
+  CreateProxyDomainName "${mattermostApplicationName}" "${mattermostDomainName:?}" "${mattermostInternalPort:?}" "${letsEncryptEmail:?}"
+  nginxConfigurationPath=/etc/nginx/sites-configuration/"${mattermostApplicationName}"/"${mattermostDomainName:?}"/https.conf
+  nginxConfiguration="upstream backend {
+   server 127.0.0.1:${mattermostInternalPort:?};
+   keepalive 32;
+}
+
+  proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=mattermost_cache:10m max_size=3g inactive=120m use_temp_path=off;
+
+  server {
+  listen 443      ssl http2;
+  listen [::]:443 ssl http2;
+  server_name ${mattermostDomainName:?};
+
+  root /var/www/${mattermostApplicationName};
+
+  http2_push_preload on;
+
+  location ~ /api/v[0-9]+/(users/)?websocket$ {
+    client_max_body_size 50M;
+    proxy_set_header Upgrade \$http_upgrade;
+    proxy_set_header Connection \"upgrade\";
+    proxy_set_header Host \$http_host;
+    proxy_set_header X-Real-IP \$remote_addr;
+    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto \$scheme;
+    proxy_set_header X-Frame-Options SAMEORIGIN;
+    proxy_buffers 256 16k;
+    proxy_buffer_size 16k;
+    client_body_timeout 60;
+    send_timeout 300;
+    lingering_timeout 5;
+    proxy_connect_timeout 90;
+    proxy_send_timeout 300;
+    proxy_read_timeout 90s;
+    proxy_http_version 1.1;
+    proxy_pass http://backend;
+  }
+
+  location / {
+    limit_req zone=ip burst=100 nodelay;
+    client_max_body_size 50M;
+    proxy_set_header Connection \"\";
+    proxy_set_header Host \$http_host;
+    proxy_set_header X-Real-IP \$remote_addr;
+    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto \$scheme;
+    proxy_set_header X-Frame-Options SAMEORIGIN;
+    proxy_buffers 256 16k;
+    proxy_buffer_size 16k;
+    proxy_read_timeout 600s;
+    proxy_cache mattermost_cache;
+    proxy_cache_revalidate on;
+    proxy_cache_min_uses 2;
+    proxy_cache_use_stale timeout;
+    proxy_cache_lock on;
+    proxy_http_version 1.1;
+    proxy_pass http://backend;
+  }
+
+  error_log  /var/log/nginx/${mattermostApplicationName}.error.log error;
+  access_log /var/log/nginx/${mattermostApplicationName}.access.log;
+
+  ssl_certificate     /etc/letsencrypt/live/${mattermostDomainName:?}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/${mattermostDomainName:?}/privkey.pem;
+  ssl_session_timeout 1d;
+  ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384';
+  ssl_prefer_server_ciphers on;
+  ssl_session_cache shared:SSL:50m;
+  ssl_stapling on;
+  ssl_stapling_verify on;
+
+  add_header Strict-Transport-Security \"max-age=15552000; preload;\";
+  add_header Expect-CT \"max-age=86400, enforce\";
+  add_header X-Frame-Options \"SAMEORIGIN\";
+  add_header X-Content-Type-Options \"nosniff\";
+  add_header Referrer-Policy \"same-origin\";
+  add_header Cache-Control \"private, max-age=604800, must-revalidate\";
+  add_header Permissions-Policy \"fullscreen=(); microphone=(); geolocation=(); camera=(); midi=(); sync-xhr=(); magnetometer=(); gyroscope=(); payment=();\";
+  include /etc/nginx/sites-configuration/${mattermostApplicationName}/${mattermostDomainName:?}/content-security-policy.conf;
+}"
+  SetFileContent "${nginxConfiguration}" "${nginxConfigurationPath}"
+  mattermostContentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${mattermostApplicationName}"/"${mattermostDomainName}"/content-security-policy.conf
+  mattermostContentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self' 'unsafe-inline' data:;\";"
+  SetFileContent "${mattermostContentSecurityPolicyConfiguration}" "${mattermostContentSecurityPolicyConfigurationPath}"
+  RestartService 'nginx'
+}

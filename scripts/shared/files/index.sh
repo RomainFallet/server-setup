@@ -9,6 +9,12 @@ function CopyFileIfNotExisting () {
   fi
 }
 
+function CopyDirectory () {
+  directoryPath="${1}"
+  destinationPath="${2}"
+  sudo cp --archive "${directoryPath}" "${destinationPath}"
+}
+
 function BackupFile () {
   filePath="${1}"
   fileName=$(basename "${filePath}")
@@ -73,6 +79,11 @@ function RemoveFile () {
   sudo rm --force "${filePath}"
 }
 
+function RemoveDirectory () {
+  directoryPath="${1}"
+  sudo rm --force --recursive "${directoryPath}"
+}
+
 function CopyFile () {
   filePath="${1}"
   destinationPath="${2}"
@@ -82,7 +93,13 @@ function CopyFile () {
 function DownloadFile () {
   url="${1}"
   destinationPath="${2}"
-  wget "${url}" --output-document "${destinationPath}"
+  sudo wget "${url}" --output-document "${destinationPath}"
+}
+
+function ExctractTarFile () {
+  sourcePath="${1}"
+  destinationPath="${2}"
+  sudo tar -xvzf "${sourcePath}" -C "${destinationPath}"
 }
 
 function SetDefaultDirectoryPermissions () {
@@ -182,4 +199,14 @@ function MakeFileProtected () {
 function MakeFileUnprotected () {
   filePath="${1}"
   sudo chattr -i "${filePath}"
+}
+
+function SetJsonValueInFile () {
+  filePath="${1}"
+  key="${2}"
+  value="${3}"
+  rm --force /tmp/file.json
+  updatedJson=$(sudo jq "${key} = ${value}" "${filePath}")
+  echo "${updatedJson}" | tee /tmp/file.json > /dev/null
+  sudo mv /tmp/file.json "${filePath}"
 }

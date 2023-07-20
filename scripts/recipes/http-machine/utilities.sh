@@ -7,6 +7,8 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/gitea/index.sh"
 # shellcheck source-path=../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/mattermost/index.sh"
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/http/index.sh"
 
 function AskHttpMachineActions () {
@@ -15,7 +17,8 @@ function AskHttpMachineActions () {
   - Set up http static server.........[1]
   - Set up http static server for SPA.[2]
   - Set up http proxy server..........[3]
-  - Set up Gitea http server..........[4]"
+  - Set up Gitea http server..........[4]
+  - Set up Mattermost http server.....[5]"
   if [[ "${applicationMachineAction:?}" == '1' ]]; then
     SetupHttpStaticServer
   fi
@@ -27,5 +30,8 @@ function AskHttpMachineActions () {
   fi
   if [[ "${applicationMachineAction:?}" == '4' ]]; then
     SetupGiteaHttpServer
+  fi
+  if [[ "${applicationMachineAction:?}" == '5' ]]; then
+    SetupMattermostHttpServer
   fi
 }

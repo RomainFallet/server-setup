@@ -59,11 +59,21 @@ do
     break
   fi
   mkdir -p /root/data/applications/\${applicationName}
-  /usr/bin/rsync --archive --verbose --delete /var/opt/\${applicationName}/ /root/data/applications/\${applicationName}/opt
-  /usr/bin/rsync --archive --verbose --delete /var/lib/\${applicationName}/ /root/data/applications/\${applicationName}/lib
-  /usr/bin/rsync --archive --verbose --delete /etc/\${applicationName}/ /root/data/applications/\${applicationName}/etc
-  /usr/bin/rsync --archive --verbose --delete /home/\${applicationName}/ /root/data/applications/\${applicationName}/home
-  /usr/bin/rsync --archive --verbose --delete /etc/systemd/system/\${applicationName}.service /root/data/applications/\${applicationName}/systemd.service
+  if test -d /var/opt/\${applicationName}/; then
+    /usr/bin/rsync --archive --verbose --delete /var/opt/\${applicationName}/ /root/data/applications/\${applicationName}/opt
+  fi
+  if test -d /var/lib/\${applicationName}/; then
+    /usr/bin/rsync --archive --verbose --delete /var/lib/\${applicationName}/ /root/data/applications/\${applicationName}/lib
+  fi
+  if test -d /etc/\${applicationName}/; then
+    /usr/bin/rsync --archive --verbose --delete /etc/\${applicationName}/ /root/data/applications/\${applicationName}/etc
+  fi
+  if test -d /home/\${applicationName}/; then
+    /usr/bin/rsync --archive --verbose --delete /home/\${applicationName}/ /root/data/applications/\${applicationName}/home
+  fi
+  if test -f /etc/systemd/system/\${applicationName}.service; then
+    /usr/bin/rsync --archive --verbose --delete /etc/systemd/system/\${applicationName}.service /root/data/applications/\${applicationName}/systemd.service
+  fi
   if test -f /etc/systemd/system/\${applicationName}-watcher.service > /dev/null; then
     /usr/bin/rsync --archive --verbose --delete /etc/systemd/system/\${applicationName}-watcher.service /root/data/applications/\${applicationName}/systemd-watcher.service
   fi
@@ -96,11 +106,21 @@ for directoryPath in  /root/data/applications/*/
 do
   directoryPath=\${directoryPath%*/}
   applicationName=\${directoryPath##*/}
-  /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/opt/ /var/opt/\${applicationName}
-  /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/lib/ /var/lib/\${applicationName}
-  /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/etc/ /etc/\${applicationName}
-  /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/home/ /home/\${applicationName}
-  /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/systemd.service /etc/systemd/system/\${applicationName}.service
+  if test -d /root/data/applications/\${applicationName}/opt/; then
+    /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/opt/ /var/opt/\${applicationName}
+  fi
+  if test -d /root/data/applications/\${applicationName}/lib/; then
+    /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/lib/ /var/lib/\${applicationName}
+  fi
+  if test -d /root/data/applications/\${applicationName}/etc/; then
+    /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/etc/ /etc/\${applicationName}
+  fi
+  if test -d /root/data/applications/\${applicationName}/home/; then
+    /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/home/ /home/\${applicationName}
+  fi
+  if test -f /root/data/applications/\${applicationName}/systemd.service; then
+    /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/systemd.service /etc/systemd/system/\${applicationName}.service
+  fi
   if test -f /root/data/applications/\${applicationName}/systemd-watcher.service > /dev/null; then
     /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/systemd-watcher.service /etc/systemd/system/\${applicationName}-watcher.service
   fi
