@@ -30,6 +30,14 @@ function SetupHttpStaticServer () {
   RestartService 'nginx'
 }
 
+function SetupHttpRedirectionServer () {
+  Ask httpApplicationName "Enter your HTTP application name (eg. my-awesome-app)"
+  Ask domainName "Enter the domain name you want to redirect"
+  Ask redirectionDomainName "Enter the domain name redirection target"
+  Ask letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
+  CreateRedirectionDomainName "${httpApplicationName}" "${domainName}" "${redirectionDomainName}" "${letsEncryptEmail}"
+}
+
 function SetupHttpSpaServer () {
   Ask httpApplicationName "Enter your HTTP application name (eg. my-awesome-app)"
   Ask domainName "Enter your domain name"

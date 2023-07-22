@@ -17,8 +17,9 @@ function AskHttpMachineActions () {
   - Set up http static server.........[1]
   - Set up http static server for SPA.[2]
   - Set up http proxy server..........[3]
-  - Set up Gitea http server..........[4]
-  - Set up Mattermost http server.....[5]"
+  - Set up http redirection server....[4]
+  - Set up Gitea http server..........[5]
+  - Set up Mattermost http server.....[6]"
   if [[ "${applicationMachineAction:?}" == '1' ]]; then
     SetupHttpStaticServer
   fi
@@ -29,9 +30,12 @@ function AskHttpMachineActions () {
     SetupHttpProxyServer
   fi
   if [[ "${applicationMachineAction:?}" == '4' ]]; then
-    SetupGiteaHttpServer
+    SetupHttpRedirectionServer
   fi
   if [[ "${applicationMachineAction:?}" == '5' ]]; then
+    SetupGiteaHttpServer
+  fi
+  if [[ "${applicationMachineAction:?}" == '6' ]]; then
     SetupMattermostHttpServer
   fi
 }

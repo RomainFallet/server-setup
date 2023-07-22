@@ -133,3 +133,32 @@ function CreateSpaDomainName () {
   SetFileContent "${contentSecurityPolicyConfiguration}" "${contentSecurityPolicyConfigurationPath}"
   RestartService 'nginx'
 }
+
+function CreateRedirectionDomainName () {
+  applicationName="${1}"
+  domainName="${2}"
+  redirectionDomainName="${3}"
+  letsencryptEmail="${4}"
+  GenerateTlsCertificate "${applicationName}" "${domainName}" "${letsencryptEmail}"
+  httpsConfigurationPath=/etc/nginx/sites-configuration/"${applicationName}"/"${domainName}"/https.conf
+  httpsConfiguration="server {
+  listen 443      ssl http2;
+  listen [::]:443 ssl http2;
+  server_name ${domainName};
+
+  root /var/www/${applicationName};
+
+  error_log  /var/log/nginx/${applicationName}.error.log error;
+  access_log /var/log/nginx/${applicationName}.access.log;
+
+  ssl_certificate     /etc/letsencrypt/live/${domainName}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/${domainName}/privkey.pem;
+
+  location / {
+    limit_req zone=ip burst=20 nodelay;
+    return 301 https://${redirectionDomainName}\$request_uri;
+  }
+}"
+  SetFileContent "${httpsConfiguration}" "${httpsConfigurationPath}"
+  RestartService 'nginx'
+}
