@@ -7,6 +7,10 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/variables/index.sh"
 
+function AskForExternalHardDrive () {
+  AskIfNotSet useExternalHardDrive "Are you using an external hard drive at /dev/sda? (y/n)" 'n'
+}
+
 function AskDailyBackupMachineActions () {
   Ask dailyBackupMachineAction "What do you want to do?
   - Nothing [0]
@@ -17,23 +21,25 @@ function AskDailyBackupMachineActions () {
   fi
 }
 
-function LinkHomeFolderToExternalDisk () {
-  for directoryPath in /home/*/
-  do
-    directoryPath=${directoryPath%*/}
-    username=${directoryPath##*/}
-    sourcePath=/mnt/sda/"${username}"
-    targetPath=/home/"${username}"/data
-    echo "Linking folder to external disk"
-    echo "username: ${username}"
-    echo "sourcePath: ${sourcePath}"
-    echo "targetPath: ${targetPath}"
-    # shellcheck disable=SC2065
-    if ! test -d /mnt/sda/"${username}" > /dev/null; then
-      CreateDirectoryIfNotExisting "${sourcePath}"
-      SetDirectoryOwnership "${sourcePath}" "${username}"
-    fi
-    CreateDirectorySymbolicLinkIfNotExisting "${targetPath}" "${sourcePath}"
-    SetSymbolicLinkOwnership "${targetPath}" "${username}"
-  done
+function LinkHomeFolderToExternalDiskIfNeeded () {
+  if [[ "${useExternalHardDrive:?}" == 'y' ]]; then
+    for directoryPath in /home/*/
+    do      directoryPath=${directoryPath%*/}
+      username=${directoryPath##*/}
+      sourcePath=/mnt/sda/"${username}"
+      targetPath=/home/"${username}"/data
+      echo "Linking folder to external disk"
+      echo "username: ${username}"
+      echo "sourcePath: ${sourcePath}"
+      echo "targetPath: ${targetPath}"
+      # shellcheck disable=SC2065
+      if ! test -d /mnt/sda/"${username}" > /dev/null; then
+        CreateDirectoryIfNotExisting "${sourcePath}"
+        SetDirectoryOwnership "${sourcePath}" "${username}"
+      fi
+      CreateDirectorySymbolicLinkIfNotExisting "${targetPath}" "${sourcePath}"
+      SetSymbolicLinkOwnership "${targetPath}" "${username}"
+    done
+
+  fi
 }

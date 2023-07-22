@@ -25,7 +25,9 @@ function SetUpHttpMachinePrerequisites () {
 function SetUpBackupMachinePrerequisites () {
   UpgradeAllPackages
   InstallPackageIfNotExisting 'rsync'
-  MountDeviceAutomaticallyIfConnected 'sda'
+  if [[ "${useExternalHardDrive:?}" == 'y' ]]; then
+    MountDeviceAutomaticallyIfConnected 'sda'
+  fi
 }
 
 function SetUpFileMachinePrerequisites () {
