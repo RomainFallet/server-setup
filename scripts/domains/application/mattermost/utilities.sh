@@ -100,9 +100,11 @@ function ConfigureMattermost() {
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.ServiceSettings.EnableLocalMode' 'true'
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.ServiceSettings.TrustedProxyIPHeader' '["Upgrade", "Connection", "Host", "X-Real-IP", "X-Forwarded-For", "X-Forwarded-Proto", "X-Frame-Options"]'
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.SqlSettings.DataSource' "\"postgres://${mattermostApplicationName}:${mattermostDatabasePassword}@localhost:5432/${mattermostDatabaseName}?sslmode=disable&connect_timeout=10\""
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.EnableSignUpWithEmail' 'false'
+  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.EnableSignUpWithEmail' 'true'
+  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.EnableSignInWithEmail' 'true'
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.EnableSignInWithUsername' 'false'
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SendEmailNotifications' 'true'
+  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.RequireEmailVerification' 'true'
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.EnableSMTPAuth' 'true'
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SMTPUsername' "\"${mattermostSmtpUserName:?}\""
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SMTPPassword' "\"${mattermostSmtpPassword:?}\""
