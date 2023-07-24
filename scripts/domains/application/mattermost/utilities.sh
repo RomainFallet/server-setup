@@ -104,7 +104,7 @@ function ConfigureMattermost() {
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.EnableSignInWithEmail' 'true'
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.EnableSignInWithUsername' 'false'
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SendEmailNotifications' 'true'
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.RequireEmailVerification' 'true'
+  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.RequireEmailVerification' 'false'
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.EnableSMTPAuth' 'true'
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SMTPUsername' "\"${mattermostSmtpUserName:?}\""
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SMTPPassword' "\"${mattermostSmtpPassword:?}\""
