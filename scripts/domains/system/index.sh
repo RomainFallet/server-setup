@@ -9,6 +9,7 @@ function SetUpBasicSystemConfiguration () {
   # shellcheck disable=SC2119
   SetHostName
   SetUpUnattentedUpgrades
+  SetUpIpv6
 }
 
 function SetUpAutomaticUpdates () {

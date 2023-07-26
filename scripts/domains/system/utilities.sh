@@ -4,6 +4,8 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/variables/index.sh"
+# shellcheck source-path=../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/network/index.sh"
 
 function SetTimeZone () {
   timeZone="${1}"
@@ -39,4 +41,22 @@ Unattended-Upgrade::Automatic-Reboot-Time \"05:00\";"
   BackupFile "${unattendedUpgradeConfigPath}"
   SetFileContent "${periodicConfig}" "${periocConfigPath}"
   SetFileContent "${unattendedUpgradeConfig}" "${unattendedUpgradeConfigPath}"
+}
+
+function SetUpIpv6 () {
+  AskIfNotSet ipv6Address "Enter your IPv6 address (eg. 2001:XXXX:XXX:XXXX::XXXX)"
+  AskIfNotSet ipv6Gateway "Enter your IPv6 gateway (eg. 2001:XXXX:XXX:XXXX::1)"
+  ipv4ConfigurationPath=/etc/netplan/50-cloud-init.yaml
+  ipv6ConfigurationPath=/etc/netplan/51-cloud-init-ipv6.yaml
+  CopyFile "${ipv4ConfigurationPath}" "${ipv6ConfigurationPath}"
+  ReplaceTextInFile "dhcp4:\strue" "dhcp6: false" "${ipv6ConfigurationPath}"
+  ipv6Configuration="            addresses:
+                - ${ipv6Address:?}/128
+            routes:
+                - to: default
+                  via: ${ipv6Gateway:?}
+                - to: ${ipv6Gateway:?}
+                  scope: link"
+  AppendTextInFileIfNotFound "${ipv6Configuration}" "${ipv6ConfigurationPath}"
+  EnableNetworkConfiguration
 }
