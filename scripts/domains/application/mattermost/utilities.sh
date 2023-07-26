@@ -111,6 +111,8 @@ function ConfigureMattermost() {
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SMTPServer' "\"${mattermostSmtpHostName:?}\""
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SMTPPort' "\"${mattermostSmtpPort:?}\""
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.ConnectionSecurity' "\"TLS\""
+  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SendPushNotifications' "true",
+  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.PushNotificationServer' "\"https://push-test.mattermost.com\"",
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.LogSettings.EnableSentry' "false"
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.PasswordSettings.MinimumLength' "15"
   SetJsonValueInFile "${mattermostConfigurationFilePath}" '.FileSettings.Directory' "\"${mattermortFilesDirectory}\""
