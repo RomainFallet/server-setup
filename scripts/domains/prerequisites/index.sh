@@ -6,9 +6,12 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/packages/index.sh"
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
+# shellcheck source-path=../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/logs/index.sh"
 
 function SetUpApplicationMachinePrerequisites () {
   UpgradeAllPackages
+  CleanOldLogs
   InstallPackageIfNotExisting 'rsync'
   InstallPackageIfNotExisting 'postgresql'
   InstallPackageIfNotExisting 'openjdk-17-jre'
@@ -17,6 +20,7 @@ function SetUpApplicationMachinePrerequisites () {
 
 function SetUpHttpMachinePrerequisites () {
   UpgradeAllPackages
+  CleanOldLogs
   InstallPackageIfNotExisting 'rsync'
   InstallPackageIfNotExisting 'nginx'
   InstallPackageIfNotExisting 'certbot'
@@ -24,6 +28,7 @@ function SetUpHttpMachinePrerequisites () {
 
 function SetUpBackupMachinePrerequisites () {
   UpgradeAllPackages
+  CleanOldLogs
   InstallPackageIfNotExisting 'rsync'
   if [[ "${useExternalHardDrive:?}" == 'y' ]]; then
     MountDeviceAutomaticallyIfConnected 'sda'
@@ -32,6 +37,7 @@ function SetUpBackupMachinePrerequisites () {
 
 function SetUpFileMachinePrerequisites () {
   UpgradeAllPackages
+  CleanOldLogs
   InstallPackageIfNotExisting 'rsync'
   InstallPackageIfNotExisting 'nfs-kernel-server'
   MountDeviceAutomaticallyIfConnected 'sda'
