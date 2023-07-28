@@ -55,20 +55,24 @@ for directoryPath in /var/opt/*/
 do
   directoryPath=\${directoryPath%*/}
   applicationName=\${directoryPath##*/}
+  mkdir -p /root/data/applications/\${applicationName}
   if [[ \"\${applicationName}\" == 'server-setup' ]]; then
     break
   fi
-  mkdir -p /root/data/applications/\${applicationName}
   if test -d /var/opt/\${applicationName}/; then
+    mkdir -p /root/data/applications/\${applicationName}/opt
     /usr/bin/rsync --archive --verbose --delete /var/opt/\${applicationName}/ /root/data/applications/\${applicationName}/opt
   fi
   if test -d /var/lib/\${applicationName}/; then
+    mkdir -p /root/data/applications/\${applicationName}/lib
     /usr/bin/rsync --archive --verbose --delete /var/lib/\${applicationName}/ /root/data/applications/\${applicationName}/lib
   fi
   if test -d /etc/\${applicationName}/; then
+    mkdir -p /root/data/applications/\${applicationName}/etc
     /usr/bin/rsync --archive --verbose --delete /etc/\${applicationName}/ /root/data/applications/\${applicationName}/etc
   fi
   if test -d /home/\${applicationName}/; then
+    mkdir -p /root/data/applications/\${applicationName}/home
     /usr/bin/rsync --archive --verbose --delete /home/\${applicationName}/ /root/data/applications/\${applicationName}/home
   fi
   if test -f /etc/systemd/system/\${applicationName}.service; then
