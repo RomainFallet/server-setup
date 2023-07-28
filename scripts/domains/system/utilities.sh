@@ -48,15 +48,37 @@ function SetUpIpv6 () {
   AskIfNotSet ipv6Gateway "Enter your IPv6 gateway (eg. 2001:XXXX:XXX:XXXX::1)"
   ipv4ConfigurationPath=/etc/netplan/50-cloud-init.yaml
   ipv6ConfigurationPath=/etc/netplan/51-cloud-init-ipv6.yaml
-  CopyFile "${ipv4ConfigurationPath}" "${ipv6ConfigurationPath}"
-  ReplaceTextInFile "dhcp4:\strue" "dhcp6: false" "${ipv6ConfigurationPath}"
-  ipv6Configuration="            addresses:
+  # shellcheck disable=SC2312
+  ethernetConnectionName=$(sudo ls /sys/class/net | sort -V | awk 'FNR == 1 {print}')
+  ethernetConnectionMacAddress=$(cat /sys/class/net/"${ethernetConnectionName}"/address)
+  ipv4Configuration="network:
+    version: 2
+    ethernets:
+        ${ethernetConnectionName}:
+            dhcp4: true
+            match:
+                macaddress: ${ethernetConnectionMacAddress}
+            mtu: 1500
+            set-name: ${ethernetConnectionName}"
+  ipv4ConfigurationPath=/etc/netplan/50-cloud-init.yaml
+  SetFileContent "${ipv4Configuration}" "${ipv4ConfigurationPath}"
+  ipv6Configuration="network:
+    version: 2
+    ethernets:
+        ${ethernetConnectionName}:
+            dhcp6: false
+            mtu: 1500
+            match:
+                macaddress: ${ethernetConnectionMacAddress}
+            set-name: ${ethernetConnectionName}
+            addresses:
                 - ${ipv6Address:?}/128
             routes:
                 - to: default
                   via: ${ipv6Gateway:?}
                 - to: ${ipv6Gateway:?}
                   scope: link"
-  AppendTextInFileIfNotFound "${ipv6Configuration}" "${ipv6ConfigurationPath}"
+  SetFileContent "${ipv6Configuration}" "${ipv6ConfigurationPath}"
+  SetFileContent "network: {config: disabled}" /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
   EnableNetworkConfiguration
 }
