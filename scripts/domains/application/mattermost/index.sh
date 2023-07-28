@@ -72,8 +72,6 @@ function SetupMattermostHttpServer () {
    keepalive 32;
 }
 
-  proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=mattermost_cache:10m max_size=3g inactive=120m use_temp_path=off;
-
   server {
   listen 443      ssl http2;
   listen [::]:443 ssl http2;
@@ -116,11 +114,6 @@ function SetupMattermostHttpServer () {
     proxy_buffers 256 16k;
     proxy_buffer_size 16k;
     proxy_read_timeout 600s;
-    proxy_cache mattermost_cache;
-    proxy_cache_revalidate on;
-    proxy_cache_min_uses 2;
-    proxy_cache_use_stale timeout;
-    proxy_cache_lock on;
     proxy_http_version 1.1;
     proxy_pass http://backend;
   }
@@ -142,7 +135,7 @@ function SetupMattermostHttpServer () {
   add_header X-Frame-Options \"SAMEORIGIN\";
   add_header X-Content-Type-Options \"nosniff\";
   add_header Referrer-Policy \"same-origin\";
-  add_header Cache-Control \"private, max-age=604800, must-revalidate\";
+  add_header Cache-Control \"no-store\";
   add_header Permissions-Policy \"fullscreen=(); microphone=(); geolocation=(); camera=(); midi=(); sync-xhr=(); magnetometer=(); gyroscope=(); payment=();\";
   include /etc/nginx/sites-configuration/${mattermostApplicationName}/${mattermostDomainName:?}/content-security-policy.conf;
 }"
