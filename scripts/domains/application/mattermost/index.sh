@@ -26,6 +26,7 @@ function SetupMattermost () {
   mattermostPluginsDirectory="${mattermostDataDirectory}"/plugins
   mattermostClientPluginsDirectory="${mattermostDataDirectory}"/client/plugins
   mattermostSocketPath=/var/tmp/mattermost_local.socket
+  mattermostConfigurationFilePath="${mattermostDataDirectory}"/config/config.json
   AskIfNotSet mattermostDatabasePassword "Enter your Mattermost database password"
   AskIfNotSet mattermostDomainName "Enter your Mattermost domain name"
   AskIfNotSet mattermostInternalPort "Enter your Mattermost internal port"
@@ -47,12 +48,13 @@ function SetupMattermost () {
   CreateDirectoryIfNotExisting "${mattermostPluginsDirectory}"
   CreateDirectoryIfNotExisting "${mattermostClientPluginsDirectory}"
   SetDirectoryOwnershipRecursively "${mattermostDataDirectory}" "${mattermostApplicationName}"
-  ConfigureMattermost "${mattermostApplicationName}" "${mattermostDatabaseName}" "${mattermostDatabasePassword}" "${mattermortFilesDirectory}" "${mattermostPluginsDirectory}" "${mattermostClientPluginsDirectory}"
-  CreateStartupService "${mattermostApplicationName}" "/var/opt/mattermost/bin/mattermost"
+  RemoveFile "${mattermostConfigurationFilePath}"
+  CreateStartupService "${mattermostApplicationName}" "/var/opt/mattermost/bin/mattermost" "${mattermostApplicationName}" "/var/opt/mattermost/" "MM_CONFIG='postgres://${mattermostApplicationName}:${mattermostDatabasePassword}@localhost:5432/${mattermostDatabaseName}?sslmode=disable&connect_timeout=10'" 'postgresql.service'
   SetDirectoryOwnershipRecursively "${mattermostPath}" "${mattermostApplicationName}"
   RestartService "${mattermostApplicationName}"
   WaitForMattermostSocketToBeCreated "${mattermostSocketPath}"
   SetFileOwnership "${mattermostSocketPath}" "${mattermostApplicationName}"
+  ConfigureMattermost "${mattermostApplicationName}" "${mattermortFilesDirectory}" "${mattermostPluginsDirectory}" "${mattermostClientPluginsDirectory}"
   CreateOrUpdateMattermostAdminstratorAccount "${mattermostAdministratorUserName:?}" "${mattermostAdministratorEmail:?}" "${mattermostAdministratorPassword:?}"
   CreateOrUpdateMattermostDefaultTeam "${mattermostDefaultTeamIdentifier:?}" "${mattermostDefaultTeamName:?}" "${mattermostAdministratorUserName:?}"
   ManageMattermostPlugins

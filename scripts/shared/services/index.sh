@@ -11,6 +11,7 @@ function CreateService () {
   userName="${3}"
   workingDirectory="${4}"
   environmentVariables="${5}"
+  afterServiceName="${6}"
 
   workingDirectoryConfiguration=''
   environmentConfiguration=''
@@ -22,10 +23,14 @@ WorkingDirectory=${workingDirectory}"
     environmentConfiguration="
 Environment=${environmentVariables}"
   fi
+  if [[ -n "${afterServiceName}" ]]; then
+    afterServiceNameConfiguration="
+After=${afterServiceName}"
+  fi
   fileContent="[Unit]
 Description=${name}
 After=syslog.target
-After=network.target
+After=network.target${afterServiceNameConfiguration}
 
 [Service]
 Type=simple
@@ -80,8 +85,9 @@ function CreateStartupService () {
   userName="${3}"
   workingDirectory="${4}"
   environmentVariables="${5}"
+  afterServiceName="${6}"
 
-  CreateService "${name}" "${executablePath}" "${userName}" "${workingDirectory}" "${environmentVariables}"
+  CreateService "${name}" "${executablePath}" "${userName}" "${workingDirectory}" "${environmentVariables}" "${afterServiceName}"
   EnableSystemdService "${name}"
 }
 

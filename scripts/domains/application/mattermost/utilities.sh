@@ -81,45 +81,48 @@ function CreateOrUpdateMattermostDefaultTeam () {
   sudo su --command "/var/opt/mattermost/bin/mmctl --local team users add '${teamIdentifier}' '${administratorUserName}'" - mattermost
 }
 
+function SetMattermostConfiguration () {
+  configurationKey="${1}"
+  configurationValue="${2}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local config set '${configurationKey}' ${configurationValue}" - mattermost
+}
+
 function ConfigureMattermost() {
   mattermostApplicationName="${1}"
-  mattermostDatabaseName="${2}"
-  mattermostDatabasePassword="${3}"
-  mattermortFilesDirectory="${4}"
-  mattermostPluginsDirectory="${5}"
-  mattermostClientPluginsDirectory="${6}"
+  mattermortFilesDirectory="${2}"
+  mattermostPluginsDirectory="${3}"
+  mattermostClientPluginsDirectory="${4}"
   AskIfNotSet mattermostDomainName "Enter your Mattermost domain name"
   AskIfNotSet mattermostInternalPort "Enter your Mattermost internal port"
   AskIfNotSet mattermostSmtpHostName "Enter your Mattermost SMTP hostname"
   AskIfNotSet mattermostSmtpUserName "Enter your Mattermost SMTP username" "${mattermostApplicationName}@${mattermostSmtpHostName:?}"
   AskIfNotSet mattermostSmtpPassword "Enter your Mattermost SMTP password"
   AskIfNotSet mattermostSmtpPort "Enter your Mattermost SMTP port" '465'
-  mattermostConfigurationFilePath=/var/opt/mattermost/config/config.json
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.ServiceSettings.ListenAddress' "\":${mattermostInternalPort:?}\""
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.ServiceSettings.SiteURL' "\"https://${mattermostDomainName:?}\""
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.ServiceSettings.EnableLocalMode' 'true'
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.ServiceSettings.TrustedProxyIPHeader' '["Upgrade", "Connection", "Host", "X-Real-IP", "X-Forwarded-For", "X-Forwarded-Proto", "X-Frame-Options"]'
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.SqlSettings.DataSource' "\"postgres://${mattermostApplicationName}:${mattermostDatabasePassword}@localhost:5432/${mattermostDatabaseName}?sslmode=disable&connect_timeout=10\""
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.EnableSignUpWithEmail' 'true'
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.EnableSignInWithEmail' 'true'
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.EnableSignInWithUsername' 'false'
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SendEmailNotifications' 'true'
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.RequireEmailVerification' 'false'
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.EnableSMTPAuth' 'true'
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SMTPUsername' "\"${mattermostSmtpUserName:?}\""
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SMTPPassword' "\"${mattermostSmtpPassword:?}\""
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SMTPServer' "\"${mattermostSmtpHostName:?}\""
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SMTPPort' "\"${mattermostSmtpPort:?}\""
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.ConnectionSecurity' "\"TLS\""
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.SendPushNotifications' "true"
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.EmailSettings.PushNotificationServer' "\"https://push-test.mattermost.com\""
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.LogSettings.EnableSentry' "false"
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.PasswordSettings.MinimumLength' "15"
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.FileSettings.Directory' "\"${mattermortFilesDirectory}\""
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.LocalizationSettings.DefaultServerLocale' "\"fr\""
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.LocalizationSettings.DefaultClientLocale' "\"fr\""
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.PluginSettings.Directory' "\"${mattermostPluginsDirectory}\""
-  SetJsonValueInFile "${mattermostConfigurationFilePath}" '.PluginSettings.ClientDirectory' "\"${mattermostClientPluginsDirectory}\""
+  SetMattermostConfiguration 'ServiceSettings.ListenAddress' ":${mattermostInternalPort:?}"
+  SetMattermostConfiguration 'ServiceSettings.SiteURL' "https://${mattermostDomainName:?}"
+  SetMattermostConfiguration 'ServiceSettings.EnableLocalMode' true
+  SetMattermostConfiguration 'ServiceSettings.TrustedProxyIPHeader' 'Upgrade' 'Connection' 'Host' 'X-Real-IP' 'X-Forwarded-For' 'X-Forwarded-Proto' 'X-Frame-Options'
+  SetMattermostConfiguration 'EmailSettings.EnableSignUpWithEmail' true
+  SetMattermostConfiguration 'EmailSettings.EnableSignInWithEmail' true
+  SetMattermostConfiguration 'EmailSettings.EnableSignInWithUsername' false
+  SetMattermostConfiguration 'EmailSettings.SendEmailNotifications' true
+  SetMattermostConfiguration 'EmailSettings.RequireEmailVerification' false
+  SetMattermostConfiguration 'EmailSettings.EnableSMTPAuth' true
+  SetMattermostConfiguration 'EmailSettings.SMTPUsername' "${mattermostSmtpUserName:?}"
+  SetMattermostConfiguration 'EmailSettings.SMTPPassword' "${mattermostSmtpPassword:?}"
+  SetMattermostConfiguration 'EmailSettings.SMTPServer' "${mattermostSmtpHostName:?}"
+  SetMattermostConfiguration 'EmailSettings.SMTPPort' "${mattermostSmtpPort:?}"
+  SetMattermostConfiguration 'EmailSettings.ConnectionSecurity' 'TLS'
+  SetMattermostConfiguration 'LogSettings.EnableSentry' false
+  SetMattermostConfiguration 'PasswordSettings.MinimumLength' 12
+  SetMattermostConfiguration 'LocalizationSettings.DefaultServerLocale' 'fr'
+  SetMattermostConfiguration 'LocalizationSettings.DefaultClientLocale' 'fr'
+  SetMattermostConfiguration 'PluginSettings.Directory' "${mattermostPluginsDirectory}"
+  SetMattermostConfiguration 'PluginSettings.ClientDirectory' "${mattermostClientPluginsDirectory}"
+  SetMattermostConfiguration 'FileSettings.DriverName' local
+  SetMattermostConfiguration 'FileSettings.Directory' "${mattermortFilesDirectory}"
+  SetMattermostConfiguration 'EmailSettings.SendPushNotifications' true
+  SetMattermostConfiguration 'EmailSettings.PushNotificationServer' 'https://push-test.mattermost.com'
 }
 
 function WaitForMattermostSocketToBeCreated() {
