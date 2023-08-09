@@ -101,7 +101,7 @@ function ConfigureMattermost() {
   SetMattermostConfiguration 'ServiceSettings.ListenAddress' ":${mattermostInternalPort:?}"
   SetMattermostConfiguration 'ServiceSettings.SiteURL' "https://${mattermostDomainName:?}"
   SetMattermostConfiguration 'ServiceSettings.EnableLocalMode' true
-  SetMattermostConfiguration 'ServiceSettings.TrustedProxyIPHeader' 'Upgrade' 'Connection' 'Host' 'X-Real-IP' 'X-Forwarded-For' 'X-Forwarded-Proto' 'X-Frame-Options'
+  SetMattermostConfiguration 'ServiceSettings.TrustedProxyIPHeader' "'Upgrade' 'Connection' 'Host' 'X-Real-IP' 'X-Forwarded-For' 'X-Forwarded-Proto' 'X-Frame-Options'"
   SetMattermostConfiguration 'EmailSettings.EnableSignUpWithEmail' true
   SetMattermostConfiguration 'EmailSettings.EnableSignInWithEmail' true
   SetMattermostConfiguration 'EmailSettings.EnableSignInWithUsername' false
@@ -157,4 +157,20 @@ function ManageMattermostPlugins () {
   sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin enable 'com.mattermost.apps'" - mattermost
   sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin enable 'focalboard'" - mattermost
   sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin enable 'jitsi'" - mattermost
+}
+
+function SetMattermostConfigurationFileContent () {
+  configurationFilePath="${1}"
+  postgresqlUsername="${2}"
+  postgresqlPassword="${3}"
+  postgresqlDatabaseName="${4}"
+  configuration="{
+    \"ServiceSettings\": {
+      \"EnableLocalMode\": true
+    },
+    \"SqlSettings\": {
+      \"\DataSource\": \"postgres://${postgresqlUsername}:${postgresqlPassword}@localhost:5432/${postgresqlDatabaseName}?sslmode=disable&connect_timeout=10'\"
+    }
+  }"
+  SetFileContent "${configuration}" "${configurationFilePath}"
 }

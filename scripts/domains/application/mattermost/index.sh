@@ -48,8 +48,8 @@ function SetupMattermost () {
   CreateDirectoryIfNotExisting "${mattermostPluginsDirectory}"
   CreateDirectoryIfNotExisting "${mattermostClientPluginsDirectory}"
   SetDirectoryOwnershipRecursively "${mattermostDataDirectory}" "${mattermostApplicationName}"
-  RemoveFile "${mattermostConfigurationFilePath}"
-  CreateStartupService "${mattermostApplicationName}" "/var/opt/mattermost/bin/mattermost" "${mattermostApplicationName}" "/var/opt/mattermost/" "MM_CONFIG='postgres://${mattermostApplicationName}:${mattermostDatabasePassword}@localhost:5432/${mattermostDatabaseName}?sslmode=disable&connect_timeout=10'" 'postgresql.service'
+  SetMattermostConfigurationFileContent "${mattermostConfigurationFilePath}" "${mattermostApplicationName}" "${mattermostDatabasePassword}" "${mattermostDatabaseName}"
+  CreateStartupService "${mattermostApplicationName}" "/var/opt/mattermost/bin/mattermost" "${mattermostApplicationName}" "/var/opt/mattermost/" '' 'postgresql.service'
   SetDirectoryOwnershipRecursively "${mattermostPath}" "${mattermostApplicationName}"
   RestartService "${mattermostApplicationName}"
   WaitForMattermostSocketToBeCreated "${mattermostSocketPath}"
@@ -141,7 +141,7 @@ function SetupMattermostHttpServer () {
 }"
   SetFileContent "${nginxConfiguration}" "${nginxConfigurationPath}"
   mattermostContentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${mattermostApplicationName}"/"${mattermostDomainName}"/content-security-policy.conf
-  mattermostContentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self' 'unsafe-inline' data:;\";"
+  mattermostContentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self' 'unsafe-inline' data: blob:;\";"
   SetFileContent "${mattermostContentSecurityPolicyConfiguration}" "${mattermostContentSecurityPolicyConfigurationPath}"
   RestartService 'nginx'
 }
