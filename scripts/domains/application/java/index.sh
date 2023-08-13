@@ -10,6 +10,8 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
 # shellcheck source-path=../../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/variables/index.sh"
+# shellcheck source-path=../../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/packages/index.sh"
 
 function SetupJavaApplication () {
   Ask applicationName "Enter your Java application name (eg. my-awesome-app)"
@@ -17,6 +19,7 @@ function SetupJavaApplication () {
   dataPath=/var/lib/"${applicationName}"
   configurationPath=/etc/"${applicationName}"
   applicationPath=/var/opt/"${applicationName}"
+  InstallPackageIfNotExisting 'openjdk-17-jre'
   CreateApplicationDeploymentUserThroughSsh "${applicationName}" "${applicationPath}"
   Ask createPostgreSqlDatabase "Create a PostgreSql database? (y/n)" 'n'
   if [[ "${createPostgreSqlDatabase:?}" == 'y' ]]; then
