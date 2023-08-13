@@ -106,6 +106,7 @@ mkdir -p /root/data
 cp /root/data/pg_dump.sql /var/lib/postgresql/pg_dump.sql
 su --command \"psql --file /var/lib/postgresql/pg_dump.sql\" - postgres
 rm -f /var/lib/postgresql/pg_dump.sql
+/usr/bin/rsync --archive --verbose --delete /root/data/server-setup/ /etc/server-setup
 for directoryPath in  /root/data/applications/*/
 do
   directoryPath=\${directoryPath%*/}
