@@ -29,6 +29,7 @@ function CreateProxyDomainName () {
     proxy_set_header X-Real-IP \$remote_addr;
     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto \$scheme;
+    proxy_pass_request_headers on;
     proxy_pass http://127.0.0.1:${internalPort};
   }
 
@@ -43,7 +44,6 @@ function CreateProxyDomainName () {
   add_header X-Frame-Options \"deny\";
   add_header X-Content-Type-Options \"nosniff\";
   add_header Referrer-Policy \"same-origin\";
-  add_header Cache-Control \"private, max-age=604800, must-revalidate\";
   add_header Permissions-Policy \"fullscreen=(); microphone=(); geolocation=(); camera=(); midi=(); sync-xhr=(); magnetometer=(); gyroscope=(); payment=();\";
   include /etc/nginx/sites-configuration/${applicationName}/${domainName}/content-security-policy.conf;
 }"

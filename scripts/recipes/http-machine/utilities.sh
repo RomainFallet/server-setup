@@ -9,6 +9,8 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/mattermost/index.sh"
 # shellcheck source-path=../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/listmonk/index.sh"
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/http/index.sh"
 
 function AskHttpMachineActions () {
@@ -19,7 +21,8 @@ function AskHttpMachineActions () {
   - Set up http proxy server..........[3]
   - Set up http redirection server....[4]
   - Set up Gitea http server..........[5]
-  - Set up Mattermost http server.....[6]"
+  - Set up Mattermost http server.....[6]
+  - Set up Listmonk http server.  ....[7]"
   if [[ "${applicationMachineAction:?}" == '1' ]]; then
     SetupHttpStaticServer
   fi
@@ -37,5 +40,8 @@ function AskHttpMachineActions () {
   fi
   if [[ "${applicationMachineAction:?}" == '6' ]]; then
     SetupMattermostHttpServer
+  fi
+  if [[ "${applicationMachineAction:?}" == '7' ]]; then
+    SetupListmonkHttpServer
   fi
 }
