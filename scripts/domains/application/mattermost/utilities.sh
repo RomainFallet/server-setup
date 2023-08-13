@@ -58,15 +58,16 @@ function DownloadMattermostIfOutdated () {
   fi
 }
 
-function CreateOrUpdateMattermostAdminstratorAccount () {
+function CreateOrUpdateMattermostAdministratorAccount () {
   userName="${1}"
   userEmail="${2}"
   userPassword="${3}"
-  existingUsers=$(sudo su --command "/var/opt/mattermost/bin/mmctl --local user list" - mattermost)
+  mattermostApplicationName="${4}"
+  existingUsers=$(sudo su --command "/var/opt/mattermost/bin/mmctl --local user list" - "${mattermostApplicationName}")
   if echo "${existingUsers}" | grep "${userEmail}" > /dev/null; then
-    sudo su --command "/var/opt/mattermost/bin/mmctl --local user change-password '${userName}' --password '${userPassword}'" - mattermost
+    sudo su --command "/var/opt/mattermost/bin/mmctl --local user change-password '${userName}' --password '${userPassword}'" - "${mattermostApplicationName}"
   else
-    sudo su --command "/var/opt/mattermost/bin/mmctl --local user create --system-admin --email '${userEmail}' --username '${userName}' --password '${userPassword}'" - mattermost
+    sudo su --command "/var/opt/mattermost/bin/mmctl --local user create --system-admin --email '${userEmail}' --username '${userName}' --password '${userPassword}'" - "${mattermostApplicationName}"
   fi
 }
 
@@ -74,17 +75,19 @@ function CreateOrUpdateMattermostDefaultTeam () {
   teamIdentifier="${1}"
   teamName="${2}"
   administratorUserName="${3}"
-  existingTeams=$(sudo su --command "/var/opt/mattermost/bin/mmctl --local team list" - mattermost)
+  mattermostApplicationName="${4}"
+  existingTeams=$(sudo su --command "/var/opt/mattermost/bin/mmctl --local team list" - "${mattermostApplicationName}")
   if ! echo "${existingTeams}" | grep "${teamIdentifier}" > /dev/null; then
-    sudo su --command "/var/opt/mattermost/bin/mmctl --local team create --name '${teamIdentifier}' --display-name '${teamName}' --private" - mattermost
+    sudo su --command "/var/opt/mattermost/bin/mmctl --local team create --name '${teamIdentifier}' --display-name '${teamName}' --private" - "${mattermostApplicationName}"
   fi
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local team users add '${teamIdentifier}' '${administratorUserName}'" - mattermost
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local team users add '${teamIdentifier}' '${administratorUserName}'" - "${mattermostApplicationName}"
 }
 
 function SetMattermostConfiguration () {
   configurationKey="${1}"
   configurationValue="${2}"
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local config set '${configurationKey}' ${configurationValue}" - mattermost
+  mattermostApplicationName="${3}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local config set '${configurationKey}' ${configurationValue}" - "${mattermostApplicationName}"
 }
 
 function ConfigureMattermost() {
@@ -98,31 +101,31 @@ function ConfigureMattermost() {
   AskIfNotSet mattermostSmtpUserName "Enter your Mattermost SMTP username" "${mattermostApplicationName}@${mattermostSmtpHostName:?}"
   AskIfNotSet mattermostSmtpPassword "Enter your Mattermost SMTP password"
   AskIfNotSet mattermostSmtpPort "Enter your Mattermost SMTP port" '465'
-  SetMattermostConfiguration 'ServiceSettings.ListenAddress' ":${mattermostInternalPort:?}"
-  SetMattermostConfiguration 'ServiceSettings.SiteURL' "https://${mattermostDomainName:?}"
-  SetMattermostConfiguration 'ServiceSettings.EnableLocalMode' true
-  SetMattermostConfiguration 'ServiceSettings.TrustedProxyIPHeader' "'Upgrade' 'Connection' 'Host' 'X-Real-IP' 'X-Forwarded-For' 'X-Forwarded-Proto' 'X-Frame-Options'"
-  SetMattermostConfiguration 'EmailSettings.EnableSignUpWithEmail' true
-  SetMattermostConfiguration 'EmailSettings.EnableSignInWithEmail' true
-  SetMattermostConfiguration 'EmailSettings.EnableSignInWithUsername' false
-  SetMattermostConfiguration 'EmailSettings.SendEmailNotifications' true
-  SetMattermostConfiguration 'EmailSettings.RequireEmailVerification' false
-  SetMattermostConfiguration 'EmailSettings.EnableSMTPAuth' true
-  SetMattermostConfiguration 'EmailSettings.SMTPUsername' "${mattermostSmtpUserName:?}"
-  SetMattermostConfiguration 'EmailSettings.SMTPPassword' "${mattermostSmtpPassword:?}"
-  SetMattermostConfiguration 'EmailSettings.SMTPServer' "${mattermostSmtpHostName:?}"
-  SetMattermostConfiguration 'EmailSettings.SMTPPort' "${mattermostSmtpPort:?}"
-  SetMattermostConfiguration 'EmailSettings.ConnectionSecurity' 'TLS'
-  SetMattermostConfiguration 'LogSettings.EnableSentry' false
-  SetMattermostConfiguration 'PasswordSettings.MinimumLength' 12
-  SetMattermostConfiguration 'LocalizationSettings.DefaultServerLocale' 'fr'
-  SetMattermostConfiguration 'LocalizationSettings.DefaultClientLocale' 'fr'
-  SetMattermostConfiguration 'PluginSettings.Directory' "${mattermostPluginsDirectory}"
-  SetMattermostConfiguration 'PluginSettings.ClientDirectory' "${mattermostClientPluginsDirectory}"
-  SetMattermostConfiguration 'FileSettings.DriverName' local
-  SetMattermostConfiguration 'FileSettings.Directory' "${mattermortFilesDirectory}"
-  SetMattermostConfiguration 'EmailSettings.SendPushNotifications' true
-  SetMattermostConfiguration 'EmailSettings.PushNotificationServer' 'https://push-test.mattermost.com'
+  SetMattermostConfiguration 'ServiceSettings.ListenAddress' ":${mattermostInternalPort:?}" "${mattermostApplicationName}"
+  SetMattermostConfiguration 'ServiceSettings.SiteURL' "https://${mattermostDomainName:?}" "${mattermostApplicationName}"
+  SetMattermostConfiguration 'ServiceSettings.EnableLocalMode' true "${mattermostApplicationName}"
+  SetMattermostConfiguration 'ServiceSettings.TrustedProxyIPHeader' "'Upgrade' 'Connection' 'Host' 'X-Real-IP' 'X-Forwarded-For' 'X-Forwarded-Proto' 'X-Frame-Options'" "${mattermostApplicationName}"
+  SetMattermostConfiguration 'EmailSettings.EnableSignUpWithEmail' true "${mattermostApplicationName}"
+  SetMattermostConfiguration 'EmailSettings.EnableSignInWithEmail' true "${mattermostApplicationName}"
+  SetMattermostConfiguration 'EmailSettings.EnableSignInWithUsername' false "${mattermostApplicationName}"
+  SetMattermostConfiguration 'EmailSettings.SendEmailNotifications' true "${mattermostApplicationName}"
+  SetMattermostConfiguration 'EmailSettings.RequireEmailVerification' false "${mattermostApplicationName}"
+  SetMattermostConfiguration 'EmailSettings.EnableSMTPAuth' true "${mattermostApplicationName}"
+  SetMattermostConfiguration 'EmailSettings.SMTPUsername' "${mattermostSmtpUserName:?}" "${mattermostApplicationName}"
+  SetMattermostConfiguration 'EmailSettings.SMTPPassword' "${mattermostSmtpPassword:?}" "${mattermostApplicationName}"
+  SetMattermostConfiguration 'EmailSettings.SMTPServer' "${mattermostSmtpHostName:?}" "${mattermostApplicationName}"
+  SetMattermostConfiguration 'EmailSettings.SMTPPort' "${mattermostSmtpPort:?}" "${mattermostApplicationName}"
+  SetMattermostConfiguration 'EmailSettings.ConnectionSecurity' 'TLS' "${mattermostApplicationName}"
+  SetMattermostConfiguration 'LogSettings.EnableSentry' false "${mattermostApplicationName}"
+  SetMattermostConfiguration 'PasswordSettings.MinimumLength' 12 "${mattermostApplicationName}"
+  SetMattermostConfiguration 'LocalizationSettings.DefaultServerLocale' 'fr' "${mattermostApplicationName}"
+  SetMattermostConfiguration 'LocalizationSettings.DefaultClientLocale' 'fr' "${mattermostApplicationName}"
+  SetMattermostConfiguration 'PluginSettings.Directory' "${mattermostPluginsDirectory}" "${mattermostApplicationName}"
+  SetMattermostConfiguration 'PluginSettings.ClientDirectory' "${mattermostClientPluginsDirectory}" "${mattermostApplicationName}"
+  SetMattermostConfiguration 'FileSettings.DriverName' local "${mattermostApplicationName}"
+  SetMattermostConfiguration 'FileSettings.Directory' "${mattermortFilesDirectory}" "${mattermostApplicationName}"
+  SetMattermostConfiguration 'EmailSettings.SendPushNotifications' true "${mattermostApplicationName}"
+  SetMattermostConfiguration 'EmailSettings.PushNotificationServer' 'https://push-test.mattermost.com' "${mattermostApplicationName}"
 }
 
 function WaitForMattermostSocketToBeCreated() {
@@ -142,21 +145,22 @@ function WaitForMattermostSocketToBeCreated() {
 }
 
 function ManageMattermostPlugins () {
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'com.mattermost.calls'" - mattermost
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin delete 'com.mattermost.calls'" - mattermost
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'com.mattermost.nps'" - mattermost
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin delete 'com.mattermost.nps'" - mattermost
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'playbooks'" - mattermost
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin delete 'playbooks'" - mattermost
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'com.mattermost.apps'" - mattermost
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'focalboard'" - mattermost
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'jitsi'" - mattermost
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin marketplace install 'com.mattermost.apps'" - mattermost
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin marketplace install 'focalboard'" - mattermost
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin marketplace install 'jitsi'" - mattermost
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin enable 'com.mattermost.apps'" - mattermost
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin enable 'focalboard'" - mattermost
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin enable 'jitsi'" - mattermost
+  mattermostApplicationName="${1}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'com.mattermost.calls'" - "${mattermostApplicationName}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin delete 'com.mattermost.calls'" - "${mattermostApplicationName}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'com.mattermost.nps'" - "${mattermostApplicationName}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin delete 'com.mattermost.nps'" - "${mattermostApplicationName}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'playbooks'" - "${mattermostApplicationName}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin delete 'playbooks'" - "${mattermostApplicationName}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'com.mattermost.apps'" - "${mattermostApplicationName}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'focalboard'" - "${mattermostApplicationName}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'jitsi'" - "${mattermostApplicationName}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin marketplace install 'com.mattermost.apps'" - "${mattermostApplicationName}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin marketplace install 'focalboard'" - "${mattermostApplicationName}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin marketplace install 'jitsi'" - "${mattermostApplicationName}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin enable 'com.mattermost.apps'" - "${mattermostApplicationName}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin enable 'focalboard'" - "${mattermostApplicationName}"
+  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin enable 'jitsi'" - "${mattermostApplicationName}"
 }
 
 function SetMattermostConfigurationFileContent () {

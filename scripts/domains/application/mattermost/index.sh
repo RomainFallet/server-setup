@@ -55,9 +55,9 @@ function SetupMattermost () {
   WaitForMattermostSocketToBeCreated "${mattermostSocketPath}"
   SetFileOwnership "${mattermostSocketPath}" "${mattermostApplicationName}"
   ConfigureMattermost "${mattermostApplicationName}" "${mattermortFilesDirectory}" "${mattermostPluginsDirectory}" "${mattermostClientPluginsDirectory}"
-  CreateOrUpdateMattermostAdminstratorAccount "${mattermostAdministratorUserName:?}" "${mattermostAdministratorEmail:?}" "${mattermostAdministratorPassword:?}"
-  CreateOrUpdateMattermostDefaultTeam "${mattermostDefaultTeamIdentifier:?}" "${mattermostDefaultTeamName:?}" "${mattermostAdministratorUserName:?}"
-  ManageMattermostPlugins
+  CreateOrUpdateMattermostAdministratorAccount "${mattermostAdministratorUserName:?}" "${mattermostAdministratorEmail:?}" "${mattermostAdministratorPassword:?}" "${mattermostApplicationName}"
+  CreateOrUpdateMattermostDefaultTeam "${mattermostDefaultTeamIdentifier:?}" "${mattermostDefaultTeamName:?}" "${mattermostAdministratorUserName:?}" "${mattermostApplicationName}"
+  ManageMattermostPlugins "${mattermostApplicationName}"
 }
 
 function SetupMattermostHttpServer () {
