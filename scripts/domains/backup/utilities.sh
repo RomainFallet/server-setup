@@ -111,6 +111,9 @@ for directoryPath in  /root/data/applications/*/
 do
   directoryPath=\${directoryPath%*/}
   applicationName=\${directoryPath##*/}
+  if [[ \"\${applicationName}\" == 'server-setup' ]]; then
+    break
+  fi
   if test -d /root/data/applications/\${applicationName}/opt/; then
     /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/opt/ /var/opt/\${applicationName}
   fi
