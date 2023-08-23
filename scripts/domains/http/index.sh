@@ -42,6 +42,7 @@ function SetupHttpSpaServer () {
   Ask httpApplicationName "Enter your HTTP application name (eg. my-awesome-app)"
   Ask domainName "Enter your domain name"
   Ask letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
+  httpApplicationDeploymentPath=/var/www/"${httpApplicationName:?}"
   CreateSpaDomainName "${httpApplicationName:?}" "${domainName:?}" "${letsEncryptEmail:?}"
   CreateApplicationDeploymentUserThroughSsh "${httpApplicationName:?}" /var/www/"${httpApplicationName:?}"
   SetDirectoryOwnershipRecursively "${httpApplicationDeploymentPath}" "${httpApplicationName:?}" 'www-data'
