@@ -14,6 +14,7 @@
 SetUpFileMachinePrerequisites
 SetUpFileMachineRestoreBackupScript
 SetUpFileMachineBackupScript
+AskFileMachineBackupRestore
 SetUpSsh
 SetUpFail2Ban
 SetUpFileMachineFireWall
