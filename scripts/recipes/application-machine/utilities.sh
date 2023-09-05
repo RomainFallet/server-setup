@@ -12,24 +12,30 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/listmonk/index.sh"
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/java/index.sh"
+# shellcheck source-path=../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/phoenix/index.sh"
 
 function AskApplicationMachineActions () {
   Ask applicationMachineAction "What do you want to do?
   - Nothing........................[0]
   - Set up a Java application......[1]
-  - Install or upgrade Gitea.......[2]
-  - Install or upgrade Mattermost..[3]
-  - Install or upgrade Listmonk..  [4]"
+  - Set up a Phoenix application...[2]
+  - Install or upgrade Gitea.......[3]
+  - Install or upgrade Mattermost..[4]
+  - Install or upgrade Listmonk..  [5]"
   if [[ "${applicationMachineAction:?}" == '1' ]]; then
     SetupJavaApplication
   fi
   if [[ "${applicationMachineAction:?}" == '2' ]]; then
-    SetupGitea
+    SetupPhoenixApplication
   fi
   if [[ "${applicationMachineAction:?}" == '3' ]]; then
-    SetupMattermost
+    SetupGitea
   fi
   if [[ "${applicationMachineAction:?}" == '4' ]]; then
+    SetupMattermost
+  fi
+  if [[ "${applicationMachineAction:?}" == '5' ]]; then
     SetupListmonk
   fi
 }
