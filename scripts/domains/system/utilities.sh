@@ -44,7 +44,7 @@ Unattended-Upgrade::Automatic-Reboot-Time \"05:00\";"
 }
 
 function SetUpIpv6 () {
-  Ask configureIpv6 'Configure IPv6? (y/n)' 'y'
+  AskIfNotSet configureIpv6 'Configure IPv6? (y/n)' 'y'
   if [[ "${configureIpv6:?}" == 'y' ]]; then
     AskIfNotSet ipv6Address "Enter your IPv6 address (eg. 2001:XXXX:XXX:XXXX::XXXX)"
     AskIfNotSet ipv6Gateway "Enter your IPv6 gateway (eg. 2001:XXXX:XXX:XXXX::1)"
