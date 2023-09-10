@@ -37,6 +37,8 @@ Type=simple
 ExecStart=${executablePath}
 Restart=on-failure
 RestartSec=2s
+StartLimitInterval=1d
+StartLimitBurst=3
 User=${userName}
 Group=${userName}${workingDirectoryConfiguration}${environmentConfiguration}
 
