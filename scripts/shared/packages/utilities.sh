@@ -20,3 +20,13 @@ function CleanOldLinuxKernel () {
   # shellcheck disable=SC2312
   sudo dpkg --list | grep 'linux-headers' | awk '{ print $2 }' | sort -V | sed -n '/'"$(uname -r | sed "s/\([0-9.-]*\)-\([^0-9]\+\)/\1/")"'/q;p' | xargs sudo apt purge -y
 }
+
+function AddGpgKeyWithCurl () {
+  keyDownloadUrl="${1}"
+  keyPath="${2}"
+  (curl --fail --silent --show-error --location "${keyDownloadUrl}" || true) | sudo gpg --dearmor -o "${keyPath}"
+}
+
+function ReloadAptRepositories () {
+  sudo apt update
+}

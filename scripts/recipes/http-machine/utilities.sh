@@ -7,6 +7,8 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/gitea/index.sh"
 # shellcheck source-path=../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/drone-ci/index.sh"
+# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/mattermost/index.sh"
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/listmonk/index.sh"
@@ -22,7 +24,8 @@ function AskHttpMachineActions () {
   - Set up http redirection server....[4]
   - Set up Gitea http server..........[5]
   - Set up Mattermost http server.....[6]
-  - Set up Listmonk http server.  ....[7]"
+  - Set up Listmonk http server.  ....[7]
+  - Set up Drone CI http server.  ....[8]"
   if [[ "${applicationMachineAction:?}" == '1' ]]; then
     SetupHttpStaticServer
   fi
@@ -43,5 +46,8 @@ function AskHttpMachineActions () {
   fi
   if [[ "${applicationMachineAction:?}" == '7' ]]; then
     SetupListmonkHttpServer
+  fi
+  if [[ "${applicationMachineAction:?}" == '8' ]]; then
+    SetupDroneCiHttpServer
   fi
 }

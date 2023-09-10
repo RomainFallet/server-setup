@@ -8,6 +8,8 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/logs/index.sh"
+# shellcheck source-path=../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/prerequisites/utilities.sh"
 
 function SetUpApplicationMachinePrerequisites () {
   UpgradeAllPackages
@@ -42,3 +44,8 @@ function SetUpFileMachinePrerequisites () {
   MountDeviceAutomaticallyIfConnected 'sda'
 }
 
+function SetUpCiMachinePrerequisites () {
+  UpgradeAllPackages
+  CleanOldLogs
+  InstallDocker
+}

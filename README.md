@@ -200,6 +200,14 @@ ss:recipes:application-machine
 ss:recipes:http-machine
 ```
 
+### CI machine
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:recipes:ci-machine
+```
+
 ### File machine
 
 [Back to top ↑](#table-of-contents)

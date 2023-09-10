@@ -51,7 +51,7 @@ function SetUpIpv6 () {
     ipv4ConfigurationPath=/etc/netplan/50-cloud-init.yaml
     ipv6ConfigurationPath=/etc/netplan/51-cloud-init-ipv6.yaml
     # shellcheck disable=SC2312
-    ethernetConnectionName=$(sudo ls /sys/class/net | sort -V | awk 'FNR == 1 {print}')
+    ethernetConnectionName=$(sudo find /sys/class/net -mindepth 1 -maxdepth 1 -lname '*virtual*' -prune -o -printf '%f\n' | awk 'FNR == 1 {print}')
     ethernetConnectionMacAddress=$(cat /sys/class/net/"${ethernetConnectionName}"/address)
     ipv4Configuration="network:
       version: 2
