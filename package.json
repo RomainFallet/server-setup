@@ -5,9 +5,9 @@
   "license": "UNLICENSED",
   "devDependencies": {
     "devmoji": "^2.0.0",
-    "glob": "^10.2.6",
+    "glob": "^10.0.0",
     "husky": "^8.0.0",
-    "lint-staged": "^13.0.0",
+    "lint-staged": "^14.0.0",
     "markdownlint": "^0.*.0",
     "markdownlint-cli": "^0.*.0",
     "npm-run-all": "^4.0.0",
