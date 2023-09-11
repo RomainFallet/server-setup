@@ -23,7 +23,7 @@ function SetupDroneCi () {
   CreateUserIfNotExisting "${droneApplicationName}"
   CreateDirectoryIfNotExisting "${droneDataPath}"
   SetDirectoryOwnershipRecursively "${droneDataPath}" "${droneApplicationName}"
-  CreateDroneCiDockerContainer "${droneApplicationName}" "${droneDataPath}" "${droneDomainName}" "${droneInternalPort}" "${droneSharedSecretKey}" "${giteaBaseUrl}" "${giteaClientId}" "${giteaClientSecret}"
+  CreateDroneCiDockerContainer "${droneApplicationName}" "${droneDataPath}" "${droneDomainName}" "${droneInternalPort}" "${droneSharedSecretKey}" "${giteaBaseUrl?:}" "${giteaClientId}" "${giteaClientSecret}"
   CreateStartupService "${droneApplicationName}" "sudo docker start ${droneApplicationName}" 'root' "${droneDataPath}" '' 'docker.service'
   RestartService "${droneApplicationName}"
 }

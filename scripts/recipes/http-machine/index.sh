@@ -14,7 +14,6 @@
 SetUpHttpMachinePrerequisites
 SetUpHttpMachineRestoreBackupScript
 SetUpHttpMachineBackupScript
-AskHttpMachineBackupRestore
 SetUpSsh
 SetUpFail2Ban
 SetUpMachineFireWall

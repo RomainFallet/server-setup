@@ -14,7 +14,6 @@
 SetUpApplicationMachinePrerequisites
 SetUpApplicationMachineRestoreBackupScript
 SetUpApplicationMachineBackupScript
-AskApplicationMachineBackupRestore
 SetUpSsh
 SetUpFail2Ban
 SetUpMachineFireWall
