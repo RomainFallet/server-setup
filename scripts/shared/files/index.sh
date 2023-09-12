@@ -193,12 +193,12 @@ function CreateDirectorySymbolicLinkIfNotExisting () {
 
 function MakeFileProtected () {
   filePath="${1}"
-  sudo chattr +i "${filePath}"
+  sudo chattr -f +i "${filePath}"
 }
 
 function MakeFileUnprotected () {
   filePath="${1}"
-  sudo chattr -i "${filePath}"
+  sudo chattr -f -i "${filePath}"
 }
 
 function SetJsonValueInFile () {

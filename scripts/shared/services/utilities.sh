@@ -9,6 +9,11 @@ function EnableSystemdService () {
   sudo systemctl enable "${serviceName}.service"
 }
 
+function DisableSystemdService () {
+  serviceName="${1}"
+  sudo systemctl disable "${serviceName}.service"
+}
+
 function EnableSystemdPath () {
   serviceName="${1}"
   sudo systemctl enable "${serviceName}.path"
@@ -27,6 +32,11 @@ function RestartSystemdPath () {
 function StartSystemdService () {
   serviceName="${1}"
   sudo systemctl restart "${serviceName}.service"
+}
+
+function StopSystemdService () {
+  serviceName="${1}"
+  sudo systemctl stop "${serviceName}.service"
 }
 
 function FollowSystemdServiceLogs () {

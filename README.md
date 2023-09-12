@@ -208,6 +208,14 @@ ss:recipes:http-machine
 ss:recipes:ci-machine
 ```
 
+### CI runner machine
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:recipes:ci-runner-machine
+```
+
 ### File machine
 
 [Back to top ↑](#table-of-contents)

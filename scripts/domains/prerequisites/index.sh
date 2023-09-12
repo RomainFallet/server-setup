@@ -49,3 +49,8 @@ function SetUpCiMachinePrerequisites () {
   CleanOldLogs
   InstallDocker
 }
+
+function SetUpCiRunnerMachinePrerequisites () {
+  UpgradeAllPackages
+  CleanOldLogs
+}

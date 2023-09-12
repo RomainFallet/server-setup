@@ -93,6 +93,11 @@ function CreateStartupService () {
   EnableSystemdService "${name}"
 }
 
+function DisableService () {
+  serviceName="${1}"
+  DisableSystemdService "${serviceName}"
+}
+
 function RestartService () {
   serviceName="${1}"
   RestartSystemdService "${serviceName}"
@@ -106,6 +111,11 @@ function RestartServicePath () {
 function StartService () {
   serviceName="${1}"
   StartSystemdService "${serviceName}"
+}
+
+function StopService () {
+  serviceName="${1}"
+  StopSystemdService "${serviceName}"
 }
 
 function FollowServiceLogs () {
