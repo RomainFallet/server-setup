@@ -30,6 +30,9 @@ function SetUpFileMachineFireWall () {
   OpenFireWallPort '22'
   OpenFireWallPort '2049'
   OpenFireWallPort '111'
-  OpenFireWallPort '13025'
+  OpenFireWallPort '892'
+  OpenFireWallPort '32803'
+  OpenFireWallPort '32769'
+  OpenFireWallPort '662'
   EnableFireWall
 }

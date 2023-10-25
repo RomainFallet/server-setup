@@ -6,6 +6,8 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/file-sharing/utilities.sh"
 
 function SetUpFileSharing () {
+  ConfigureNfs
   ConfigureFolders
   ExportFolders
+  RestartNfs
 }
