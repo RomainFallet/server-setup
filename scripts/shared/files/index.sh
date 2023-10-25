@@ -113,6 +113,12 @@ function SetDirectoryPermissions () {
   sudo chmod "${permissions}" "${directoryPath}"
 }
 
+function SetFilePermissions () {
+  filePath="${1}"
+  permissions="${2}"
+  sudo chmod "${permissions}" "${filePath}"
+}
+
 function SetDirectoryPermissionsRecursively () {
   directoryPath="${1}"
   permissions="${2}"

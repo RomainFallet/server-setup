@@ -69,6 +69,7 @@ function SetUpNetworkConfiguration () {
             mtu: 1500
             set-name: ${ethernetConnectionName}"
   SetFileContent "${ipv4Configuration}" "${ipv4ConfigurationPath}"
+  SetFilePermissions 600 "${ipv4ConfigurationPath}"
 
   if [[ "${configureIpv6:?}" == 'y' ]]; then
     AskIfNotSet ipv6Address "Enter your IPv6 address (eg. 2001:XXXX:XXX:XXXX::XXXX)"
@@ -96,6 +97,7 @@ function SetUpNetworkConfiguration () {
                   - to: ${ipv6Gateway:?}
                     scope: link"
     SetFileContent "${ipv6Configuration}" "${ipv6ConfigurationPath}"
+    SetFilePermissions 600 "${ipv6ConfigurationPath}"
   fi
 
   EnableNetworkConfiguration
