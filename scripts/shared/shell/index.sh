@@ -3,28 +3,9 @@
 function ExecShellScriptWithRoot () {
   directoryPath="${1}"
   pathToExecute="${2}"
-  arguments="${3}"
   currentWorkingDirectory="${PWD}"
   cd "${directoryPath}" || exit
-  if [[ -n "${arguments}" ]]; then
-    sudo bash "${pathToExecute}" "${arguments}"
-  else
-    sudo bash "${pathToExecute}"
-  fi
-  cd "${currentWorkingDirectory}" || exit
-}
-
-function ExecShellScript () {
-  directoryPath="${1}"
-  pathToExecute="${2}"
-  arguments="${3}"
-  currentWorkingDirectory="${PWD}"
-  cd "${directoryPath}" || exit
-  if [[ -n "${arguments}" ]]; then
-    bash "${pathToExecute}" "${arguments}"
-  else
-    bash "${pathToExecute}"
-  fi
+  sudo bash "${pathToExecute}"
   cd "${currentWorkingDirectory}" || exit
 }
 
