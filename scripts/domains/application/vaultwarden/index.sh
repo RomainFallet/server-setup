@@ -12,5 +12,5 @@ function SetupVaultwarden () {
   DownloadFile "https://raw.githubusercontent.com/jjlin/docker-image-extract/main/docker-image-extract" "${extractScriptPath}"
   MakeFileExecutable "${extractScriptPath}"
   architecture=$(SelectAppropriateVaultwardenArchitecture)
-  /tmp/docker-image-extract -p "${architecture}" vaultwarden/server:latest-alpine
+  sudo /tmp/docker-image-extract -p "${architecture}" vaultwarden/server:latest-alpine
 }
