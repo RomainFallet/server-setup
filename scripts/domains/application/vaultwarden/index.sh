@@ -9,5 +9,5 @@ function SetupVaultwarden () {
   extractScriptPath=/tmp/docker-image-extract
   DownloadFile "https://raw.githubusercontent.com/jjlin/docker-image-extract/main/docker-image-extract" "${extractScriptPath}"
   MakeFileExecutable "${extractScriptPath}"
-  ExecShellScript "${extractScriptPath}" vaultwarden/server:latest-alpine
+  ExecShellScript /tmp ./docker-image-extract vaultwarden/server:latest-alpine
 }
