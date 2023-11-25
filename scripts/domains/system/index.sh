@@ -11,10 +11,6 @@ function SetUpBasicSystemConfiguration () {
   # shellcheck disable=SC2119
   SetHostName
   SetUpUnattentedUpgrades
-  SetUpNetworkConfiguration
+  ConfigureIpv4Ipv6AndDns
   ConfigureLogRotation
-}
-
-function SetUpAutomaticUpdates () {
-  SetUpUnattentedUpgrades
 }

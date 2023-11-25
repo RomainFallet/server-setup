@@ -45,7 +45,7 @@ Unattended-Upgrade::Automatic-Reboot-Time \"05:00\";"
   SetFileContent "${unattendedUpgradeConfig}" "${unattendedUpgradeConfigPath}"
 }
 
-function SetUpNetworkConfiguration () {
+function ConfigureIpv4Ipv6AndDns () {
   AskIfNotSet configureIpv6 'Configure IPv6? (y/n)' 'y'
   SetFileContent "network: {config: disabled}" /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
   # shellcheck disable=SC2312
@@ -69,7 +69,7 @@ function SetUpNetworkConfiguration () {
             mtu: 1500
             set-name: ${ethernetConnectionName}"
   SetFileContent "${ipv4Configuration}" "${ipv4ConfigurationPath}"
-  SetFilePermissions 600 "${ipv4ConfigurationPath}"
+  SetFilePermissions "${ipv4ConfigurationPath}" 600
 
   if [[ "${configureIpv6:?}" == 'y' ]]; then
     AskIfNotSet ipv6Address "Enter your IPv6 address (eg. 2001:XXXX:XXX:XXXX::XXXX)"
@@ -97,7 +97,7 @@ function SetUpNetworkConfiguration () {
                   - to: ${ipv6Gateway:?}
                     scope: link"
     SetFileContent "${ipv6Configuration}" "${ipv6ConfigurationPath}"
-    SetFilePermissions 600 "${ipv6ConfigurationPath}"
+    SetFilePermissions "${ipv6ConfigurationPath}" 600
   fi
 
   EnableNetworkConfiguration
