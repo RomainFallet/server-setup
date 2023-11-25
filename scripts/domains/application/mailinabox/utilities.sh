@@ -18,7 +18,7 @@ function InstallGit () {
 function InstallMailInABox () {
   MakeFileUnprotected /etc/resolv.conf
   CloneRepositoryIfNotExisting https://github.com/mail-in-a-box/mailinabox ~/mailinabox
-  CheckoutRepository ~/mailinabox 'v64'
+  CheckoutRepository ~/mailinabox 'v65'
   ExecShellScriptWithRoot ~/mailinabox/ ./setup/start.sh
   resolvConfiguration="nameserver 45.90.28.193
 nameserver 45.90.30.193"
