@@ -14,6 +14,8 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/java/index.sh"
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/phoenix/index.sh"
+# shellcheck source-path=../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/vaultwarden/index.sh"
 
 function AskApplicationMachineActions () {
   Ask applicationMachineAction "What do you want to do?
@@ -22,7 +24,8 @@ function AskApplicationMachineActions () {
   - Set up a Phoenix application...[2]
   - Install or upgrade Gitea.......[3]
   - Install or upgrade Mattermost..[4]
-  - Install or upgrade Listmonk..  [5]"
+  - Install or upgrade Listmonk....[5]
+  - Install or upgrade Vaultwarden.[6]"
   if [[ "${applicationMachineAction:?}" == '1' ]]; then
     SetupJavaApplication
   fi
@@ -37,5 +40,8 @@ function AskApplicationMachineActions () {
   fi
   if [[ "${applicationMachineAction:?}" == '5' ]]; then
     SetupListmonk
+  fi
+  if [[ "${applicationMachineAction:?}" == '6' ]]; then
+    SetupVaultwarden
   fi
 }
