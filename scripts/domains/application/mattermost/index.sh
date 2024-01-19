@@ -26,7 +26,6 @@ function SetupMattermost () {
   mattermostPluginsDirectory="${mattermostDataDirectory}"/plugins
   mattermostClientPluginsDirectory="${mattermostDataDirectory}"/client/plugins
   mattermostSocketPath=/var/tmp/mattermost_local.socket
-  mattermostConfigurationFilePath="${mattermostDataDirectory}"/config/config.json
   AskIfNotSet mattermostDatabasePassword "Enter your Mattermost database password"
   AskIfNotSet mattermostDomainName "Enter your Mattermost domain name"
   AskIfNotSet mattermostInternalPort "Enter your Mattermost internal port"
