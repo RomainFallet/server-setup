@@ -12,6 +12,7 @@ function GrantAllPrivilegesOnPostgreSqlDatabase () {
   databaseName="${1}"
   userName="${2}"
   sudo su --command "psql --command \"GRANT ALL PRIVILEGES ON DATABASE ${databaseName} to ${userName};\"" - postgres
+  sudo su --command "psql --command \"ALTER DATABASE ${databaseName} OWNER TO ${userName};\"" - postgres
 }
 
 function CreatePostgreSqlUserIfNotExisting () {
