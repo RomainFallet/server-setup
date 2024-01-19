@@ -152,15 +152,6 @@ function ManageMattermostPlugins () {
   sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin delete 'com.mattermost.nps'" - "${mattermostApplicationName}"
   sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'playbooks'" - "${mattermostApplicationName}"
   sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin delete 'playbooks'" - "${mattermostApplicationName}"
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'com.mattermost.apps'" - "${mattermostApplicationName}"
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'focalboard'" - "${mattermostApplicationName}"
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin disable 'jitsi'" - "${mattermostApplicationName}"
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin marketplace install 'com.mattermost.apps'" - "${mattermostApplicationName}"
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin marketplace install 'focalboard'" - "${mattermostApplicationName}"
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin marketplace install 'jitsi'" - "${mattermostApplicationName}"
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin enable 'com.mattermost.apps'" - "${mattermostApplicationName}"
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin enable 'focalboard'" - "${mattermostApplicationName}"
-  sudo su --command "/var/opt/mattermost/bin/mmctl --local plugin enable 'jitsi'" - "${mattermostApplicationName}"
 }
 
 function SetMattermostConfigurationFileContent () {
