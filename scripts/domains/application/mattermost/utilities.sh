@@ -173,7 +173,7 @@ function SetMattermostConfigurationFileContent () {
       \"EnableLocalMode\": true
     },
     \"SqlSettings\": {
-      \"\DataSource\": \"postgres://${postgresqlUsername}:${postgresqlPassword}@localhost:5432/${postgresqlDatabaseName}?sslmode=disable&connect_timeout=10'\"
+      \"DataSource\": \"postgres://${postgresqlUsername}:${postgresqlPassword}@localhost:5432/${postgresqlDatabaseName}?sslmode=disable&connect_timeout=10\"
     }
   }"
   SetFileContent "${configuration}" "${configurationFilePath}"
