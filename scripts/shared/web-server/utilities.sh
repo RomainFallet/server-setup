@@ -64,3 +64,30 @@ function GenerateTlsCertificate () {
   RestartService 'nginx'
   GenerateTlsCertificateWithCertbot "${applicationName}" "${domainName}" "${email}"
 }
+
+function ConfigureContentSecurityPolicy () {
+  applicationName="${1}"
+  domainName="${2}"
+  defaultCspRule="default-src 'self';"
+  cspConfigurationFilePath=/etc/nginx/sites-configuration/"${applicationName}"/"${domainName}"/content-security-policy.conf
+  # shellcheck disable=SC2065
+  if test -f "${cspConfigurationFilePath}" > /dev/null; then
+    cspFileContent=$(sudo cat "${cspConfigurationFilePath}")
+    cspRule=$(ReplaceText '^add_header\sContent-Security-Policy\s"(.+?)";$', '\1' "${cspFileContent}")
+  fi
+  if [[ -z "${cspRule}" ]]; then
+    cspRule="${defaultCspRule}"
+    Ask updateCspRule "Default Content Security Policy is ${cspRule}. Update it? (y/n)" 'n'
+  else
+    Ask updateCspRule "Existing Content Security Policy is ${cspRule}. Update it? (y/n)" 'n'
+  fi
+
+  if [[ "${updateCspRule:?}" == 'y' ]]; then
+    Ask newCspRule "Enter your Content Security Policy"
+    newCspFileContent="add_header Content-Security-Policy \"${newCspRule:?}\";"
+    SetFileContent "${newCspFileContent}" "${cspConfigurationFilePath}"
+  else
+    cspFileContent="add_header Content-Security-Policy \"${cspRule:?}\";"
+    SetFileContent "${cspFileContent}" "${cspConfigurationFilePath}"
+  fi
+}

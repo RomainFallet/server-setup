@@ -49,9 +49,7 @@ function CreateProxyDomainName () {
   include /etc/nginx/sites-configuration/${applicationName}/${domainName}/content-security-policy.conf;
 }"
   SetFileContent "${httpsConfiguration}" "${httpsConfigurationPath}"
-  contentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${applicationName}"/"${domainName}"/content-security-policy.conf
-  contentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self';\";"
-  SetFileContent "${contentSecurityPolicyConfiguration}" "${contentSecurityPolicyConfigurationPath}"
+  ConfigureContentSecurityPolicy "${applicationName}" "${domainName}"
   RestartService 'nginx'
 }
 
@@ -89,9 +87,7 @@ function CreateStaticDomainName () {
   include /etc/nginx/sites-configuration/${applicationName}/${domainName}/content-security-policy.conf;
 }"
   SetFileContent "${httpsConfiguration}" "${httpsConfigurationPath}"
-  contentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${applicationName}"/"${domainName}"/content-security-policy.conf
-  contentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self';\";"
-  SetFileContent "${contentSecurityPolicyConfiguration}" "${contentSecurityPolicyConfigurationPath}"
+  ConfigureContentSecurityPolicy "${applicationName}" "${domainName}"
   RestartService 'nginx'
 }
 
@@ -129,9 +125,7 @@ function CreateSpaDomainName () {
   include /etc/nginx/sites-configuration/${applicationName}/${domainName}/content-security-policy.conf;
 }"
   SetFileContent "${httpsConfiguration}" "${httpsConfigurationPath}"
-  contentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${applicationName}"/"${domainName}"/content-security-policy.conf
-  contentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self';\";"
-  SetFileContent "${contentSecurityPolicyConfiguration}" "${contentSecurityPolicyConfigurationPath}"
+  ConfigureContentSecurityPolicy "${applicationName}" "${domainName}"
   RestartService 'nginx'
 }
 

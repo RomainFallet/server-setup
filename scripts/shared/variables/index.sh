@@ -69,3 +69,10 @@ function Ask() {
     Ask "${variableName}" "${askText}"
   fi
 }
+
+function ReplaceText () {
+  regexPattern="${1}"
+  replacementText="${2}"
+  inputText="${3}"
+  echo "${inputText}" | sed --regexp-extended "s|${regexPattern}|${replacementText}|g"
+}
