@@ -18,36 +18,42 @@
 function AskWebMachineActions () {
   Ask applicationMachineAction "What do you want to do?
   - Nothing...........................[0]
-  - Set up web static server.........[1]
-  - Set up web static server for SPA.[2]
-  - Set up web proxy server..........[3]
-  - Set up web redirection server....[4]
-  - Set up Gitea web server..........[5]
-  - Set up Mattermost web server.....[6]
-  - Set up Listmonk web server.  ....[7]
-  - Set up Drone CI web server.  ....[8]"
+  - Create a user.....................[1]
+  - Set up web static server..........[2]
+  - Set up web static server for SPA..[3]
+  - Set up web proxy server...........[4]
+  - Set up web redirection server.....[5]
+  - Set up Gitea web server...........[6]
+  - Set up Mattermost web server......[7]
+  - Set up Listmonk web server.  .....[8]
+  - Set up Drone CI web server.  .....[9]"
+
   if [[ "${applicationMachineAction:?}" == '1' ]]; then
-    SetupWebStaticServer
+    Ask usernameToCreate "Enter the username"
+    CreateUserIfNotExisting "${usernameToCreate:?}"
   fi
   if [[ "${applicationMachineAction:?}" == '2' ]]; then
-    SetupWebSpaServer
+    SetupWebStaticServer
   fi
   if [[ "${applicationMachineAction:?}" == '3' ]]; then
-    SetupWebProxyServer
+    SetupWebSpaServer
   fi
   if [[ "${applicationMachineAction:?}" == '4' ]]; then
-    SetupWebRedirectionServer
+    SetupWebProxyServer
   fi
   if [[ "${applicationMachineAction:?}" == '5' ]]; then
-    SetupGiteaWebServer
+    SetupWebRedirectionServer
   fi
   if [[ "${applicationMachineAction:?}" == '6' ]]; then
-    SetupMattermostWebServer
+    SetupGiteaWebServer
   fi
   if [[ "${applicationMachineAction:?}" == '7' ]]; then
-    SetupListmonkWebServer
+    SetupMattermostWebServer
   fi
   if [[ "${applicationMachineAction:?}" == '8' ]]; then
+    SetupListmonkWebServer
+  fi
+  if [[ "${applicationMachineAction:?}" == '9' ]]; then
     SetupDroneCiWebServer
   fi
 }
