@@ -50,7 +50,8 @@ function ConfigureIpv4Ipv6AndDns () {
   InstallPackageIfNotExisting 'openvswitch-switch-dpdk'
   SetFileContent "network: {config: disabled}" /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
   # shellcheck disable=SC2312
-  ethernetConnectionName=$(sudo find /sys/class/net -mindepth 1 -maxdepth 1 -lname '*virtual*' -prune -o -printf '%f\n' | awk 'FNR == 1 {print}')
+  rawEthernetConnectionName=$(sudo lshw -class network -short | grep 'Ethernet interface' | awk '{print $2}')
+  ethernetConnectionName=$(Trim "${rawEthernetConnectionName}")
   ethernetConnectionMacAddress=$(cat /sys/class/net/"${ethernetConnectionName}"/address)
   ipv4ConfigurationPath=/etc/netplan/50-cloud-init.yaml
   ipv4Configuration="network:
