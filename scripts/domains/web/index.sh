@@ -9,7 +9,7 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/users/index.sh"
 
-function SetupHttpProxyServer () {
+function SetupWebProxyServer () {
   Ask httpApplicationName "Enter your HTTP application name (eg. my-awesome-app)"
   Ask domainName "Enter your domain name"
   Ask letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
@@ -18,7 +18,7 @@ function SetupHttpProxyServer () {
   RestartService 'nginx'
 }
 
-function SetupHttpStaticServer () {
+function SetupWebStaticServer () {
   Ask httpApplicationName "Enter your HTTP application name (eg. my-awesome-app)"
   Ask domainName "Enter your domain name"
   Ask letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
@@ -30,7 +30,7 @@ function SetupHttpStaticServer () {
   RestartService 'nginx'
 }
 
-function SetupHttpRedirectionServer () {
+function SetupWebRedirectionServer () {
   Ask httpApplicationName "Enter your HTTP application name (eg. my-awesome-app)"
   Ask domainName "Enter the domain name you want to redirect"
   Ask redirectionDomainName "Enter the domain name redirection target"
@@ -38,7 +38,7 @@ function SetupHttpRedirectionServer () {
   CreateRedirectionDomainName "${httpApplicationName}" "${domainName}" "${redirectionDomainName}" "${letsEncryptEmail}"
 }
 
-function SetupHttpSpaServer () {
+function SetupWebSpaServer () {
   Ask httpApplicationName "Enter your HTTP application name (eg. my-awesome-app)"
   Ask domainName "Enter your domain name"
   Ask letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"

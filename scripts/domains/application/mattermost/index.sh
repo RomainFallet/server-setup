@@ -59,7 +59,7 @@ function SetupMattermost () {
   ManageMattermostPlugins "${mattermostApplicationName}"
 }
 
-function SetupMattermostHttpServer () {
+function SetupMattermostWebServer () {
   mattermostApplicationName='mattermost'
   AskIfNotSet mattermostDomainName "Enter your Mattermost domain name"
   AskIfNotSet letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"

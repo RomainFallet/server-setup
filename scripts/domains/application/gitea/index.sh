@@ -141,7 +141,7 @@ PASSWORD_HASH_ALGO = pbkdf2"
   RestartService "${giteaApplicationName}"
 }
 
-function SetupGiteaHttpServer () {
+function SetupGiteaWebServer () {
   giteaApplicationName='gitea'
   AskIfNotSet giteaDomainName "Enter your Gitea domain name"
   AskIfNotSet letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"

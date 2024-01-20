@@ -19,7 +19,7 @@ function SetUpApplicationMachinePrerequisites () {
   InstallPackageIfNotExisting 'jq'
 }
 
-function SetUpHttpMachinePrerequisites () {
+function SetUpWebMachinePrerequisites () {
   UpgradeAllPackages
   CleanOldLogs
   InstallPackageIfNotExisting 'rsync'

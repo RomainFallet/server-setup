@@ -48,7 +48,7 @@ function SetupListmonk () {
   RestartService "${listmonkApplicationName}"
 }
 
-function SetupListmonkHttpServer () {
+function SetupListmonkWebServer () {
   listmonkApplicationName='listmonk'
   AskIfNotSet listmonkDomainName "Enter your Listmonk domain name"
   AskIfNotSet letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"

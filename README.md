@@ -11,7 +11,7 @@
 - [Recipes](#recipes)
   - [Mail machine](#mail-machine)
   - [Application machine](#application-machine)
-  - [Http machine](#http-machine)
+  - [Web machine](#web-machine)
   - [File machine](#file-machine)
   - [Daily backup machine](#daily-backup-machine)
 - [Contributing](#contributing)
@@ -192,12 +192,12 @@ ss:recipes:mail-machine
 ss:recipes:application-machine
 ```
 
-### Http machine
+### Web machine
 
 [Back to top ↑](#table-of-contents)
 
 ```bash
-ss:recipes:http-machine
+ss:recipes:web-machine
 ```
 
 ### CI machine

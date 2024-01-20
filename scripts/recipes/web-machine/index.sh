@@ -9,13 +9,13 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/prerequisites/index.sh"
 # shellcheck source-path=../../../
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/recipes/http-machine/utilities.sh"
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/recipes/web-machine/utilities.sh"
 
-SetUpHttpMachinePrerequisites
-SetUpHttpMachineRestoreBackupScript
-SetUpHttpMachineBackupScript
+SetUpWebMachinePrerequisites
+SetUpWebMachineRestoreBackupScript
+SetUpWebMachineBackupScript
 SetUpSsh
 SetUpFail2Ban
 SetUpMachineFireWall
 SetUpBasicSystemConfiguration
-AskHttpMachineActions
+AskWebMachineActions

@@ -13,41 +13,41 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/listmonk/index.sh"
 # shellcheck source-path=../../../
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/http/index.sh"
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/web/index.sh"
 
-function AskHttpMachineActions () {
+function AskWebMachineActions () {
   Ask applicationMachineAction "What do you want to do?
   - Nothing...........................[0]
-  - Set up http static server.........[1]
-  - Set up http static server for SPA.[2]
-  - Set up http proxy server..........[3]
-  - Set up http redirection server....[4]
-  - Set up Gitea http server..........[5]
-  - Set up Mattermost http server.....[6]
-  - Set up Listmonk http server.  ....[7]
-  - Set up Drone CI http server.  ....[8]"
+  - Set up web static server.........[1]
+  - Set up web static server for SPA.[2]
+  - Set up web proxy server..........[3]
+  - Set up web redirection server....[4]
+  - Set up Gitea web server..........[5]
+  - Set up Mattermost web server.....[6]
+  - Set up Listmonk web server.  ....[7]
+  - Set up Drone CI web server.  ....[8]"
   if [[ "${applicationMachineAction:?}" == '1' ]]; then
-    SetupHttpStaticServer
+    SetupWebStaticServer
   fi
   if [[ "${applicationMachineAction:?}" == '2' ]]; then
-    SetupHttpSpaServer
+    SetupWebSpaServer
   fi
   if [[ "${applicationMachineAction:?}" == '3' ]]; then
-    SetupHttpProxyServer
+    SetupWebProxyServer
   fi
   if [[ "${applicationMachineAction:?}" == '4' ]]; then
-    SetupHttpRedirectionServer
+    SetupWebRedirectionServer
   fi
   if [[ "${applicationMachineAction:?}" == '5' ]]; then
-    SetupGiteaHttpServer
+    SetupGiteaWebServer
   fi
   if [[ "${applicationMachineAction:?}" == '6' ]]; then
-    SetupMattermostHttpServer
+    SetupMattermostWebServer
   fi
   if [[ "${applicationMachineAction:?}" == '7' ]]; then
-    SetupListmonkHttpServer
+    SetupListmonkWebServer
   fi
   if [[ "${applicationMachineAction:?}" == '8' ]]; then
-    SetupDroneCiHttpServer
+    SetupDroneCiWebServer
   fi
 }

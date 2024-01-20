@@ -55,25 +55,25 @@ function SetUpApplicationMachineRestoreBackupScript () {
   fi
 }
 
-function SetUpHttpMachineBackupScript () {
-  AskIfNotSet configureHttpMachineBackup 'Configure backups? (y/n)' 'y'
-  if [[ "${configureHttpMachineBackup?:}" == 'y' ]]; then
-    AskIfNotSet sshHttpMachineUserName 'Enter SSH username of backup machine'
-    AskIfNotSet sshHttpMachineHostName 'Enter SSH hostname of backup machine'
-    AskIfNotSet httpMachineHealthCheckId 'Enter your HealthChecks.io monitoring ID'
-    CreateHttpMachineBackupScript "${sshHttpMachineUserName:?}" "${sshHttpMachineHostName:?}" "${httpMachineHealthCheckId:?}"
-    CreateDailyCronJob 'http-backup' 'systemctl start http-backup.service'*
+function SetUpWebMachineBackupScript () {
+  AskIfNotSet configureWebMachineBackup 'Configure backups? (y/n)' 'y'
+  if [[ "${configureWebMachineBackup?:}" == 'y' ]]; then
+    AskIfNotSet sshWebMachineUserName 'Enter SSH username of backup machine'
+    AskIfNotSet sshWebMachineHostName 'Enter SSH hostname of backup machine'
+    AskIfNotSet webMachineHealthCheckId 'Enter your HealthChecks.io monitoring ID'
+    CreateWebMachineBackupScript "${sshWebMachineUserName:?}" "${sshWebMachineHostName:?}" "${webMachineHealthCheckId:?}"
+    CreateDailyCronJob 'web-backup' 'systemctl start web-backup.service'*
   fi
 }
 
-function SetUpHttpMachineRestoreBackupScript () {
-  Ask restoreHttpBackup 'Restore http data (y/n)' 'n'
-  if [[ "${restoreHttpBackup?:}" == 'y' ]]; then
-    AskIfNotSet sshHttpMachineUserName 'Enter SSH username of backup machine'
-    AskIfNotSet sshHttpMachineHostName 'Enter SSH hostname of backup machine'
-    CreateHttpMachineRestoreBackupScript "${sshHttpMachineUserName:?}" "${sshHttpMachineHostName:?}"
-    DisplayMessage 'Restoring http data...'
-    ExecShellScriptWithRoot /var/opt/server-setup ./http-restore-backup.sh
+function SetUpWebMachineRestoreBackupScript () {
+  Ask restoreWebBackup 'Restore web data (y/n)' 'n'
+  if [[ "${restoreWebBackup?:}" == 'y' ]]; then
+    AskIfNotSet sshWebMachineUserName 'Enter SSH username of backup machine'
+    AskIfNotSet sshWebMachineHostName 'Enter SSH hostname of backup machine'
+    CreateWebMachineRestoreBackupScript "${sshWebMachineUserName:?}" "${sshWebMachineHostName:?}"
+    DisplayMessage 'Restoring web data...'
+    ExecShellScriptWithRoot /var/opt/server-setup ./web-restore-backup.sh
     DisplayMessage 'Datas were successfully restored!'
   fi
 }

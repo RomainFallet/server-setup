@@ -28,7 +28,7 @@ function SetupDroneCi () {
   RestartService "${droneApplicationName}"
 }
 
-function SetupDroneCiHttpServer () {
+function SetupDroneCiWebServer () {
   droneApplicationName='drone-ci'
   AskIfNotSet droneDomainName "Enter your Drone CI domain name"
   AskIfNotSet letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"

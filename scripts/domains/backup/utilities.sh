@@ -156,7 +156,7 @@ rm -rf /root/data"
   CreateService 'application-restore-backup' "/bin/bash ${filePath}" 'root'
 }
 
-function CreateHttpMachineBackupScript () {
+function CreateWebMachineBackupScript () {
   sshUser="${1}"
   sshHostname="${2}"
   healthChecksUuid="${3}"
@@ -174,14 +174,14 @@ mkdir -p /root/data/letsencrypt
 /usr/bin/rsync --archive --verbose --delete --progress /root/data/ ${sshUser}@${sshHostname}:~/data
 rm -rf /root/data
 /usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
-  filePath=/var/opt/server-setup/http-backup.sh
+  filePath=/var/opt/server-setup/web-backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
   SetFileContent "${fileContent}" "${filePath}"
   MakeFileExecutable "${filePath}"
-  CreateService 'http-backup' "/bin/bash ${filePath}" 'root'
+  CreateService 'web-backup' "/bin/bash ${filePath}" 'root'
 }
 
-function CreateHttpMachineRestoreBackupScript () {
+function CreateWebMachineRestoreBackupScript () {
   sshUser="${1}"
   sshHostname="${2}"
   fileContent="#!/bin/bash
@@ -197,11 +197,11 @@ mkdir -p /root/data
 chown -R www-data:www-data /var/www
 systemctl restart nginx
 rm -rf /root/data"
-  filePath=/var/opt/server-setup/http-restore-backup.sh
+  filePath=/var/opt/server-setup/web-restore-backup.sh
   CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
   SetFileContent "${fileContent}" "${filePath}"
   MakeFileExecutable "${filePath}"
-  CreateService 'http-restore-backup' "/bin/bash ${filePath}" 'root'
+  CreateService 'web-restore-backup' "/bin/bash ${filePath}" 'root'
 }
 
 function CreateFileMachineBackupScript () {
