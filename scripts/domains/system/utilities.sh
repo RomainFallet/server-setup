@@ -47,33 +47,33 @@ Unattended-Upgrade::Automatic-Reboot-Time \"05:00\";"
 
 function ConfigureIpv4Ipv6AndDns () {
   AskIfNotSet configureIpv6 'Configure IPv6? (y/n)' 'y'
-  InstallPackageIfNotExisting 'openvswitch-switch-dpdk'
-  SetFileContent "network: {config: disabled}" /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
-  # shellcheck disable=SC2312
-  rawEthernetConnectionName=$(sudo lshw -class network -short | grep 'Ethernet interface' | awk '{print $2}')
-  ethernetConnectionName=$(Trim "${rawEthernetConnectionName}")
-  ethernetConnectionMacAddress=$(cat /sys/class/net/"${ethernetConnectionName}"/address)
-  ipv4ConfigurationPath=/etc/netplan/50-cloud-init.yaml
-  ipv4Configuration="network:
-    version: 2
-    ethernets:
-        ${ethernetConnectionName}:
-            dhcp4: true
-            dhcp4-overrides:
-              use-dns: false
-            match:
-                macaddress: ${ethernetConnectionMacAddress}
-            nameservers:
-                addresses:
-                    - 45.90.28.193
-                    - 45.90.30.193
-                search: []
-            mtu: 1500
-            set-name: ${ethernetConnectionName}"
-  SetFileContent "${ipv4Configuration}" "${ipv4ConfigurationPath}"
-  SetFilePermissions "${ipv4ConfigurationPath}" 600
-
   if [[ "${configureIpv6:?}" == 'y' ]]; then
+    InstallPackageIfNotExisting 'openvswitch-switch-dpdk'
+    SetFileContent "network: {config: disabled}" /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+    # shellcheck disable=SC2312
+    rawEthernetConnectionName=$(sudo lshw -class network -short | grep 'Ethernet interface' | awk '{print $2}')
+    ethernetConnectionName=$(Trim "${rawEthernetConnectionName}")
+    ethernetConnectionMacAddress=$(cat /sys/class/net/"${ethernetConnectionName}"/address)
+    ipv4ConfigurationPath=/etc/netplan/50-cloud-init.yaml
+    ipv4Configuration="network:
+      version: 2
+      ethernets:
+          ${ethernetConnectionName}:
+              dhcp4: true
+              dhcp4-overrides:
+                use-dns: false
+              match:
+                  macaddress: ${ethernetConnectionMacAddress}
+              nameservers:
+                  addresses:
+                      - 45.90.28.193
+                      - 45.90.30.193
+                  search: []
+              mtu: 1500
+              set-name: ${ethernetConnectionName}"
+    SetFileContent "${ipv4Configuration}" "${ipv4ConfigurationPath}"
+    SetFilePermissions "${ipv4ConfigurationPath}" 600
+
     AskIfNotSet ipv6Address "Enter your IPv6 address (eg. 2001:XXXX:XXX:XXXX::XXXX)"
     AskIfNotSet ipv6Gateway "Enter your IPv6 gateway (eg. 2001:XXXX:XXX:XXXX::1)"
     ipv6ConfigurationPath=/etc/netplan/51-cloud-init-ipv6.yaml
@@ -100,7 +100,6 @@ function ConfigureIpv4Ipv6AndDns () {
                     scope: link"
     SetFileContent "${ipv6Configuration}" "${ipv6ConfigurationPath}"
     SetFilePermissions "${ipv6ConfigurationPath}" 600
+    EnableNetworkConfiguration
   fi
-
-  EnableNetworkConfiguration
 }
