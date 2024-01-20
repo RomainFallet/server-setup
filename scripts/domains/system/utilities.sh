@@ -47,6 +47,7 @@ Unattended-Upgrade::Automatic-Reboot-Time \"05:00\";"
 
 function ConfigureIpv4Ipv6AndDns () {
   AskIfNotSet configureIpv6 'Configure IPv6? (y/n)' 'y'
+  InstallPackageIfNotExisting 'openvswitch-switch-dpdk'
   SetFileContent "network: {config: disabled}" /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
   # shellcheck disable=SC2312
   ethernetConnectionName=$(sudo find /sys/class/net -mindepth 1 -maxdepth 1 -lname '*virtual*' -prune -o -printf '%f\n' | awk 'FNR == 1 {print}')
