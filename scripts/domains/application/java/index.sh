@@ -37,7 +37,7 @@ function SetupJavaApplication () {
   SetDefaultDirectoryPermissions "${dataPath}"
   SetDefaultDirectoryPermissions "${configurationPath}"
   SetDefaultDirectoryPermissions "${applicationPath}"
-  CreateStartupService "${applicationName}" "/usr/bin/java -jar /var/opt/${applicationName}/application.jar"
+  CreateStartupService "${applicationName}" "/usr/bin/java -jar /var/opt/${applicationName}/application.jar" "${applicationName}"
   CreateStartupServiceWatcher "${applicationName}" /var/opt/"${applicationName}"
   RestartService "${applicationName}"
   RestartService "${applicationName}-watcher"
