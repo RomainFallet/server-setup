@@ -2,6 +2,9 @@
 
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
+# shellcheck source-path=../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/variables/index.sh"
+
 
 function GenerateTlsCertificateWithCertbot () {
   applicationName="${1}"
@@ -68,18 +71,29 @@ function GenerateTlsCertificate () {
 function ConfigureContentSecurityPolicy () {
   applicationName="${1}"
   domainName="${2}"
+  cspBehavior="${3}"
+  if [[ -z "${cspBehavior}" ]]; then
+    cspBehavior='default'
+  fi
   defaultCspRule="default-src 'self';"
   cspConfigurationFilePath=/etc/nginx/sites-configuration/"${applicationName}"/"${domainName}"/content-security-policy.conf
   # shellcheck disable=SC2065
   if test -f "${cspConfigurationFilePath}" > /dev/null; then
     cspFileContent=$(sudo cat "${cspConfigurationFilePath}")
-    cspRule=$(ReplaceText '^add_header\sContent-Security-Policy\s"(.+?)";$', '\1' "${cspFileContent}")
+    trimmedCspFileContent=$(Trim "${cspFileContent}")
+    cspRule=$(ReplaceText '^add_header\sContent-Security-Policy\s"(.+?)";$' '\1' "${trimmedCspFileContent}")
   fi
   if [[ -z "${cspRule}" ]]; then
     cspRule="${defaultCspRule}"
-    Ask updateCspRule "Default Content Security Policy is ${cspRule}. Update it? (y/n)" 'n'
+  fi
+  if [[ "${cspBehavior}" == 'ask' ]]; then
+    if [[ -z "${cspRule}" ]]; then
+      Ask updateCspRule "Default Content Security Policy is ${cspRule}. Update it? (y/n)" 'n'
+    else
+      Ask updateCspRule "Existing Content Security Policy is ${cspRule}. Update it? (y/n)" 'n'
+    fi
   else
-    Ask updateCspRule "Existing Content Security Policy is ${cspRule}. Update it? (y/n)" 'n'
+    updateCspRule='n'
   fi
 
   if [[ "${updateCspRule:?}" == 'y' ]]; then

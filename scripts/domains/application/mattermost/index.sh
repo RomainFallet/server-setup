@@ -42,7 +42,7 @@ function SetupMattermost () {
   CreatePostgreSqlUserIfNotExisting "${mattermostApplicationName}" "${mattermostDatabasePassword:?}"
   CreatePostgreSqlDatabaseIfNotExisting "${mattermostDatabaseName}"
   GrantAllPrivilegesOnPostgreSqlDatabase "${mattermostDatabaseName}" "${mattermostApplicationName}"
-  DownloadMattermostIfOutdated "${mattermostDownloadPath}" "${mattermostPath}"
+  DownloadMattermostIfOutdated "${mattermostDownloadPath}" "${mattermostPath}" "${mattermostApplicationName}"
   CreateDirectoryIfNotExisting "${mattermortFilesDirectory}"
   CreateDirectoryIfNotExisting "${mattermostPluginsDirectory}"
   CreateDirectoryIfNotExisting "${mattermostClientPluginsDirectory}"
@@ -64,7 +64,7 @@ function SetupMattermostWebServer () {
   AskIfNotSet mattermostDomainName "Enter your Mattermost domain name"
   AskIfNotSet letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
   AskIfNotSet mattermostInternalPort "Enter your Mattermost internal port"
-  CreateProxyDomainName "${mattermostApplicationName}" "${mattermostDomainName:?}" "${mattermostInternalPort:?}" "${letsEncryptEmail:?}"
+  CreateProxyDomainName "${mattermostApplicationName}" "${mattermostDomainName:?}" "${mattermostInternalPort:?}" "${letsEncryptEmail:?}" 'default'
   nginxConfigurationPath=/etc/nginx/sites-configuration/"${mattermostApplicationName}"/"${mattermostDomainName:?}"/https.conf
   nginxConfiguration="upstream backend {
    server 127.0.0.1:${mattermostInternalPort:?};

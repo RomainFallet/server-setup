@@ -22,7 +22,7 @@ function UpperCaseToCamelCase() {
 
 function Trim() {
   text="${1}"
-  echo "${text}" | xargs
+  echo "${text}" | (sed 's|"|\\"|g' || true)| xargs
 }
 
 function AskIfNotSet() {

@@ -14,6 +14,7 @@ function CreateProxyDomainName () {
   domainName="${2}"
   internalPort="${3}"
   letsencryptEmail="${4}"
+  cspBehavior="${5}"
   GenerateTlsCertificate "${applicationName}" "${domainName}" "${letsencryptEmail}"
   httpsConfigurationPath=/etc/nginx/sites-configuration/"${applicationName}"/"${domainName}"/https.conf
   httpsConfiguration="server {
@@ -49,7 +50,7 @@ function CreateProxyDomainName () {
   include /etc/nginx/sites-configuration/${applicationName}/${domainName}/content-security-policy.conf;
 }"
   SetFileContent "${httpsConfiguration}" "${httpsConfigurationPath}"
-  ConfigureContentSecurityPolicy "${applicationName}" "${domainName}"
+  ConfigureContentSecurityPolicy "${applicationName}" "${domainName}" "${cspBehavior}"
   RestartService 'nginx'
 }
 
@@ -57,6 +58,7 @@ function CreateStaticDomainName () {
   applicationName="${1}"
   domainName="${2}"
   letsencryptEmail="${3}"
+  cspBehavior="${4}"
   GenerateTlsCertificate "${applicationName}" "${domainName}" "${letsencryptEmail}"
   httpsConfigurationPath=/etc/nginx/sites-configuration/"${applicationName}"/"${domainName}"/https.conf
   httpsConfiguration="server {
@@ -87,7 +89,7 @@ function CreateStaticDomainName () {
   include /etc/nginx/sites-configuration/${applicationName}/${domainName}/content-security-policy.conf;
 }"
   SetFileContent "${httpsConfiguration}" "${httpsConfigurationPath}"
-  ConfigureContentSecurityPolicy "${applicationName}" "${domainName}"
+  ConfigureContentSecurityPolicy "${applicationName}" "${domainName}" "${cspBehavior}"
   RestartService 'nginx'
 }
 
@@ -95,6 +97,7 @@ function CreateSpaDomainName () {
   applicationName="${1}"
   domainName="${2}"
   letsencryptEmail="${3}"
+  cspBehavior="${4}"
   GenerateTlsCertificate "${applicationName}" "${domainName}" "${letsencryptEmail}"
   httpsConfigurationPath=/etc/nginx/sites-configuration/"${applicationName}"/"${domainName}"/https.conf
   httpsConfiguration="server {
@@ -125,7 +128,7 @@ function CreateSpaDomainName () {
   include /etc/nginx/sites-configuration/${applicationName}/${domainName}/content-security-policy.conf;
 }"
   SetFileContent "${httpsConfiguration}" "${httpsConfigurationPath}"
-  ConfigureContentSecurityPolicy "${applicationName}" "${domainName}"
+  ConfigureContentSecurityPolicy "${applicationName}" "${domainName}" "${cspBehavior}"
   RestartService 'nginx'
 }
 

@@ -29,10 +29,11 @@ function GetLatestMattermostVersion () {
 
 function GetCurrentMattermostVersion () {
   mattermostBinaryPath="${1}"
+  mattermostUserName="${2}"
   if ! sudo test -f "${mattermostBinaryPath}"; then
     echo 'uninstalled'
   else
-    versionString=$(sudo su --command "${mattermostBinaryPath} version" - mattermost)
+    versionString=$(sudo su --command "${mattermostBinaryPath} version" - "${mattermostUserName}")
     versionStringLine=$(echo "${versionString}" | grep '^Version')
     rawVersion=$(echo "${versionStringLine}" | awk '{print $2}')
     version=$(Trim "${rawVersion}")
@@ -43,8 +44,9 @@ function GetCurrentMattermostVersion () {
 function DownloadMattermostIfOutdated () {
   mattermostDownloadPath="${1}"
   mattermostPath="${2}"
+  mattermostUserName="${3}"
   mattermostArchitecture=$(SelectAppropriateMattermostArchitecture)
-  mattermostCurrentVersion=$(GetCurrentMattermostVersion "${mattermostPath}"/bin/mmctl)
+  mattermostCurrentVersion=$(GetCurrentMattermostVersion "${mattermostPath}"/bin/mmctl "${mattermostUserName}")
   mattermostLatestVersion=$(GetLatestMattermostVersion)
   echo "Mattermost current version: ${mattermostCurrentVersion}"
   echo "Mattermost latest version: ${mattermostLatestVersion}"

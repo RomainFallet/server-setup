@@ -10,7 +10,7 @@ function CreateService () {
   executablePath="${2}"
   userName="${3}"
   workingDirectory="${4}"
-  environmentVariables="${5}"
+  environmentPath="${5}"
   afterServiceName="${6}"
 
   workingDirectoryConfiguration=''
@@ -19,9 +19,9 @@ function CreateService () {
     workingDirectoryConfiguration="
 WorkingDirectory=${workingDirectory}"
   fi
-  if [[ -n "${environmentVariables}" ]]; then
+  if [[ -n "${environmentPath}" ]]; then
     environmentConfiguration="
-Environment=${environmentVariables}"
+EnvironmentFile=${environmentPath}"
   fi
   if [[ -n "${afterServiceName}" ]]; then
     afterServiceNameConfiguration="
@@ -37,8 +37,6 @@ Type=simple
 ExecStart=${executablePath}
 Restart=on-failure
 RestartSec=2s
-StartLimitInterval=1d
-StartLimitBurst=3
 User=${userName}
 Group=${userName}${workingDirectoryConfiguration}${environmentConfiguration}
 
@@ -56,8 +54,6 @@ function CreateStartupServiceWatcher () {
   watcherConfiguration="[Unit]
 Description=${serviceName} restarter
 After=network.target
-StartLimitIntervalSec=5
-StartLimitBurst=1
 
 [Service]
 Type=oneshot
@@ -86,10 +82,10 @@ function CreateStartupService () {
   executablePath="${2}"
   userName="${3}"
   workingDirectory="${4}"
-  environmentVariables="${5}"
+  environmentPath="${5}"
   afterServiceName="${6}"
 
-  CreateService "${name}" "${executablePath}" "${userName}" "${workingDirectory}" "${environmentVariables}" "${afterServiceName}"
+  CreateService "${name}" "${executablePath}" "${userName}" "${workingDirectory}" "${environmentPath}" "${afterServiceName}"
   EnableSystemdService "${name}"
 }
 

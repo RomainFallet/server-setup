@@ -24,7 +24,10 @@ function SetupGitea () {
   giteaConfigurationFilePath="${giteaConfigurationPath}"/app.ini
   giteaBinaryPath=/var/opt/gitea/gitea
   giteaBinaryDownloadPath=/tmp/gitea
-  giteaEnvironmentVariables="USER=${giteaApplicationName} HOME=/home/${giteaApplicationName} GITEA_WORK_DIR=${giteaDataPath}"
+  giteaEnvironmentVariables="USER=${giteaApplicationName}
+HOME=/home/${giteaApplicationName}
+GITEA_WORK_DIR=${giteaDataPath}"
+  giteaEnvironmentPath=/home/"${giteaApplicationName}"/environment
   AskIfNotSet giteaDomainName "Enter your Gitea domain name"
   AskIfNotSet giteaInternalPort "Enter your Gitea internal port"
   AskIfNotSet giteaDatabasePassword "Enter your Gitea database password"
@@ -136,8 +139,10 @@ INTERNAL_TOKEN     = ${giteaInternalToken}
 PASSWORD_HASH_ALGO = pbkdf2"
   SetFileContent "${fileContent}" "${giteaConfigurationFilePath}"
   SetFileOwnership "${giteaConfigurationFilePath}" "${giteaApplicationName}" "${giteaApplicationName}"
+  SetFileContent "${giteaEnvironmentVariables}" "${giteaEnvironmentPath}"
+  SetFileOwnership "${giteaEnvironmentPath}" "${giteaApplicationName}" "${giteaApplicationName}"
   CreateOrUpdateGiteaAdminstratorAccount "${giteaAdministratorUserName:?}" "${giteaAdministratorEmail:?}" "${giteaAdministratorPassword:?}" "${giteaConfigurationFilePath}" "${giteaDataPath}"
-  CreateStartupService "${giteaApplicationName}" "${giteaBinaryPath} web --config ${giteaConfigurationFilePath}" "${giteaApplicationName}" "${giteaDataPath}" "${giteaEnvironmentVariables}"
+  CreateStartupService "${giteaApplicationName}" "${giteaBinaryPath} web --config ${giteaConfigurationFilePath}" "${giteaApplicationName}" "${giteaDataPath}" "${giteaEnvironmentPath}"
   RestartService "${giteaApplicationName}"
 }
 
@@ -146,7 +151,7 @@ function SetupGiteaWebServer () {
   AskIfNotSet giteaDomainName "Enter your Gitea domain name"
   AskIfNotSet letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
   AskIfNotSet giteaInternalPort "Enter your Gitea internal port"
-  CreateProxyDomainName "${giteaApplicationName}" "${giteaDomainName}" "${giteaInternalPort}" "${letsEncryptEmail:?}"
+  CreateProxyDomainName "${giteaApplicationName}" "${giteaDomainName}" "${giteaInternalPort}" "${letsEncryptEmail:?}" 'default'
   giteaContentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${giteaApplicationName}"/"${giteaDomainName}"/content-security-policy.conf
   giteaContentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self' 'unsafe-inline' 'unsafe-eval' data:;\";"
   SetFileContent "${giteaContentSecurityPolicyConfiguration}" "${giteaContentSecurityPolicyConfigurationPath}"
