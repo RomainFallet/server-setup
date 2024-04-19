@@ -122,12 +122,6 @@ function SetupMattermostWebServer () {
 
   ssl_certificate     /etc/letsencrypt/live/${mattermostDomainName:?}/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/${mattermostDomainName:?}/privkey.pem;
-  ssl_session_timeout 1d;
-  ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384';
-  ssl_prefer_server_ciphers on;
-  ssl_session_cache shared:SSL:50m;
-  ssl_stapling on;
-  ssl_stapling_verify on;
 
   add_header Strict-Transport-Security \"max-age=15552000; preload;\";
   add_header Expect-CT \"max-age=86400, enforce\";
