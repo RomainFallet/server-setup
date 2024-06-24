@@ -17,7 +17,7 @@ function InstallGit () {
 
 function InstallMailInABox () {
   CloneRepositoryIfNotExisting https://github.com/mail-in-a-box/mailinabox ~/mailinabox
-  CheckoutRepository ~/mailinabox 'v65'
+  CheckoutRepository ~/mailinabox 'v68'
   ExecShellScriptWithRoot ~/mailinabox/ ./setup/start.sh
   StartService 'fix-mailinabox-permissions'
 }
