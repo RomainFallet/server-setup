@@ -6,6 +6,8 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/packages/index.sh"
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/services/index.sh"
+# shellcheck source-path=../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/firewall/index.sh"
 
 function InstallFail2Ban () {
   InstallPackageIfNotExisting 'fail2ban'
@@ -68,4 +70,29 @@ function BackupSshConfigFile () {
 
 function RemoveOtherSshConfigFiles () {
   RemoveFile /etc/ssh/sshd_config.d/50-cloud-init.conf
+}
+
+function OpenSshFirewallPorts () {
+  OpenFireWallPort '22'
+}
+
+function OpenHttpFirewallPorts () {
+  OpenFireWallPort '80'
+  OpenFireWallPort '443'
+}
+
+function OpenNfsFirewallPorts () {
+  OpenFireWallPort '2049'
+  OpenFireWallPort '111'
+  OpenFireWallPort '892'
+  OpenFireWallPort '32803'
+  OpenFireWallPort '32769'
+  OpenFireWallPort '662'
+}
+
+function OpenSmbFirewallPorts () {
+  OpenFireWallPort '137'
+  OpenFireWallPort '138'
+  OpenFireWallPort '139'
+  OpenFireWallPort '445'
 }

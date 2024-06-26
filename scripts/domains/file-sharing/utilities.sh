@@ -114,6 +114,29 @@ port=662
   SetFileContent "${configuration}" "${configurationPath}"
 }
 
+function ConfigureSamba() {
+  configurationPath=/etc/samba/smb.conf
+  for directoryPath in /mnt/sda/*/
+  do
+    directoryPath=${directoryPath%*/}
+    if [[ "${directoryPath}" == '/mnt/sda/lost+found' ]]; then
+      break
+    fi
+    sambaDirectoryName=$(basename "${directoryPath}")
+    configuration="[${sambaDirectoryName}]
+    path = ${directoryPath}
+    read only = no
+    browsable = yes
+    guest ok = yes
+"
+    AppendTextInFileIfNotFound "${configuration}" "${configurationPath}"
+  done
+}
+
 function RestartNfs() {
   RestartService 'nfs-kernel-server'
+}
+
+function RestartSamba() {
+  RestartService 'smbd'
 }

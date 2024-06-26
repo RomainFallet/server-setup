@@ -2,8 +2,6 @@
 
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/security/utilities.sh"
-# shellcheck source-path=../../../
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/firewall/index.sh"
 
 function SetUpSsh () {
   BackupSshConfigFile
@@ -20,19 +18,14 @@ function SetUpFail2Ban () {
 }
 
 function SetUpMachineFireWall () {
-  OpenFireWallPort '22'
-  OpenFireWallPort '443'
-  OpenFireWallPort '80'
+  OpenSshFirewallPorts
+  OpenHttpFirewallPorts
   EnableFireWall
 }
 
 function SetUpFileMachineFireWall () {
-  OpenFireWallPort '22'
-  OpenFireWallPort '2049'
-  OpenFireWallPort '111'
-  OpenFireWallPort '892'
-  OpenFireWallPort '32803'
-  OpenFireWallPort '32769'
-  OpenFireWallPort '662'
+  OpenSshFirewallPorts
+  OpenNfsFirewallPorts
+  OpenSmbFirewallPorts
   EnableFireWall
 }

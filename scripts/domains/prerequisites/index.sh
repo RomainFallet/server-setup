@@ -41,6 +41,7 @@ function SetUpFileMachinePrerequisites () {
   CleanOldLogs
   InstallPackageIfNotExisting 'rsync'
   InstallPackageIfNotExisting 'nfs-kernel-server'
+  InstallPackageIfNotExisting 'samba'
   MountDeviceAutomaticallyIfConnected 'sda'
 }
 
