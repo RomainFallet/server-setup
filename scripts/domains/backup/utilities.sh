@@ -57,7 +57,7 @@ do
   applicationName=\${directoryPath##*/}
   mkdir -p /root/data/applications/\${applicationName}
   if [[ \"\${applicationName}\" == 'server-setup' ]]; then
-    break
+    continue
   fi
   if test -d /var/opt/\${applicationName}/; then
     mkdir -p /root/data/applications/\${applicationName}/opt
