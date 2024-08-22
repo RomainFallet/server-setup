@@ -10,6 +10,8 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/web-server/index.sh"
 # shellcheck source-path=../../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/files/index.sh"
+# shellcheck source-path=../../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/docker/index.sh"
 
 function SetupDroneCi () {
   droneApplicationName='drone-ci'
@@ -23,6 +25,7 @@ function SetupDroneCi () {
   CreateUserIfNotExisting "${droneApplicationName}"
   CreateDirectoryIfNotExisting "${droneDataPath}"
   SetDirectoryOwnershipRecursively "${droneDataPath}" "${droneApplicationName}"
+  InstallDocker
   CreateDroneCiDockerContainer "${droneApplicationName}" "${droneDataPath}" "${droneDomainName}" "${droneInternalPort}" "${droneSharedSecretKey}" "${giteaBaseUrl?:}" "${giteaClientId}" "${giteaClientSecret}"
   CreateStartupService "${droneApplicationName}" "sudo docker start ${droneApplicationName}" 'root' "${droneDataPath}" '' 'docker.service'
   RestartService "${droneApplicationName}"

@@ -25,6 +25,7 @@ function AddGpgKeyWithCurl () {
   keyDownloadUrl="${1}"
   keyPath="${2}"
   (curl --fail --silent --show-error --location "${keyDownloadUrl}" || true) | sudo gpg --dearmor -o "${keyPath}"
+  sudo chmod a+r "${keyPath}"
 }
 
 function ReloadAptRepositories () {

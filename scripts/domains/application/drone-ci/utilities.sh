@@ -9,13 +9,13 @@ function CreateDroneCiDockerContainer () {
   droneDomainName="${3}"
   droneInternalPort="${4}"
   droneSharedSecretKey="${5}"
-  giteaDomainName="${6}"
+  giteaBaseUrl="${6}"
   giteaClientId="${7}"
   giteaClientSecret="${8}"
   RemoveDockerContainerIfExisting "${dockerContainerName}"
   sudo docker create \
     --volume="${droneDataPath}":/data \
-    --env=DRONE_GITEA_SERVER="${giteaDomainName}" \
+    --env=DRONE_GITEA_SERVER="${giteaBaseUrl}" \
     --env=DRONE_GITEA_CLIENT_ID="${giteaClientId}" \
     --env=DRONE_GITEA_CLIENT_SECRET="${giteaClientSecret}" \
     --env=DRONE_RPC_SECRET="${droneSharedSecretKey}" \
