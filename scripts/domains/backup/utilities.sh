@@ -124,7 +124,7 @@ do
   directoryPath=\${directoryPath%*/}
   applicationName=\${directoryPath##*/}
   if [[ \"\${applicationName}\" == 'server-setup' ]]; then
-    break
+    continue
   fi
   echo \"Restoring \${applicationName}...\"
   if test -d /root/data/applications/\${applicationName}/opt/; then
