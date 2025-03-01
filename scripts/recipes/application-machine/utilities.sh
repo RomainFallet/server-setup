@@ -5,7 +5,7 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/variables/index.sh"
 # shellcheck source-path=../../../
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/gitea/index.sh"
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/forgejo/index.sh"
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/mattermost/index.sh"
 # shellcheck source-path=../../../
@@ -28,7 +28,7 @@ function AskApplicationMachineActions () {
   - Nothing............................[0]
   - Set up a Java application..........[1]
   - Set up a Phoenix application.......[2]
-  - Install or upgrade Gitea...........[3]
+  - Install or upgrade Forgejo.........[3]
   - Install or upgrade Mattermost......[4]
   - Install or upgrade Listmonk........[5]
   - Install or upgrade Vaultwarden.....[6]
@@ -41,7 +41,7 @@ function AskApplicationMachineActions () {
     SetupPhoenixApplication
   fi
   if [[ "${applicationMachineAction:?}" == '3' ]]; then
-    SetupGitea
+    SetupForgejo
   fi
   if [[ "${applicationMachineAction:?}" == '4' ]]; then
     SetupMattermost

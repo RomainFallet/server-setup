@@ -5,7 +5,7 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/variables/index.sh"
 # shellcheck source-path=../../../
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/gitea/index.sh"
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/forgejo/index.sh"
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/drone-ci/index.sh"
 # shellcheck source-path=../../../
@@ -25,7 +25,7 @@ function AskWebMachineActions () {
   - Set up web static server for SPA..[3]
   - Set up web proxy server...........[4]
   - Set up web redirection server.....[5]
-  - Set up Gitea web server...........[6]
+  - Set up Forgejo web server.........[6]
   - Set up Mattermost web server......[7]
   - Set up Listmonk web server........[8]
   - Set up Drone CI web server........[9]
@@ -48,7 +48,7 @@ function AskWebMachineActions () {
     SetupWebRedirectionServer
   fi
   if [[ "${applicationMachineAction:?}" == '6' ]]; then
-    SetupGiteaWebServer
+    SetupForgejoWebServer
   fi
   if [[ "${applicationMachineAction:?}" == '7' ]]; then
     SetupMattermostWebServer
