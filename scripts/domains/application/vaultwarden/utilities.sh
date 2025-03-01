@@ -42,7 +42,8 @@ function GetCurrentVaultwardenVersion () {
     echo 'uninstalled'
   else
     versionString=$(sudo su --command "${vaultwardenBinaryPath} --version" - "${vaultwardenUsername}")
-    rawVersion=$(echo "${versionString}" | awk '{print $2}')
+    versionStringFirstLine=$(echo "${versionString}" | head -n 1)
+    rawVersion=$(echo "${versionStringFirstLine}" | awk '{print $2}')
     version=$(Trim "${rawVersion}")
     echo "${version}"
   fi
