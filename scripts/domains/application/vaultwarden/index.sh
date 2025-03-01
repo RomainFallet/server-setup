@@ -25,6 +25,10 @@ function SetupVaultwarden () {
   AskIfNotSet vaultwardenSmtpPassword "Enter your Vaultwarden SMTP password"
   AskIfNotSet vaultwardenSmtpPort "Enter your Vaultwarden SMTP port" '465'
   AskIfNotSet vaultwardenAdministratorPassword "Enter your Vaultwarden administrator password"
+  AskIfNotSet configureVaultwardenPortForwarding 'Forward vaultwarden port to remote machine? (y/n)' 'n'
+  if [[ "${configureVaultwardenPortForwarding?:}" == 'y' ]]; then
+    ForwardPortToRemoteServer "${vaultwardenInternalPort}" "vaultwarden-port-forwarding"
+  fi
   ConfigureVaultwarden "${vaultwardenApplicationName}" "${vaultwardenDataPath}" "${vaultwardenLogPath}" "${vaultwardenDatabaseName}" "${vaultwardenDatabasePassword}" "${vaultwardenAdministratorPassword:?}" "${vaultwardenDomainName}" "${vaultwardenSmtpHostName}" "${vaultwardenSmtpUserName}" "${vaultwardenSmtpPassword}" "${vaultwardenSmtpPort}" "${vaultwardenEnvironmentPath}" "${vaultwardenInternalPort}" "${vaultwardenWebvaultPath}"
   CreateUserIfNotExisting "${vaultwardenApplicationName}"
   CreatePostgreSqlUserIfNotExisting "${vaultwardenApplicationName}" "${vaultwardenDatabasePassword:?}"

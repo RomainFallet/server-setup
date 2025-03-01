@@ -26,40 +26,36 @@
 function AskApplicationMachineActions () {
   Ask applicationMachineAction "What do you want to do?
   - Nothing............................[0]
-  - Forward a port through SSH.........[1]
-  - Set up a Java application..........[2]
-  - Set up a Phoenix application.......[3]
-  - Install or upgrade Gitea...........[4]
-  - Install or upgrade Mattermost......[5]
-  - Install or upgrade Listmonk........[6]
-  - Install or upgrade Vaultwarden.....[7]
-  - Install or upgrade Drone CI........[8]
-  - Install or upgrade Drone CI Runner.[9]"
+  - Set up a Java application..........[1]
+  - Set up a Phoenix application.......[2]
+  - Install or upgrade Gitea...........[3]
+  - Install or upgrade Mattermost......[4]
+  - Install or upgrade Listmonk........[5]
+  - Install or upgrade Vaultwarden.....[6]
+  - Install or upgrade Drone CI........[7]
+  - Install or upgrade Drone CI Runner.[8]"
   if [[ "${applicationMachineAction:?}" == '1' ]]; then
-    ForwardPortToRemoteServer
-  fi
-  if [[ "${applicationMachineAction:?}" == '2' ]]; then
     SetupJavaApplication
   fi
-  if [[ "${applicationMachineAction:?}" == '3' ]]; then
+  if [[ "${applicationMachineAction:?}" == '2' ]]; then
     SetupPhoenixApplication
   fi
-  if [[ "${applicationMachineAction:?}" == '4' ]]; then
+  if [[ "${applicationMachineAction:?}" == '3' ]]; then
     SetupGitea
   fi
-  if [[ "${applicationMachineAction:?}" == '5' ]]; then
+  if [[ "${applicationMachineAction:?}" == '4' ]]; then
     SetupMattermost
   fi
-  if [[ "${applicationMachineAction:?}" == '6' ]]; then
+  if [[ "${applicationMachineAction:?}" == '5' ]]; then
     SetupListmonk
   fi
-  if [[ "${applicationMachineAction:?}" == '7' ]]; then
+  if [[ "${applicationMachineAction:?}" == '6' ]]; then
     SetupVaultwarden
   fi
-  if [[ "${applicationMachineAction:?}" == '8' ]]; then
+  if [[ "${applicationMachineAction:?}" == '7' ]]; then
     SetupDroneCi
   fi
-  if [[ "${applicationMachineAction:?}" == '9' ]]; then
+  if [[ "${applicationMachineAction:?}" == '8' ]]; then
     SetupDroneCiRunner
   fi
 }

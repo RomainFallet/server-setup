@@ -6,11 +6,12 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/packages/index.sh"
 
 function CreatePortForwardingService () {
-  port="${1}"
-  sshUserName="${2}"
-  sshHostName="${3}"
+  serviceName="${1}"
+  port="${2}"
+  sshUserName="${3}"
+  sshHostName="${4}"
   InstallPackageIfNotExisting 'autossh'
   autosshCommand="/usr/bin/autossh -N -R ${port}:localhost:${port} ${sshUserName}@${sshHostName}"
-  CreateStartupService "autossh-${port}" "${autosshCommand}" 'root'
-  RestartService "autossh-${port}"
+  CreateStartupService "${serviceName}" "${autosshCommand}" 'root'
+  RestartService "${serviceName}"
 }
