@@ -17,6 +17,7 @@ function SetUpApplicationMachinePrerequisites () {
   InstallPackageIfNotExisting 'rsync'
   InstallPackageIfNotExisting 'postgresql'
   InstallPackageIfNotExisting 'jq'
+  InstallPackageIfNotExisting 'autossh'
 }
 
 function SetUpWebMachinePrerequisites () {

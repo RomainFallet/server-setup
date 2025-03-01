@@ -10,7 +10,6 @@ function CreatePortForwardingService () {
   port="${2}"
   sshUserName="${3}"
   sshHostName="${4}"
-  InstallPackageIfNotExisting 'autossh'
   autosshCommand="/usr/bin/autossh -N -R ${port}:localhost:${port} ${sshUserName}@${sshHostName}"
   CreateStartupService "${serviceName}" "${autosshCommand}" 'root'
   RestartService "${serviceName}"
