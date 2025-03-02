@@ -38,6 +38,7 @@ FORGEJO_WORK_DIR=${forgejoDataPath}"
   AskIfNotSet forgejoSmtpUserName "Enter your Forgejo SMTP username" "${forgejoApplicationName}@${forgejoSmtpHostName:?}"
   AskIfNotSet forgejoSmtpPassword "Enter your Forgejo SMTP password"
   AskIfNotSet forgejoSmtpPort "Enter your Forgejo SMTP port" '465'
+  forgejoInstanceUrl="https://${forgejoDomainName:?}/"
   CreateUserIfNotExisting "${forgejoApplicationName}"
   CreatePostgreSqlDatabaseIfNotExisting "${forgejoDatabaseName}"
   CreatePostgreSqlUserIfNotExisting "${forgejoApplicationName}" "${forgejoDatabasePassword:?}"
@@ -80,7 +81,7 @@ ROOT = /var/lib/forgejo/data/forgejo-repositories
 SSH_DOMAIN       = ${forgejoDomainName:?}
 DOMAIN           = ${forgejoDomainName}
 HTTP_PORT        = ${forgejoInternalPort:?}
-ROOT_URL         = https://${forgejoDomainName}/
+ROOT_URL         = ${forgejoInstanceUrl}
 DISABLE_SSH      = false
 SSH_PORT         = 22
 LFS_START_SERVER = true
@@ -145,6 +146,17 @@ PASSWORD_HASH_ALGO = pbkdf2"
   timeToWaitInSeconds=1
   sleep "${timeToWaitInSeconds}"s
   CreateOrUpdateForgejoAdminstratorAccount "${forgejoAdministratorUserName:?}" "${forgejoAdministratorEmail:?}" "${forgejoAdministratorPassword:?}" "${forgejoConfigurationFilePath}" "${forgejoDataPath}"
+  forgejoRunnerBinaryPath=/usr/local/bin/forgejo-runner
+  forgejoRunnerBinaryDownloadPath=/tmp/forgejo-runner
+  forgejoRunnerLatestVersion="$(GetLatestForgejoRunnerVersion)"
+  forgejoRunnerCurrentVersion="$(GetCurrentForgejoRunnerVersion "${forgejoRunnerBinaryPath}")"
+  DownloadForgejoRunnerBinaryIfOutdated "${forgejoRunnerLatestVersion}" "${forgejoRunnerCurrentVersion}" "${forgejoRunnerBinaryPath}" "${forgejoRunnerBinaryDownloadPath}"
+  forgejoRunner1Name="forgejo-runner-1"
+  CreateUserIfNotExisting "${forgejoRunner1Name}"
+  forgejoRunner1Token=$(GetForgejoRunnerToken "${forgejoRunner1Name}")
+  RegisterForgejoRunner "${forgejoRunner1Name}" "${forgejoRunner1Token}" "${forgejoInstanceUrl}" "${forgejoConfigurationFilePath}"
+  CreateStartupService "${forgejoRunner1Name}" "${forgejoRunnerBinaryPath} daemon" "${forgejoRunner1Name}" "/home/${forgejoRunner1Name}"
+  RestartService "${forgejoRunner1Name}"
 }
 
 function SetupForgejoWebServer () {
