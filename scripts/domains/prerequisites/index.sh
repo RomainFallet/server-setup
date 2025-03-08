@@ -16,12 +16,6 @@ function SetUpApplicationMachinePrerequisites () {
   InstallPackageIfNotExisting 'postgresql'
   InstallPackageIfNotExisting 'jq'
   InstallPackageIfNotExisting 'autossh'
-}
-
-function SetUpWebMachinePrerequisites () {
-  UpgradeAllPackages
-  CleanOldLogs
-  InstallPackageIfNotExisting 'rsync'
   InstallPackageIfNotExisting 'nginx'
   InstallPackageIfNotExisting 'certbot'
 }

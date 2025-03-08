@@ -55,29 +55,6 @@ function SetUpApplicationMachineRestoreBackupScript () {
   fi
 }
 
-function SetUpWebMachineBackupScript () {
-  AskIfNotSet configureWebMachineBackup 'Configure backups? (y/n)' 'y'
-  if [[ "${configureWebMachineBackup?:}" == 'y' ]]; then
-    AskIfNotSet sshWebMachineUserName 'Enter SSH username of backup machine'
-    AskIfNotSet sshWebMachineHostName 'Enter SSH hostname of backup machine'
-    AskIfNotSet webMachineHealthCheckId 'Enter your HealthChecks.io monitoring ID'
-    CreateWebMachineBackupScript "${sshWebMachineUserName:?}" "${sshWebMachineHostName:?}" "${webMachineHealthCheckId:?}"
-    CreateDailyCronJob 'web-backup' 'systemctl start web-backup.service'*
-  fi
-}
-
-function SetUpWebMachineRestoreBackupScript () {
-  Ask restoreWebBackup 'Restore web data (y/n)' 'n'
-  if [[ "${restoreWebBackup?:}" == 'y' ]]; then
-    AskIfNotSet sshWebMachineUserName 'Enter SSH username of backup machine'
-    AskIfNotSet sshWebMachineHostName 'Enter SSH hostname of backup machine'
-    CreateWebMachineRestoreBackupScript "${sshWebMachineUserName:?}" "${sshWebMachineHostName:?}"
-    DisplayMessage 'Restoring web data...'
-    ExecShellScriptWithRoot /var/opt/server-setup ./web-restore-backup.sh
-    DisplayMessage 'Datas were successfully restored!'
-  fi
-}
-
 function SetUpFileMachineBackupScript () {
   AskIfNotSet configureFileMachineBackup 'Configure backups? (y/n)' 'y'
   if [[ "${configureFileMachineBackup?:}" == 'y' ]]; then

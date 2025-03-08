@@ -49,6 +49,13 @@ function CreateApplicationMachineBackupScript () {
 set -e
 rm -rf /root/data
 mkdir -p /root/data
+mkdir -p /root/data/nginx
+mkdir -p /root/data/letsencrypt
+/usr/bin/rsync --archive --verbose --delete /etc/server-setup/ /root/data/server-setup
+/usr/bin/rsync --archive --verbose --delete /etc/nginx/ /root/data/nginx/etc
+/usr/bin/rsync --archive --verbose --delete /var/log/nginx/ /root/data/nginx/log
+/usr/bin/rsync --archive --verbose --delete /var/www/ /root/data/nginx/www
+/usr/bin/rsync --archive --verbose --delete /etc/letsencrypt/ /root/data/letsencrypt/etc
 su --command \"pg_dumpall --clean --if-exists\" - postgres | sudo tee /root/data/pg_dump.sql > /dev/null
 /usr/bin/rsync --archive --verbose --delete /etc/server-setup/ /root/data/server-setup
 for directoryPath in /var/opt/*/
@@ -115,6 +122,13 @@ set -e
 rm -rf /root/data
 mkdir -p /root/data
 /usr/bin/rsync --archive --verbose --delete ${sshUser}@${sshHostname}:~/data/ /root/data
+/usr/bin/rsync --archive --verbose --delete /root/data/server-setup/ /etc/server-setup
+/usr/bin/rsync --archive --verbose --delete /root/data/nginx/etc/ /etc/nginx
+/usr/bin/rsync --archive --verbose --delete /root/data/nginx/log/ /var/log/nginx
+/usr/bin/rsync --archive --verbose --delete /root/data/nginx/www/ /var/www
+/usr/bin/rsync --archive --verbose --delete /root/data/letsencrypt/etc/ /etc/letsencrypt
+chown -R www-data:www-data /var/www
+systemctl restart nginx
 cp /root/data/pg_dump.sql /var/lib/postgresql/pg_dump.sql
 su --command \"psql --file /var/lib/postgresql/pg_dump.sql\" - postgres
 rm -f /var/lib/postgresql/pg_dump.sql
@@ -181,54 +195,6 @@ rm -rf /root/data"
   SetFileContent "${fileContent}" "${filePath}"
   MakeFileExecutable "${filePath}"
   CreateService 'application-restore-backup' "/bin/bash ${filePath}" 'root'
-}
-
-function CreateWebMachineBackupScript () {
-  sshUser="${1}"
-  sshHostname="${2}"
-  healthChecksUuid="${3}"
-  fileContent="#!/bin/bash
-set -e
-rm -rf /root/data
-mkdir -p /root/data
-mkdir -p /root/data/nginx
-mkdir -p /root/data/letsencrypt
-/usr/bin/rsync --archive --verbose --delete /etc/server-setup/ /root/data/server-setup
-/usr/bin/rsync --archive --verbose --delete /etc/nginx/ /root/data/nginx/etc
-/usr/bin/rsync --archive --verbose --delete /var/log/nginx/ /root/data/nginx/log
-/usr/bin/rsync --archive --verbose --delete /var/www/ /root/data/nginx/www
-/usr/bin/rsync --archive --verbose --delete /etc/letsencrypt/ /root/data/letsencrypt/etc
-/usr/bin/rsync --archive --verbose --delete --progress /root/data/ ${sshUser}@${sshHostname}:~/data
-rm -rf /root/data
-/usr/bin/curl -m 10 --retry 5 https://hc-ping.com/${healthChecksUuid}"
-  filePath=/var/opt/server-setup/web-backup.sh
-  CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
-  SetFileContent "${fileContent}" "${filePath}"
-  MakeFileExecutable "${filePath}"
-  CreateService 'web-backup' "/bin/bash ${filePath}" 'root'
-}
-
-function CreateWebMachineRestoreBackupScript () {
-  sshUser="${1}"
-  sshHostname="${2}"
-  fileContent="#!/bin/bash
-set -e
-rm -rf /root/data
-mkdir -p /root/data
-/usr/bin/rsync --archive --verbose --delete ${sshUser}@${sshHostname}:~/data/ /root/data
-/usr/bin/rsync --archive --verbose --delete /root/data/server-setup/ /etc/server-setup
-/usr/bin/rsync --archive --verbose --delete /root/data/nginx/etc/ /etc/nginx
-/usr/bin/rsync --archive --verbose --delete /root/data/nginx/log/ /var/log/nginx
-/usr/bin/rsync --archive --verbose --delete /root/data/nginx/www/ /var/www
-/usr/bin/rsync --archive --verbose --delete /root/data/letsencrypt/etc/ /etc/letsencrypt
-chown -R www-data:www-data /var/www
-systemctl restart nginx
-rm -rf /root/data"
-  filePath=/var/opt/server-setup/web-restore-backup.sh
-  CreateDirectoryIfNotExisting "$(dirname "${filePath}")"
-  SetFileContent "${fileContent}" "${filePath}"
-  MakeFileExecutable "${filePath}"
-  CreateService 'web-restore-backup' "/bin/bash ${filePath}" 'root'
 }
 
 function CreateFileMachineBackupScript () {
