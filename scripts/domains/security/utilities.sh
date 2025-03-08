@@ -23,19 +23,7 @@ maxretry = 10
 enabled = true
 port = ssh
 filter = sshd
-logpath = /var/log/auth.log
-
-[nginx-req-limit]
-enabled = true
-filter = nginx-req-limit
-action = iptables-multiport[name=ReqLimit, port=\"http,https\", protocol=tcp]
-logpath = /var/log/nginx/*error.log
-
-[nginx-http-auth]
-enabled  = true
-port     = http,https
-filter   = nginx-http-auth
-logpath  = /var/log/nginx/*error.log"
+logpath = /var/log/auth.log"
   filePath=/etc/fail2ban/jail.local
   SetFileContent "${fileContent}" "${filePath}"
 }
