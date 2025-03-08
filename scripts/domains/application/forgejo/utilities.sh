@@ -87,6 +87,7 @@ function DownloadForgejoRunnerBinaryIfOutdated () {
   forgejoArchitecture=$(SelectAppropriateForgejoArchitecture)
   echo "Forgejo runner current version: ${forgejoRunnerCurrentVersion}"
   echo "Forgejo runner latest version: ${forgejoRunnerLatestVersion}"
+
   if [[ "${forgejoRunnerCurrentVersion}" != "${forgejoRunnerLatestVersion}" ]]; then
     DownloadFile "https://data.forgejo.org/forgejo/runner/releases/download/v${forgejoRunnerLatestVersion}/forgejo-runner-${forgejoRunnerLatestVersion}-linux-${forgejoArchitecture}" "${forgejoRunnerBinaryDownloadPath}"
     MakeFileExecutable "${forgejoRunnerBinaryDownloadPath}"
@@ -106,23 +107,25 @@ function GetForgejoSecretKey () {
   echo "${forgejoSecretKey}"
 }
 
-function GetForgejoRunnerToken () {
+function GetForgejoRunnerSecret () {
   runnerName="${1}"
-  forgejoSecretKey=$(GetConfigurationFileValue /etc/server-setup/main.conf "${runnerName}")
-  if [[ -z "${forgejoRunnerTokenKey}" ]]; then
-    forgejoRunnerTokenKey=$(sudo su --command "${forgejoBinaryPath} forgejo-cli actions generate-runner-token" - forgejo)
-    SetConfigurationFileValue /etc/server-setup/main.conf "${runnerName}" "${forgejoRunnerTokenKey}"
+  forgejoConfigurationFilePath="${2}"
+  forgejoRunnerSecretName="${runnerName}Secret"
+  forgejoRunnerSecretKey=$(GetConfigurationFileValue /etc/server-setup/main.conf "${forgejoRunnerSecretName}")
+  if [[ -z "${forgejoRunnerSecretKey}" ]]; then
+    forgejoRunnerSecretKey=$(sudo su --command "${forgejoBinaryPath} --config ${forgejoConfigurationFilePath} forgejo-cli actions generate-secret" - forgejo)
+    SetConfigurationFileValue /etc/server-setup/main.conf "${forgejoRunnerSecretName}" "${forgejoRunnerSecretKey}"
   fi
-  echo "${forgejoRunnerTokenKey}"
+  echo "${forgejoRunnerSecretKey}"
 }
 
 function RegisterForgejoRunner () {
   runnerName="${1}"
-  runnerToken="${2}"
+  runnerSecret="${2}"
   forgejoInstanceUrl="${3}"
   forgejoConfigurationFilePath="${4}"
-  sudo su --command "${forgejoBinaryPath} forgejo-cli actions register --config ${forgejoConfigurationFilePath} --name ${runnerName} --secret ${runnerToken}" - forgejo
-  sudo su --command "${forgejoRunnerBinaryPath} create-runner-file --instance ${forgejoInstanceUrl} --secret ${runnerToken}" - "${runnerName}"
+  sudo su --command "${forgejoBinaryPath} --config ${forgejoConfigurationFilePath} forgejo-cli actions register --name ${runnerName} --secret ${runnerSecret}" - forgejo
+  sudo su --login --command "${forgejoRunnerBinaryPath} create-runner-file --instance ${forgejoInstanceUrl} --secret ${runnerSecret} --name ${runnerName}" - "${runnerName}"
 }
 
 function CreateOrUpdateForgejoAdminstratorAccount () {
