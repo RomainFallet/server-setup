@@ -93,7 +93,7 @@ function CopyFile () {
 function DownloadFile () {
   url="${1}"
   destinationPath="${2}"
-  sudo wget "${url}" --output-document "${destinationPath}"
+  sudo wget "${url}" --output-document "${destinationPath}" --output-file /dev/null
 }
 
 function ExctractTarFile () {
