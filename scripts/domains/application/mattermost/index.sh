@@ -57,12 +57,6 @@ function SetupMattermost () {
   CreateOrUpdateMattermostAdministratorAccount "${mattermostAdministratorUserName:?}" "${mattermostAdministratorEmail:?}" "${mattermostAdministratorPassword:?}" "${mattermostApplicationName}"
   CreateOrUpdateMattermostDefaultTeam "${mattermostDefaultTeamIdentifier:?}" "${mattermostDefaultTeamName:?}" "${mattermostAdministratorUserName:?}" "${mattermostApplicationName}"
   ManageMattermostPlugins "${mattermostApplicationName}"
-}
-
-function SetupMattermostWebServer () {
-  mattermostApplicationName='mattermost'
-  AskIfNotSet mattermostDomainName "Enter your Mattermost domain name"
-  AskIfNotSet mattermostInternalPort "Enter your Mattermost internal port"
   CreateProxyDomainName "${mattermostApplicationName}" "${mattermostDomainName:?}" "${mattermostInternalPort:?}" 'default'
   nginxConfigurationPath=/etc/nginx/sites-configuration/"${mattermostApplicationName}"/"${mattermostDomainName:?}"/https.conf
   nginxConfiguration="upstream backend {

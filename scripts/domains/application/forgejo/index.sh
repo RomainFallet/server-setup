@@ -157,15 +157,10 @@ PASSWORD_HASH_ALGO = pbkdf2"
   RegisterForgejoRunner "${forgejoRunner1Name}" "${forgejoRunner1Token}" "${forgejoInstanceUrl}" "${forgejoConfigurationFilePath}"
   CreateStartupService "${forgejoRunner1Name}" "${forgejoRunnerBinaryPath} daemon" "${forgejoRunner1Name}" "/home/${forgejoRunner1Name}"
   RestartService "${forgejoRunner1Name}"
-}
-
-function SetupForgejoWebServer () {
-  forgejoApplicationName='forgejo'
-  AskIfNotSet forgejoDomainName "Enter your Forgejo domain name"
-  AskIfNotSet forgejoInternalPort "Enter your Forgejo internal port"
   CreateProxyDomainName "${forgejoApplicationName}" "${forgejoDomainName}" "${forgejoInternalPort}" 'default'
   forgejoContentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${forgejoApplicationName}"/"${forgejoDomainName}"/content-security-policy.conf
   forgejoContentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self' 'unsafe-inline' 'unsafe-eval' data:;\";"
   SetFileContent "${forgejoContentSecurityPolicyConfiguration}" "${forgejoContentSecurityPolicyConfigurationPath}"
   RestartService 'nginx'
 }
+

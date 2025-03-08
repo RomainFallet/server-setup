@@ -46,12 +46,6 @@ function SetupListmonk () {
   ConfigureListmonkDatabase "${listmonkBinaryPath}" "${listmonkConfigurationFilePath}" "${listmonkApplicationName}"
   CreateStartupService "${listmonkApplicationName}" "${listmonkBinaryPath} --config ${listmonkConfigurationFilePath} --static-dir ${listmonkFilesDirectory}" "${listmonkApplicationName}" "/var/opt/listmonk/" '' 'postgresql.service'
   RestartService "${listmonkApplicationName}"
-}
-
-function SetupListmonkWebServer () {
-  listmonkApplicationName='listmonk'
-  AskIfNotSet listmonkDomainName "Enter your Listmonk domain name"
-  AskIfNotSet listmonkInternalPort "Enter your Listmonk internal port"
   CreateProxyDomainName "${listmonkApplicationName}" "${listmonkDomainName:?}" "${listmonkInternalPort:?}" 'default'
   listmonkContentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${listmonkApplicationName}"/"${listmonkDomainName}"/content-security-policy.conf
   listmonkContentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self' 'unsafe-inline' data:;\";"

@@ -42,12 +42,6 @@ function SetupVaultwarden () {
   SetDirectoryOwnershipRecursively "${vaultwardenPath}" "${vaultwardenApplicationName}"
   CreateStartupService "${vaultwardenApplicationName}" "${vaultwardenBinaryPath}" "${vaultwardenApplicationName}" "${vaultwardenPath}" "${vaultwardenEnvironmentPath}" 'postgresql.service'
   RestartService "${vaultwardenApplicationName}"
-}
-
-function SetupVaultwardenWebServer () {
-  vaultwardenApplicationName='vaultwarden'
-  AskIfNotSet vaultwardenDomainName "Enter your Vaultwarden domain name"
-  AskIfNotSet vaultwardenInternalPort "Enter your Vaultwarden internal port"
   CreateProxyDomainName "${vaultwardenApplicationName}" "${vaultwardenDomainName:?}" "${vaultwardenInternalPort:?}" 'default'
   vaultwardenContentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${vaultwardenApplicationName}"/"${vaultwardenDomainName}"/content-security-policy.conf
   vaultwardenContentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self' 'wasm-eval' 'unsafe-inline' data:;\";"

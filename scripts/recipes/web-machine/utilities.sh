@@ -5,14 +5,6 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/shared/variables/index.sh"
 # shellcheck source-path=../../../
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/forgejo/index.sh"
-# shellcheck source-path=../../../
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/mattermost/index.sh"
-# shellcheck source-path=../../../
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/listmonk/index.sh"
-# shellcheck source-path=../../../
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/vaultwarden/index.sh"
-# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/web/index.sh"
 
 function AskWebMachineActions () {
@@ -22,11 +14,7 @@ function AskWebMachineActions () {
   - Set up web static server..........[2]
   - Set up web static server for SPA..[3]
   - Set up web proxy server...........[4]
-  - Set up web redirection server.....[5]
-  - Set up Forgejo web server.........[6]
-  - Set up Mattermost web server......[7]
-  - Set up Listmonk web server........[8]
-  - Set up Vaultwarden web server.....[9]"
+  - Set up web redirection server.....[5]"
 
   if [[ "${applicationMachineAction:?}" == '1' ]]; then
     Ask usernameToCreate "Enter the username"
@@ -43,17 +31,5 @@ function AskWebMachineActions () {
   fi
   if [[ "${applicationMachineAction:?}" == '5' ]]; then
     SetupWebRedirectionServer
-  fi
-  if [[ "${applicationMachineAction:?}" == '6' ]]; then
-    SetupForgejoWebServer
-  fi
-  if [[ "${applicationMachineAction:?}" == '7' ]]; then
-    SetupMattermostWebServer
-  fi
-  if [[ "${applicationMachineAction:?}" == '8' ]]; then
-    SetupListmonkWebServer
-  fi
-  if [[ "${applicationMachineAction:?}" == '9' ]]; then
-    SetupVaultwardenWebServer
   fi
 }
