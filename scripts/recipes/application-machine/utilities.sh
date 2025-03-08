@@ -16,10 +16,6 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/vaultwarden/index.sh"
 # shellcheck source-path=../../../
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/drone-ci/index.sh"
-# shellcheck source-path=../../../
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/drone-ci-runner/index.sh"
-# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/port-forwarding/index.sh"
 
 function AskApplicationMachineActions () {
@@ -29,9 +25,7 @@ function AskApplicationMachineActions () {
   - Install or upgrade Forgejo.........[2]
   - Install or upgrade Mattermost......[3]
   - Install or upgrade Listmonk........[4]
-  - Install or upgrade Vaultwarden.....[5]
-  - Install or upgrade Drone CI........[6]
-  - Install or upgrade Drone CI Runner.[7]"
+  - Install or upgrade Vaultwarden.....[5]"
   if [[ "${applicationMachineAction:?}" == '1' ]]; then
     SetupJavaApplication
   fi
@@ -46,11 +40,5 @@ function AskApplicationMachineActions () {
   fi
   if [[ "${applicationMachineAction:?}" == '5' ]]; then
     SetupVaultwarden
-  fi
-  if [[ "${applicationMachineAction:?}" == '6' ]]; then
-    SetupDroneCi
-  fi
-  if [[ "${applicationMachineAction:?}" == '7' ]]; then
-    SetupDroneCiRunner
   fi
 }

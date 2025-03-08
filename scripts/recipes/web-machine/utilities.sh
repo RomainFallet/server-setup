@@ -7,8 +7,6 @@
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/forgejo/index.sh"
 # shellcheck source-path=../../../
-. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/drone-ci/index.sh"
-# shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/mattermost/index.sh"
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/listmonk/index.sh"
@@ -28,8 +26,7 @@ function AskWebMachineActions () {
   - Set up Forgejo web server.........[6]
   - Set up Mattermost web server......[7]
   - Set up Listmonk web server........[8]
-  - Set up Drone CI web server........[9]
-  - Set up Vaultwarden web server.....[10]"
+  - Set up Vaultwarden web server.....[9]"
 
   if [[ "${applicationMachineAction:?}" == '1' ]]; then
     Ask usernameToCreate "Enter the username"
@@ -57,9 +54,6 @@ function AskWebMachineActions () {
     SetupListmonkWebServer
   fi
   if [[ "${applicationMachineAction:?}" == '9' ]]; then
-    SetupDroneCiWebServer
-  fi
-  if [[ "${applicationMachineAction:?}" == '10' ]]; then
     SetupVaultwardenWebServer
   fi
 }
