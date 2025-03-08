@@ -47,9 +47,8 @@ function SetupVaultwarden () {
 function SetupVaultwardenWebServer () {
   vaultwardenApplicationName='vaultwarden'
   AskIfNotSet vaultwardenDomainName "Enter your Vaultwarden domain name"
-  AskIfNotSet letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
   AskIfNotSet vaultwardenInternalPort "Enter your Vaultwarden internal port"
-  CreateProxyDomainName "${vaultwardenApplicationName}" "${vaultwardenDomainName:?}" "${vaultwardenInternalPort:?}" "${letsEncryptEmail:?}" 'default'
+  CreateProxyDomainName "${vaultwardenApplicationName}" "${vaultwardenDomainName:?}" "${vaultwardenInternalPort:?}" 'default'
   vaultwardenContentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${vaultwardenApplicationName}"/"${vaultwardenDomainName}"/content-security-policy.conf
   vaultwardenContentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self' 'wasm-eval' 'unsafe-inline' data:;\";"
   SetFileContent "${vaultwardenContentSecurityPolicyConfiguration}" "${vaultwardenContentSecurityPolicyConfigurationPath}"

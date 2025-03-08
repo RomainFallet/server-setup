@@ -34,9 +34,8 @@ function SetupDroneCi () {
 function SetupDroneCiWebServer () {
   droneApplicationName='drone-ci'
   AskIfNotSet droneDomainName "Enter your Drone CI domain name"
-  AskIfNotSet letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
   AskIfNotSet droneInternalPort "Enter your Drone CI internal port"
-  CreateProxyDomainName "${droneApplicationName}" "${droneDomainName}" "${droneInternalPort}" "${letsEncryptEmail:?}" 'default'
+  CreateProxyDomainName "${droneApplicationName}" "${droneDomainName}" "${droneInternalPort}" 'default'
   droneContentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${droneApplicationName}"/"${droneDomainName}"/content-security-policy.conf
   droneContentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self' 'unsafe-inline' 'unsafe-eval' data:;\";"
   SetFileContent "${droneContentSecurityPolicyConfiguration}" "${droneContentSecurityPolicyConfigurationPath}"

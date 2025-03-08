@@ -12,18 +12,16 @@
 function SetupWebProxyServer () {
   Ask httpApplicationName "Enter your HTTP application name (eg. my-awesome-app)"
   Ask domainName "Enter your domain name"
-  Ask letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
   Ask httpInternalPort "Enter your application internal port"
-  CreateProxyDomainName "${httpApplicationName:?}" "${domainName:?}" "${httpInternalPort:?}" "${letsEncryptEmail:?}" 'ask'
+  CreateProxyDomainName "${httpApplicationName:?}" "${domainName:?}" "${httpInternalPort:?}" 'ask'
   RestartService 'nginx'
 }
 
 function SetupWebStaticServer () {
   Ask httpApplicationName "Enter your HTTP application name (eg. my-awesome-app)"
   Ask domainName "Enter your domain name"
-  Ask letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
   httpApplicationDeploymentPath=/var/www/"${httpApplicationName:?}"
-  CreateStaticDomainName "${httpApplicationName:?}" "${domainName:?}" "${letsEncryptEmail:?}"
+  CreateStaticDomainName "${httpApplicationName:?}" "${domainName:?}"
   CreateApplicationDeploymentUserThroughSsh "${httpApplicationName:?}" "${httpApplicationDeploymentPath}"
   SetDirectoryOwnershipRecursively "${httpApplicationDeploymentPath}" "${httpApplicationName:?}" 'www-data'
   SetDirectoryPermissionsRecursively "${httpApplicationDeploymentPath}" 775
@@ -34,16 +32,14 @@ function SetupWebRedirectionServer () {
   Ask httpApplicationName "Enter your HTTP application name (eg. my-awesome-app)"
   Ask domainName "Enter the domain name you want to redirect"
   Ask redirectionDomainName "Enter the domain name redirection target"
-  Ask letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
-  CreateRedirectionDomainName "${httpApplicationName}" "${domainName}" "${redirectionDomainName}" "${letsEncryptEmail}"
+  CreateRedirectionDomainName "${httpApplicationName}" "${domainName}" "${redirectionDomainName}"
 }
 
 function SetupWebSpaServer () {
   Ask httpApplicationName "Enter your HTTP application name (eg. my-awesome-app)"
   Ask domainName "Enter your domain name"
-  Ask letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
   httpApplicationDeploymentPath=/var/www/"${httpApplicationName:?}"
-  CreateSpaDomainName "${httpApplicationName:?}" "${domainName:?}" "${letsEncryptEmail:?}"
+  CreateSpaDomainName "${httpApplicationName:?}" "${domainName:?}"
   CreateApplicationDeploymentUserThroughSsh "${httpApplicationName:?}" /var/www/"${httpApplicationName:?}"
   SetDirectoryOwnershipRecursively "${httpApplicationDeploymentPath}" "${httpApplicationName:?}" 'www-data'
   SetDirectoryPermissionsRecursively "${httpApplicationDeploymentPath}" 775

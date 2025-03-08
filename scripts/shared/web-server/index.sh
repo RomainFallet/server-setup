@@ -13,9 +13,8 @@ function CreateProxyDomainName () {
   applicationName="${1}"
   domainName="${2}"
   internalPort="${3}"
-  letsencryptEmail="${4}"
-  cspBehavior="${5}"
-  GenerateTlsCertificate "${applicationName}" "${domainName}" "${letsencryptEmail}"
+  cspBehavior="${4}"
+  GenerateTlsCertificate "${applicationName}" "${domainName}"
   sslCertificatePath="/etc/letsencrypt/live/${domainName}/fullchain.pem"
   sslCertificateKeyPath="/etc/letsencrypt/live/${domainName}/privkey.pem"
   if sudo test -f "${sslCertificatePath}" && sudo test -f "${sslCertificateKeyPath}"; then
@@ -61,9 +60,8 @@ function CreateProxyDomainName () {
 function CreateStaticDomainName () {
   applicationName="${1}"
   domainName="${2}"
-  letsencryptEmail="${3}"
-  cspBehavior="${4}"
-  GenerateTlsCertificate "${applicationName}" "${domainName}" "${letsencryptEmail}"
+  cspBehavior="${3}"
+  GenerateTlsCertificate "${applicationName}" "${domainName}"
   sslCertificatePath="/etc/letsencrypt/live/${domainName}/fullchain.pem"
   sslCertificateKeyPath="/etc/letsencrypt/live/${domainName}/privkey.pem"
   if sudo test -f "${sslCertificatePath}" && sudo test -f "${sslCertificateKeyPath}"; then
@@ -104,9 +102,8 @@ function CreateStaticDomainName () {
 function CreateSpaDomainName () {
   applicationName="${1}"
   domainName="${2}"
-  letsencryptEmail="${3}"
-  cspBehavior="${4}"
-  GenerateTlsCertificate "${applicationName}" "${domainName}" "${letsencryptEmail}"
+  cspBehavior="${3}"
+  GenerateTlsCertificate "${applicationName}" "${domainName}"
   sslCertificatePath="/etc/letsencrypt/live/${domainName}/fullchain.pem"
   sslCertificateKeyPath="/etc/letsencrypt/live/${domainName}/privkey.pem"
   if sudo test -f "${sslCertificatePath}" && sudo test -f "${sslCertificateKeyPath}"; then
@@ -148,8 +145,7 @@ function CreateRedirectionDomainName () {
   applicationName="${1}"
   domainName="${2}"
   redirectionDomainName="${3}"
-  letsencryptEmail="${4}"
-  GenerateTlsCertificate "${applicationName}" "${domainName}" "${letsencryptEmail}"
+  GenerateTlsCertificate "${applicationName}" "${domainName}"
   sslCertificatePath="/etc/letsencrypt/live/${domainName}/fullchain.pem"
   sslCertificateKeyPath="/etc/letsencrypt/live/${domainName}/privkey.pem"
   if sudo test -f "${sslCertificatePath}" && sudo test -f "${sslCertificateKeyPath}"; then

@@ -62,9 +62,8 @@ function SetupMattermost () {
 function SetupMattermostWebServer () {
   mattermostApplicationName='mattermost'
   AskIfNotSet mattermostDomainName "Enter your Mattermost domain name"
-  AskIfNotSet letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
   AskIfNotSet mattermostInternalPort "Enter your Mattermost internal port"
-  CreateProxyDomainName "${mattermostApplicationName}" "${mattermostDomainName:?}" "${mattermostInternalPort:?}" "${letsEncryptEmail:?}" 'default'
+  CreateProxyDomainName "${mattermostApplicationName}" "${mattermostDomainName:?}" "${mattermostInternalPort:?}" 'default'
   nginxConfigurationPath=/etc/nginx/sites-configuration/"${mattermostApplicationName}"/"${mattermostDomainName:?}"/https.conf
   nginxConfiguration="upstream backend {
    server 127.0.0.1:${mattermostInternalPort:?};

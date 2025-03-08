@@ -162,9 +162,8 @@ PASSWORD_HASH_ALGO = pbkdf2"
 function SetupForgejoWebServer () {
   forgejoApplicationName='forgejo'
   AskIfNotSet forgejoDomainName "Enter your Forgejo domain name"
-  AskIfNotSet letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
   AskIfNotSet forgejoInternalPort "Enter your Forgejo internal port"
-  CreateProxyDomainName "${forgejoApplicationName}" "${forgejoDomainName}" "${forgejoInternalPort}" "${letsEncryptEmail:?}" 'default'
+  CreateProxyDomainName "${forgejoApplicationName}" "${forgejoDomainName}" "${forgejoInternalPort}" 'default'
   forgejoContentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${forgejoApplicationName}"/"${forgejoDomainName}"/content-security-policy.conf
   forgejoContentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self' 'unsafe-inline' 'unsafe-eval' data:;\";"
   SetFileContent "${forgejoContentSecurityPolicyConfiguration}" "${forgejoContentSecurityPolicyConfigurationPath}"

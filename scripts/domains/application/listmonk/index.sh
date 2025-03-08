@@ -51,9 +51,8 @@ function SetupListmonk () {
 function SetupListmonkWebServer () {
   listmonkApplicationName='listmonk'
   AskIfNotSet listmonkDomainName "Enter your Listmonk domain name"
-  AskIfNotSet letsEncryptEmail "Enter an email to request a LetsEncrypt's TLS certificate for your domain name"
   AskIfNotSet listmonkInternalPort "Enter your Listmonk internal port"
-  CreateProxyDomainName "${listmonkApplicationName}" "${listmonkDomainName:?}" "${listmonkInternalPort:?}" "${letsEncryptEmail:?}" 'default'
+  CreateProxyDomainName "${listmonkApplicationName}" "${listmonkDomainName:?}" "${listmonkInternalPort:?}" 'default'
   listmonkContentSecurityPolicyConfigurationPath=/etc/nginx/sites-configuration/"${listmonkApplicationName}"/"${listmonkDomainName}"/content-security-policy.conf
   listmonkContentSecurityPolicyConfiguration="add_header Content-Security-Policy \"default-src 'self' 'unsafe-inline' data:;\";"
   SetFileContent "${listmonkContentSecurityPolicyConfiguration}" "${listmonkContentSecurityPolicyConfigurationPath}"
