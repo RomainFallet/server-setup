@@ -145,13 +145,16 @@ PASSWORD_HASH_ALGO = pbkdf2"
   RestartService "${forgejoApplicationName}"
   sleep 2s
   CreateOrUpdateForgejoAdminstratorAccount "${forgejoAdministratorUserName:?}" "${forgejoAdministratorEmail:?}" "${forgejoAdministratorPassword:?}" "${forgejoConfigurationFilePath}" "${forgejoDataPath}"
-  forgejoRunnerBinaryPath=/usr/local/bin/forgejo-runner
+  forgejoRunner1Name="forgejoRunner1"
+  CreateUserIfNotExisting "${forgejoRunner1Name}"
+  forgejoRunnerBinaryPath=/var/opt/"${forgejoRunner1Name}"/forgejo-runner
+  CreateDirectoryIfNotExisting "$(dirname "${forgejoRunnerBinaryPath}")"
+  SetDirectoryOwnershipRecursively "$(dirname "${forgejoRunnerBinaryPath}")" "${forgejoRunner1Name}"
   forgejoRunnerBinaryDownloadPath=/tmp/forgejo-runner
   forgejoRunnerLatestVersion="$(GetLatestForgejoRunnerVersion)"
   forgejoRunnerCurrentVersion="$(GetCurrentForgejoRunnerVersion "${forgejoRunnerBinaryPath}")"
   DownloadForgejoRunnerBinaryIfOutdated "${forgejoRunnerLatestVersion}" "${forgejoRunnerCurrentVersion}" "${forgejoRunnerBinaryPath}" "${forgejoRunnerBinaryDownloadPath}"
-  forgejoRunner1Name="forgejoRunner1"
-  CreateUserIfNotExisting "${forgejoRunner1Name}"
+  SetFileOwnership "${forgejoRunnerBinaryPath}" "${forgejoRunner1Name}" "${forgejoRunner1Name}"
   forgejoRunner1Secret=$(GetForgejoRunnerSecret "${forgejoRunner1Name}" "${forgejoConfigurationFilePath}")
   RegisterForgejoRunner "${forgejoRunner1Name}" "${forgejoRunner1Secret}" "${forgejoInstanceUrl}" "${forgejoConfigurationFilePath}"
   CreateStartupService "${forgejoRunner1Name}" "${forgejoRunnerBinaryPath} daemon" "${forgejoRunner1Name}" "/home/${forgejoRunner1Name}"
