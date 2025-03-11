@@ -181,14 +181,18 @@ do
     echo \"Moved /root/data/applications/\${applicationName}/systemd-watcher.path to /etc/systemd/system/\${applicationName}-watcher.path\"
   fi
   systemctl daemon-reload
+  systemctl enable \"\${applicationName}.service\"
   systemctl restart \"\${applicationName}.service\"
   if test -f /etc/systemd/system/\${applicationName}-port-forwarding.service > /dev/null; then
+    systemctl enable \"\${applicationName}-port-forwarding.service\"
     systemctl restart \"\${applicationName}-port-forwarding.service\"
   fi
   if test -f /etc/systemd/system/\${applicationName}-watcher.path > /dev/null; then
+    systemctl enable \"\${applicationName}-watcher.path\"
     systemctl restart \"\${applicationName}-watcher.path\"
   fi
   if test -f /etc/systemd/system/\${applicationName}-watcher.service > /dev/null; then
+    systemctl enable \"\${applicationName}-watcher.service\"
     systemctl restart \"\${applicationName}-watcher.service\"
   fi
 done
