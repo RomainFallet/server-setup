@@ -10,6 +10,12 @@ function InstallPackageIfNotExisting() {
   InstallAptPackageIfNotExisting "${packageName}"
 }
 
+function InstallPackageFromFile() {
+  packagePath="${1}"
+  InstallAptPackageFromFile "${packagePath}"
+}
+
+
 function UpgradeAllPackages () {
   UpgradeAllAptPackages
 }

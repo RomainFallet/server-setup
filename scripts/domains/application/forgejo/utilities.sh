@@ -26,7 +26,6 @@ function DownloadForgejoBinaryIfOutdated () {
   echo "Forgejo current version: ${forgejoCurrentVersion}"
   echo "Forgejo latest version: ${forgejoLatestVersion}"
   if [[ "${forgejoCurrentVersion}" != "${forgejoLatestVersion}" ]]; then
-
     DownloadFile "https://codeberg.org/forgejo/forgejo/releases/download/v${forgejoLatestVersion}/forgejo-${forgejoLatestVersion}-linux-${forgejoArchitecture}" "${forgejoBinaryDownloadPath}"
     MakeFileExecutable "${forgejoBinaryDownloadPath}"
     CopyFile "${forgejoBinaryDownloadPath}" "${forgejoBinaryPath}"

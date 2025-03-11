@@ -27,5 +27,6 @@ function SetUpFileMachineFireWall () {
   OpenSshFirewallPorts
   OpenNfsFirewallPorts
   OpenSmbFirewallPorts
+  OpenEmbyPorts
   EnableFireWall
 }

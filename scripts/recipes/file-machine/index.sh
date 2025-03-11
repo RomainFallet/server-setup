@@ -10,6 +10,8 @@
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/backup/index.sh"
 # shellcheck source-path=../../../
 . "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/file-sharing/index.sh"
+# shellcheck source-path=../../../
+. "${SERVER_SETUP_HOME_PATH:?}/scripts/domains/application/emby/index.sh"
 
 SetUpFileMachinePrerequisites
 SetUpFileMachineRestoreBackupScript
@@ -19,3 +21,4 @@ SetUpFail2Ban
 SetUpFileMachineFireWall
 SetUpBasicSystemConfiguration
 SetUpFileSharing
+SetupEmby

@@ -84,3 +84,7 @@ function OpenSmbFirewallPorts () {
   OpenFireWallPort '139'
   OpenFireWallPort '445'
 }
+
+function OpenEmbyPorts () {
+  OpenFireWallPort '8096'
+}

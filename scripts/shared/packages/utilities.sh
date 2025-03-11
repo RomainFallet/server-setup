@@ -7,6 +7,11 @@ function InstallAptPackageIfNotExisting() {
   fi
 }
 
+function InstallAptPackageFromFile() {
+  aptPackagePath="${1}"
+  sudo apt install -y "${aptPackagePath}"
+}
+
 function UpgradeAllAptPackages () {
   sudo apt update
   sudo apt dist-upgrade -y
