@@ -31,6 +31,5 @@ function DownloadEmby () {
   embyDownloadPath="${1}"
   embyLatestVersion="${2}"
   embyArchitecture=$(SelectAppropriateEmbyArchitecture)
-  echo "URL: https://github.com/MediaBrowser/Emby.Releases/releases/download/${embyLatestVersion}/emby-server-deb_${embyLatestVersion}_${embyArchitecture}.deb"
   DownloadFile "https://github.com/MediaBrowser/Emby.Releases/releases/download/${embyLatestVersion}/emby-server-deb_${embyLatestVersion}_${embyArchitecture}.deb" "${embyDownloadPath}"
 }
