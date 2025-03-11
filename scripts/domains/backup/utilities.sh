@@ -141,20 +141,27 @@ do
     continue
   fi
   echo \"Restoring \${applicationName}...\"
+  if ! id \"\${applicationName}\" > /dev/null; then
+    adduser --system --shell /bin/bash --group --disabled-password --home /home/\"\${applicationName}\" \"\${applicationName}\"
+  fi
   if test -d /root/data/applications/\${applicationName}/opt/; then
     /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/opt/ /var/opt/\${applicationName}
+    chown -R \"\${applicationName}\":\"\${applicationName}\" \"/var/opt/\${applicationName}\"
     echo \"Moved /root/data/applications/\${applicationName}/opt/ to /var/opt/\${applicationName}\"
   fi
   if test -d /root/data/applications/\${applicationName}/lib/; then
     /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/lib/ /var/lib/\${applicationName}
+    chown -R \"\${applicationName}\":\"\${applicationName}\" \"/var/lib/\${applicationName}\"
     echo \"Moved /root/data/applications/\${applicationName}/lib/ to /var/lib/\${applicationName}\"
   fi
   if test -d /root/data/applications/\${applicationName}/etc/; then
     /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/etc/ /etc/\${applicationName}
+    chown -R \"\${applicationName}\":\"\${applicationName}\" \"/etc/\${applicationName}\"
     echo \"Moved /root/data/applications/\${applicationName}/etc/ to /etc/\${applicationName}\"
   fi
   if test -d /root/data/applications/\${applicationName}/home/; then
     /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/home/ /home/\${applicationName}
+    chown -R \"\${applicationName}\":\"\${applicationName}\" \"/home/\${applicationName}\"
     echo \"Moved /root/data/applications/\${applicationName}/home/ to /home/\${applicationName}\"
   fi
   if test -f /root/data/applications/\${applicationName}/systemd.service; then
@@ -173,10 +180,6 @@ do
     /usr/bin/rsync --archive --verbose --delete /root/data/applications/\${applicationName}/systemd-watcher.path /etc/systemd/system/\${applicationName}-watcher.path
     echo \"Moved /root/data/applications/\${applicationName}/systemd-watcher.path to /etc/systemd/system/\${applicationName}-watcher.path\"
   fi
-  if ! id \"\${applicationName}\" > /dev/null; then
-    adduser --system --shell /bin/bash --group --disabled-password --home /home/\"\${applicationName}\" \"\${applicationName}\"
-  fi
-  chown -R \"\${applicationName}\":\"\${applicationName}\" /var/{lib,opt}/\"\${applicationName}\"
   systemctl daemon-reload
   systemctl restart \"\${applicationName}.service\"
   if test -f /etc/systemd/system/\${applicationName}-port-forwarding.service > /dev/null; then
