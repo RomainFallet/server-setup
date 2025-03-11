@@ -11,4 +11,5 @@ function SetUpFileSharing () {
   ConfigureFolders
   ExportFolders
   RestartNfs
+  RestartSamba
 }
