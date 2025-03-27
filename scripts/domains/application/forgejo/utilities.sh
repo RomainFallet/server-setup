@@ -123,8 +123,12 @@ function RegisterForgejoRunner () {
   runnerSecret="${2}"
   forgejoInstanceUrl="${3}"
   forgejoConfigurationFilePath="${4}"
-  sudo su --command "${forgejoBinaryPath} --config ${forgejoConfigurationFilePath} forgejo-cli actions register --name ${runnerName} --secret ${runnerSecret} --labels self-hosted" - forgejo
+  label="self-hosted"
+  (jq ".labels=[\"${label}\"]" ~/.runner || true) | tee ~/.runner > /dev/null
+  sudo su --command "${forgejoBinaryPath} --config ${forgejoConfigurationFilePath} forgejo-cli actions register --name ${runnerName} --secret ${runnerSecret} --labels ${label}" - forgejo
   sudo su --login --command "${forgejoRunnerBinaryPath} create-runner-file --instance ${forgejoInstanceUrl} --secret ${runnerSecret} --name ${runnerName}" - "${runnerName}"
+  sudo su --login --command "(jq '.labels=[\"${label}\"]' ~/.runner || true) | tee ~/.runner > /dev/null" - "${runnerName}"
+
 }
 
 function CreateOrUpdateForgejoAdminstratorAccount () {
