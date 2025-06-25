@@ -20,6 +20,14 @@ function SetUpApplicationMachinePrerequisites () {
   InstallPackageIfNotExisting 'certbot'
 }
 
+function SetUpWebMachinePrerequisites () {
+  UpgradeAllPackages
+  CleanOldLogs
+  InstallPackageIfNotExisting 'rsync'
+  InstallPackageIfNotExisting 'nginx'
+  InstallPackageIfNotExisting 'certbot'
+}
+
 function SetUpBackupMachinePrerequisites () {
   UpgradeAllPackages
   CleanOldLogs

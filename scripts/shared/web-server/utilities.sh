@@ -9,7 +9,8 @@
 function GenerateTlsCertificateWithCertbot () {
   applicationName="${1}"
   domainName="${2}"
-  sudo certbot certonly --webroot --webroot-path "/var/www/${applicationName}" --domain "${domainName}" -n --agree-tos
+  email="${3}"
+  sudo certbot certonly --webroot --webroot-path "/var/www/${applicationName}" --domain "${domainName}" -n --agree-tos --email "${email}"
 }
 
 function ConfigureRequestLimits () {

@@ -14,7 +14,8 @@ function CreateProxyDomainName () {
   domainName="${2}"
   internalPort="${3}"
   cspBehavior="${4}"
-  GenerateTlsCertificate "${applicationName}" "${domainName}"
+  email="${5}"
+  GenerateTlsCertificate "${applicationName}" "${domainName}" "${email}"
   sslCertificatePath="/etc/letsencrypt/live/${domainName}/fullchain.pem"
   sslCertificateKeyPath="/etc/letsencrypt/live/${domainName}/privkey.pem"
   if sudo test -f "${sslCertificatePath}" && sudo test -f "${sslCertificateKeyPath}"; then

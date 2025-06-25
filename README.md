@@ -9,6 +9,7 @@
 - [Installation](#installation)
 - [Update](#update)
 - [Recipes](#recipes)
+  - [Web machine](#web-machine)
   - [Mail machine](#mail-machine)
   - [Application machine](#application-machine)
   - [File machine](#file-machine)
@@ -154,6 +155,14 @@ ss:self-update
 ```
 
 ## Recipes
+
+### Web machine
+
+[Back to top ↑](#table-of-contents)
+
+```bash
+ss:recipes:web-machine
+```
 
 ### Mail machine
 
