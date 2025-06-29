@@ -21,4 +21,4 @@ SetUpFail2Ban
 SetUpFileMachineFireWall
 SetUpBasicSystemConfiguration
 SetUpFileSharing
-SetupEmby
+#SetupEmby
