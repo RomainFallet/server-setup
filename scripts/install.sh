@@ -4,7 +4,7 @@ bashUserConfigurationPath="${HOME}/.bashrc"
 serverSetupHomePath="${HOME}/.server-setup"
 serverSetupUserConfigurationPath="${HOME}/.server-setup-configuration"
 serverSetupUserConfiguration="export SERVER_SETUP_HOME_PATH=${serverSetupHomePath}
-alias ss:self-update='cd ${serverSetupHomePath} && git pull --rebase origin master && cd ${HOME} && bash ${serverSetupHomePath}/scripts/install.sh'
+alias ss:self-update='cd ${serverSetupHomePath} && git pull --rebase origin main && cd ${HOME} && bash ${serverSetupHomePath}/scripts/install.sh'
 alias ss:recipes:mail-machine='bash ${serverSetupHomePath}/scripts/recipes/mail-machine/index.sh'
 alias ss:recipes:web-machine='bash ${serverSetupHomePath}/scripts/recipes/web-machine/index.sh'
 alias ss:recipes:application-machine='bash ${serverSetupHomePath}/scripts/recipes/application-machine/index.sh'
