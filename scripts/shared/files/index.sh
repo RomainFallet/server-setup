@@ -17,10 +17,12 @@ function CopyDirectory () {
 
 function BackupFile () {
   filePath="${1}"
-  fileName=$(basename "${filePath}")
-  directoryPath=$(dirname "${filePath}")
-  destinationPath="${directoryPath}/.${fileName}.backup"
-  CopyFileIfNotExisting "${filePath}" "${destinationPath}"
+  if sudo test -f "${filePath}"; then
+    fileName=$(basename "${filePath}")
+    directoryPath=$(dirname "${filePath}")
+    destinationPath="${directoryPath}/.${fileName}.backup"
+    CopyFileIfNotExisting "${filePath}" "${destinationPath}"
+  fi
 }
 
 function AppendTextInFileIfNotFound () {
