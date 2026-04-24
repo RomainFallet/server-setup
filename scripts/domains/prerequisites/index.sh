@@ -23,6 +23,7 @@ function SetUpApplicationMachinePrerequisites () {
 function SetUpWebMachinePrerequisites () {
   UpgradeAllPackages
   CleanOldLogs
+  InstallPackageIfNotExisting 'ufw'
   InstallPackageIfNotExisting 'rsync'
   InstallPackageIfNotExisting 'nginx'
   InstallPackageIfNotExisting 'certbot'
