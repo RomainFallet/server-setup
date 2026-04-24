@@ -131,7 +131,7 @@ ssh johndoe@mymachine.example.com
 Clone this repository:
 
 ```bash
-git clone https://github.com/RomainFallet/server-setup ~/.server-setup
+git clone https://git.fallet.net/romain.fallet/server-setup ~/.server-setup
 ```
 
 Run install script:
