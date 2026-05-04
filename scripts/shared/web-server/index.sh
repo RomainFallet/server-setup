@@ -82,8 +82,8 @@ server {
     # --------------------------------------------------------
     # Logging (dedicated per vhost)
     # --------------------------------------------------------
-    error_log  /var/log/nginx/vaultwarden.error.log error;
-    access_log /var/log/nginx/vaultwarden.access.log;
+    error_log  /var/log/nginx/${applicationName}.error.log error;
+    access_log /var/log/nginx/${applicationName}.access.log;
 
     # --------------------------------------------------------
     # TLS configuration (Let's Encrypt)
