@@ -40,19 +40,11 @@ upstream ${applicationName} {
 
 server {
     # --------------------------------------------------------
-    # HTTP/3 (QUIC)
-    # Enables HTTP/3 alongside HTTP/2 and HTTP/1.1
-    # Clients will switch via Alt-Svc header
-    # --------------------------------------------------------
-    listen 443      quic reuseport;
-    listen [::]:443 quic reuseport;
-
-    # --------------------------------------------------------
     # HTTP/2 and HTTP/1.1 fallback
-    # Ensures compatibility with clients not supporting HTTP/3
     # --------------------------------------------------------
-    listen 443      ssl reuseport;
-    listen [::]:443 ssl reuseport;
+    listen 443      ssl;
+    listen [::]:443 ssl;
+    http2 on;
 
     # Virtual host configuration
     server_name ${domainName};
@@ -114,12 +106,6 @@ server {
     ssl_ecdh_curve X25519:secp384r1;
     # Disable 0-RTT to prevent replay attacks
     ssl_early_data off;
-
-    # --------------------------------------------------------
-    # HTTP/3 advertisement
-    # Informs clients that HTTP/3 is available
-    # --------------------------------------------------------
-    add_header Alt-Svc 'h3=":443"; ma=86400' always;
 
     # --------------------------------------------------------
     # HSTS (Strict Transport Security)
