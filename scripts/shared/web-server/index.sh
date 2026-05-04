@@ -76,6 +76,7 @@ server {
         # Disable buffering: ensures correct streaming behavior and prevents
         # partial transfers with backends that do not tolerate buffering well
         proxy_buffering off;
+        proxy_request_buffering off;
     }
     ${websocketConfiguration}
     # --------------------------------------------------------
