@@ -78,7 +78,6 @@ server {
         proxy_send_timeout 60s;
     }
     ${websocketConfiguration}
-
     # --------------------------------------------------------
     # Logging (dedicated per vhost)
     # --------------------------------------------------------

@@ -144,7 +144,8 @@ function ConfigureWebsocket () {
         # Timeouts tuned for long-lived connections
         proxy_read_timeout 1h;
         proxy_send_timeout 1h;
-    }"
+    }
+    "
   else
     websocketConfiguration=""
   fi
