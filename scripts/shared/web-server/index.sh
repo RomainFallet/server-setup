@@ -15,42 +15,131 @@ function CreateProxyDomainName () {
   internalPort="${3}"
   cspBehavior="${4}"
   email="${5}"
+  websocketConfiguration=$(ConfigureWebsocket 'ask' "${domainName}")
   GenerateTlsCertificate "${applicationName}" "${domainName}" "${email}"
   sslCertificatePath="/etc/letsencrypt/live/${domainName}/fullchain.pem"
   sslCertificateKeyPath="/etc/letsencrypt/live/${domainName}/privkey.pem"
   if sudo test -f "${sslCertificatePath}" && sudo test -f "${sslCertificateKeyPath}"; then
     httpsConfigurationPath=/etc/nginx/sites-configuration/"${applicationName}"/"${domainName}"/https.conf
-    httpsConfiguration="server {
-    listen 443      ssl http2;
-    listen [::]:443 ssl http2;
+    httpsConfiguration="# ============================================================
+# Generic reverse proxy
+#
+# Responsibility split:
+# - Nginx: transport (TLS, HTTP/3), networking, basic protections
+# - Vaultwarden: application logic (CSP, cache, API behavior, etc.)
+#
+# Intentionally minimal: avoids overriding application behavior
+# ============================================================
+
+
+# Upstream definition with keepalive to avoid reopening a TCP
+# connection for every request (important with HTTP/1.1 backend)
+upstream ${applicationName} {
+    server 127.0.0.1:${internalPort};
+    keepalive 32;
+}
+
+server {
+    # --------------------------------------------------------
+    # HTTP/3 (QUIC)
+    # Enables HTTP/3 alongside HTTP/2 and HTTP/1.1
+    # Clients will switch via Alt-Svc header
+    # --------------------------------------------------------
+    listen 443      quic reuseport;
+    listen [::]:443 quic reuseport;
+
+    # --------------------------------------------------------
+    # HTTP/2 and HTTP/1.1 fallback
+    # Ensures compatibility with clients not supporting HTTP/3
+    # --------------------------------------------------------
+    listen 443      ssl reuseport;
+    listen [::]:443 ssl reuseport;
+
+    # Virtual host configuration
     server_name ${domainName};
 
-    root /var/www/${applicationName};
-
+    # --------------------------------------------------------
+    # Main application endpoint
+    # --------------------------------------------------------
     location / {
-      limit_req zone=ip burst=100 nodelay;
-      proxy_set_header Host \$http_host;
-      proxy_set_header X-Real-IP \$remote_addr;
-      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-      proxy_set_header X-Forwarded-Proto \$scheme;
-      proxy_pass_request_headers on;
-      proxy_pass http://127.0.0.1:${internalPort};
+        # Rate limiting to mitigate abuse (login brute-force, API spam)
+        # WARNING: overly aggressive settings may affect sync behavior
+        limit_req zone=ip burst=20 delay=10;
+
+        # Prevent sending \"Connection: close\" to backend
+        # Required to allow upstream keepalive reuse
+        proxy_set_header Connection \"\";
+
+        # Enable buffering to decouple client and backend:
+        # - protects backend from slow clients
+        # - improves response latency
+        proxy_buffering on;
+        proxy_buffers 32 16k;
+        proxy_buffer_size 16k;
+        proxy_busy_buffers_size 128k;
+
+        # Forward original client information to backend
+        # Required for correct logging, security checks and URL generation
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header X-Forwarded-Host \$host;
+        proxy_set_header X-Forwarded-Port \$server_port;
+
+        # Proxy to backend
+        proxy_pass http://${applicationName};
+
+        # Timeouts tuned to avoid hanging connections
+        proxy_read_timeout 60s;
+        proxy_send_timeout 60s;
     }
+    ${websocketConfiguration}
 
-    error_log  /var/log/nginx/${applicationName}.error.log error;
-    access_log /var/log/nginx/${applicationName}.access.log;
+    # --------------------------------------------------------
+    # Logging (dedicated per vhost)
+    # --------------------------------------------------------
+    error_log  /var/log/nginx/vaultwarden.error.log error;
+    access_log /var/log/nginx/vaultwarden.access.log;
 
-    ssl_certificate     /etc/letsencrypt/live/${domainName}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/${domainName}/privkey.pem;
+    # --------------------------------------------------------
+    # TLS configuration (Let's Encrypt)
+    # Modern TLS setup: TLS 1.3 only, secure curves, no tickets
+    # --------------------------------------------------------
+    ssl_certificate     /etc/letsencrypt/live/vault.fallet.net/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/vault.fallet.net/privkey.pem;
+    ssl_protocols TLSv1.3;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_tickets off;
+    ssl_ecdh_curve X25519:secp384r1;
+    # Disable 0-RTT to prevent replay attacks
+    ssl_early_data off;
 
-    add_header Strict-Transport-Security \"max-age=15552000; preload;\";
-    add_header Expect-CT \"max-age=86400, enforce\";
-    add_header X-Frame-Options \"deny\";
-    add_header X-Content-Type-Options \"nosniff\";
-    add_header Referrer-Policy \"same-origin\";
-    add_header Cache-Control \"no-store\";
-    add_header Permissions-Policy \"fullscreen=(); microphone=(); geolocation=(); camera=(); midi=(); sync-xhr=(); magnetometer=(); gyroscope=(); payment=();\";
-    include /etc/nginx/sites-configuration/${applicationName}/${domainName}/content-security-policy.conf;
+    # --------------------------------------------------------
+    # HTTP/3 advertisement
+    # Informs clients that HTTP/3 is available
+    # --------------------------------------------------------
+    add_header Alt-Svc 'h3=":443"; ma=86400' always;
+
+    # --------------------------------------------------------
+    # HSTS (Strict Transport Security)
+    # Forces clients to use HTTPS after first successful request
+    # --------------------------------------------------------
+    add_header Strict-Transport-Security \"max-age=63072000; includeSubDomains; preload\" always;
+
+    # --------------------------------------------------------
+    # Generic security headers (infra-level, app-agnostic)
+    # These do NOT interfere with application logic
+    # --------------------------------------------------------
+    proxy_hide_header X-Content-Type-Options;
+    add_header X-Content-Type-Options \"nosniff\" always;
+
+    # Privacy-focused referrer policy
+    # "strict-origin-when-cross-origin" prevents leaking sensitive data
+    # while maintaining compatibility with external services
+    proxy_hide_header Referrer-Policy;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
   }"
     SetFileContent "${httpsConfiguration}" "${httpsConfigurationPath}"
     ConfigureContentSecurityPolicy "${applicationName}" "${domainName}" "${cspBehavior}"

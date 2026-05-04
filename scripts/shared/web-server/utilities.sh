@@ -105,3 +105,50 @@ function ConfigureContentSecurityPolicy () {
     SetFileContent "${cspFileContent}" "${cspConfigurationFilePath}"
   fi
 }
+
+function ConfigureWebsocket () {
+  websocketBehavior="${1}"
+  applicationName="${2}"
+  if [[ -z "${websocketBehavior}" ]]; then
+    websocketBehavior='none'
+  fi
+  if [[ "${websocketBehavior}" == 'ask' ]]; then
+      Ask createWebsocketConfiguration "Configure a websocket endpoint? (y/n)" 'n'
+  else
+    createWebsocketConfiguration='n'
+  fi
+
+  if [[ "${createWebsocketConfiguration:?}" == 'y' ]]; then
+    Ask websocketEndpoint "Enter your websocket endpoint (ex. /websocket/):"
+    websocketConfiguration="
+    # --------------------------------------------------------
+    # WebSocket endpoint
+    # --------------------------------------------------------
+    location ${websocketEndpoint} {
+        # Disable buffering for real-time communication
+        proxy_buffering off;
+
+        # Forward client information
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header X-Forwarded-Host \$host;
+        proxy_set_header X-Forwarded-Port \$server_port;
+
+        # Required headers for HTTP → WebSocket upgrade
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection \"upgrade\";
+        proxy_http_version 1.1;
+
+        # Backend connection (long-lived)
+        proxy_pass http://${applicationName};
+        proxy_read_timeout 1h;
+        proxy_send_timeout 1h;
+    }"
+  else
+    websocketConfiguration=""
+  fi
+
+  echo "${websocketConfiguration}"
+}
