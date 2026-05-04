@@ -14,7 +14,7 @@ function SetupWebProxyServer () {
   Ask domainName "Enter your domain name"
   Ask httpInternalPort "Enter your application internal port"
   Ask email "Enter your email address for Letsencrypt registration"
-  CreateProxyDomainName "${httpApplicationName:?}" "${domainName:?}" "${httpInternalPort:?}" 'ask' "${email}"
+  CreateProxyDomainName "${httpApplicationName:?}" "${domainName:?}" "${httpInternalPort:?}" "${email}"
   RestartService 'nginx'
 }
 

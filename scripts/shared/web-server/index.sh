@@ -13,9 +13,8 @@ function CreateProxyDomainName () {
   applicationName="${1}"
   domainName="${2}"
   internalPort="${3}"
-  cspBehavior="${4}"
-  email="${5}"
-  websocketConfiguration=$(ConfigureWebsocket 'ask' "${domainName}")
+  email="${4}"
+  websocketConfiguration=$(ConfigureWebsocket 'ask' "${applicationName}")
   GenerateTlsCertificate "${applicationName}" "${domainName}" "${email}"
   sslCertificatePath="/etc/letsencrypt/live/${domainName}/fullchain.pem"
   sslCertificateKeyPath="/etc/letsencrypt/live/${domainName}/privkey.pem"
@@ -142,7 +141,6 @@ server {
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
   }"
     SetFileContent "${httpsConfiguration}" "${httpsConfigurationPath}"
-    ConfigureContentSecurityPolicy "${applicationName}" "${domainName}" "${cspBehavior}"
     RestartService 'nginx'
   fi
 }
