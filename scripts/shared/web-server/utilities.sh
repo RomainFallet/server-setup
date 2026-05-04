@@ -138,8 +138,10 @@ function ConfigureWebsocket () {
         proxy_set_header Connection \"upgrade\";
         proxy_http_version 1.1;
 
-        # Backend connection (long-lived)
+        # Proxy to backend
         proxy_pass http://${applicationName};
+
+        # Timeouts tuned for long-lived connections
         proxy_read_timeout 1h;
         proxy_send_timeout 1h;
     }"
