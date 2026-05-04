@@ -125,9 +125,6 @@ function ConfigureWebsocket () {
     # WebSocket endpoint
     # --------------------------------------------------------
     location ${websocketEndpoint} {
-        # Disable buffering for real-time communication
-        proxy_buffering off;
-
         # Forward client information
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;

@@ -61,14 +61,6 @@ server {
         # Required to allow upstream keepalive reuse
         proxy_set_header Connection \"\";
 
-        # Enable buffering to decouple client and backend:
-        # - protects backend from slow clients
-        # - improves response latency
-        proxy_buffering on;
-        proxy_buffers 32 16k;
-        proxy_buffer_size 16k;
-        proxy_busy_buffers_size 128k;
-
         # Forward original client information to backend
         # Required for correct logging, security checks and URL generation
         proxy_set_header Host \$host;
