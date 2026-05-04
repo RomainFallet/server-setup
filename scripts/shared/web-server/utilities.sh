@@ -119,7 +119,7 @@ function ConfigureWebsocket () {
   fi
 
   if [[ "${createWebsocketConfiguration:?}" == 'y' ]]; then
-    Ask websocketEndpoint "Enter your websocket endpoint (ex. /websocket/):"
+    Ask websocketEndpoint "Enter your websocket endpoint (ex. /websocket/)"
     websocketConfiguration="
     # --------------------------------------------------------
     # WebSocket endpoint
