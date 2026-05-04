@@ -124,7 +124,7 @@ function ConfigureWebsocket () {
     # --------------------------------------------------------
     # WebSocket endpoint
     # --------------------------------------------------------
-    location ${websocketEndpoint} {
+    location ^~ ${websocketEndpoint} {
         # Forward client information
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;
