@@ -92,8 +92,8 @@ server {
     # TLS configuration (Let's Encrypt)
     # Modern TLS setup: TLS 1.3 only, secure curves, no tickets
     # --------------------------------------------------------
-    ssl_certificate     /etc/letsencrypt/live/vault.fallet.net/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/vault.fallet.net/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/${domainName}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${domainName}/privkey.pem;
     ssl_protocols TLSv1.3;
     ssl_session_timeout 1d;
     ssl_session_cache shared:SSL:10m;
