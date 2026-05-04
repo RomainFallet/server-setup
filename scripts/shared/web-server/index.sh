@@ -24,7 +24,7 @@ function CreateProxyDomainName () {
 # Generic reverse proxy
 #
 # Responsibility split:
-# - Nginx: transport (TLS, HTTP/3), networking, basic protections
+# - Nginx: transport (TLS, HTTP), networking, basic protections
 # - Vaultwarden: application logic (CSP, cache, API behavior, etc.)
 #
 # Intentionally minimal: avoids overriding application behavior
