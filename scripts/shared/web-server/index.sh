@@ -53,10 +53,6 @@ server {
     # Main application endpoint
     # --------------------------------------------------------
     location / {
-        # Prevent sending \"Connection: close\" to backend
-        # Required to allow upstream keepalive reuse
-        proxy_set_header Connection \"\";
-
         # Forward original client information to backend
         # Required for correct logging, security checks and URL generation
         proxy_set_header Host \$host;
@@ -70,8 +66,8 @@ server {
         proxy_pass http://${applicationName};
 
         # Timeouts tuned to avoid hanging connections
-        proxy_read_timeout 60s;
-        proxy_send_timeout 60s;
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
 
         # Disable buffering: ensures correct streaming behavior and prevents
         # partial transfers with backends that do not tolerate buffering well
