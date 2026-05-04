@@ -65,9 +65,13 @@ server {
         # Proxy to backend
         proxy_pass http://${applicationName};
 
+        # Max body size
+        client_max_body_size 500M;
+
         # Timeouts tuned to avoid hanging connections
         proxy_read_timeout 300s;
         proxy_send_timeout 300s;
+        client_body_timeout 300s;
 
         # Disable buffering: ensures correct streaming behavior and prevents
         # partial transfers with backends that do not tolerate buffering well
