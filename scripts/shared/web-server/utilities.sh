@@ -127,6 +127,7 @@ function ConfigureWebsocket () {
     location ^~ ${websocketEndpoint} {
         # Forward client information
         proxy_set_header Host \$host;
+        proxy_set_header Origin \$scheme://\$host;
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto \$scheme;
@@ -144,6 +145,12 @@ function ConfigureWebsocket () {
         # Timeouts tuned for long-lived connections
         proxy_read_timeout 1h;
         proxy_send_timeout 1h;
+
+        # Disable buffering: ensures correct streaming behavior and prevents
+        # partial transfers with backends that do not tolerate buffering well
+        proxy_buffering off;
+        proxy_request_buffering off;
+        proxy_cache off;
     }
     "
   else
