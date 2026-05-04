@@ -53,10 +53,6 @@ server {
     # Main application endpoint
     # --------------------------------------------------------
     location / {
-        # Rate limiting to mitigate abuse (login brute-force, API spam)
-        # WARNING: overly aggressive settings may affect sync behavior
-        limit_req zone=ip burst=20 delay=10;
-
         # Prevent sending \"Connection: close\" to backend
         # Required to allow upstream keepalive reuse
         proxy_set_header Connection \"\";
