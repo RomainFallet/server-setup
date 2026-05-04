@@ -76,6 +76,10 @@ server {
         # Timeouts tuned to avoid hanging connections
         proxy_read_timeout 60s;
         proxy_send_timeout 60s;
+
+        # Disable buffering: ensures correct streaming behavior and prevents
+        # partial transfers with backends that do not tolerate buffering well
+        proxy_buffering off;
     }
     ${websocketConfiguration}
     # --------------------------------------------------------
