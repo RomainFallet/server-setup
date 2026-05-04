@@ -159,3 +159,24 @@ function ConfigureWebsocket () {
 
   echo "${websocketConfiguration}"
 }
+
+
+function DisableAccessToSpecificRoute () {
+  Ask disableAccessToSpecificRoute "Disable access to a specific route? (y/n)" 'n'
+
+  if [[ "${disableAccessToSpecificRoute:?}" == 'y' ]]; then
+    Ask disabledRoute "Enter the route to disable (ex. /admin)"
+    disableRouteConfiguration="
+    # --------------------------------------------------------
+    # Disable access
+    # --------------------------------------------------------
+    location ^~ ${disabledRoute} {
+        return 404;
+    }
+    "
+  else
+    disableRouteConfiguration=""
+  fi
+
+  echo "${disableRouteConfiguration}"
+}

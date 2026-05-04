@@ -15,6 +15,7 @@ function CreateProxyDomainName () {
   internalPort="${3}"
   email="${4}"
   websocketConfiguration=$(ConfigureWebsocket 'ask' "${applicationName}")
+  disableRouteConfiguration=$(DisableAccessToSpecificRoute)
   GenerateTlsCertificate "${applicationName}" "${domainName}" "${email}"
   sslCertificatePath="/etc/letsencrypt/live/${domainName}/fullchain.pem"
   sslCertificateKeyPath="/etc/letsencrypt/live/${domainName}/privkey.pem"
@@ -81,6 +82,7 @@ server {
         proxy_cache off;
     }
     ${websocketConfiguration}
+    ${disableRouteConfiguration}
     # --------------------------------------------------------
     # Logging (dedicated per vhost)
     # --------------------------------------------------------
