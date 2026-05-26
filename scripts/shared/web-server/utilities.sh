@@ -145,12 +145,6 @@ function ConfigureWebsocket () {
         # Timeouts tuned for long-lived connections
         proxy_read_timeout 1h;
         proxy_send_timeout 1h;
-
-        # Disable buffering: ensures correct streaming behavior and prevents
-        # partial transfers with backends that do not tolerate buffering well
-        proxy_buffering off;
-        proxy_request_buffering off;
-        proxy_cache off;
     }
     "
   else
