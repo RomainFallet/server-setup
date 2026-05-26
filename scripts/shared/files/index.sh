@@ -106,7 +106,7 @@ function ExctractTarFile () {
 
 function SetDefaultDirectoryPermissions () {
   directoryPath="${1}"
-  sudo chmod -R 750 "${directoryPath}"
+  sudo chmod -R 755 "${directoryPath}"
 }
 
 function SetDirectoryPermissions () {
