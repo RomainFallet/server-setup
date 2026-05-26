@@ -48,13 +48,11 @@ function GenerateTlsCertificate () {
   error_log  /var/log/nginx/${applicationName}.error.log error;
   access_log /var/log/nginx/${applicationName}.access.log;
 
-  location /.well-known/acme-challenge/ {
-    limit_req zone=ip burst=20 nodelay;
+  location ^~ /.well-known/acme-challenge/ {
     try_files \$uri =404;
   }
 
   location / {
-    limit_req zone=ip burst=20 nodelay;
     return 301 https://\$host\$request_uri;
   }
 }"
