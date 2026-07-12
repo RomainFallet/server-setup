@@ -12,7 +12,7 @@
 function CreateProxyDomainName () {
   applicationName="${1}"
   domainName="${2}"
-  internalPort="${3}"
+  proxyHost="${3}"
   email="${4}"
   websocketConfiguration=$(ConfigureWebsocket 'ask' "${applicationName}")
   disableRouteConfiguration=$(DisableAccessToSpecificRoute)
@@ -35,7 +35,7 @@ function CreateProxyDomainName () {
 # Upstream definition with keepalive to avoid reopening a TCP
 # connection for every request (important with HTTP/1.1 backend)
 upstream ${applicationName} {
-    server 127.0.0.1:${internalPort};
+    server ${proxyHost};
     keepalive 32;
 }
 
